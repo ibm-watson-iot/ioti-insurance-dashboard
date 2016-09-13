@@ -1,2 +1,2 @@
 # ioti-insurance-dashboard
-IoT4 for Insurance Dashboard
+IoT4I for Insurance Dashboard
