@@ -11,7 +11,6 @@ applications:
   buildpack: sdk-for-nodejs
   no-route: false
   services:
-  - iot4i-iotf-service
   - iot4i-cloudantNoSQLDB  
   env:
     NODE_MODULES_CACHE: false
