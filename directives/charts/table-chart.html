@@ -1,0 +1,19 @@
+<div class="table-chart">
+  <div class="rTable">
+    <div class="rTableRow">
+      <div class="rTableHead"
+      	data-ng-repeat="header in datasource.headers track by $index" ng-click="sort(datasource.data, $index)" data-ng-style="colalign[$index] == 'right' && {'text-align' : 'right'}">
+    <span >{{header}}</span>
+      </div>
+    </div>
+    <div class="rTableRow" data-ng-repeat="row in datasource.data">
+      <div class="rTableCell"
+        data-ng-repeat="col in row track by $index" data-ng-style="colalign[$index] == 'right' && {'text-align' : 'right'}">
+        <span data-ng-if="col.indexOf('icon') !== 0">{{col}}</span>
+        <div class="icon" data-ng-if="col.indexOf('icon') === 0" data-ng-class="col.substring(5, col.length)"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="nodata" data-ng-show="!datasource.data || datasource.data.length==0" translate>No data available</div>
+</div>

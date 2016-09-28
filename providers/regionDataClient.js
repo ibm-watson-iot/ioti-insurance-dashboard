@@ -1,19 +1,18 @@
-# iot4i-dashboard
-
+/*****************************************************
 Data Privacy Disclaimer
 
 This Program has been developed for demonstration purposes only to illustrate the technical capabilities and potential business uses of the IBM IoT for Insurance
 
 The components included in this Program may involve the processing of personal information (for example location tracking and behavior analytics). When implemented in practice such processing may be subject to specific legal and regulatory requirements imposed by country specific data protection and privacy laws.  Any such requirements are not addressed in this Program.
 
-Licensee is responsible for the ensuring Licenseeís use of this Program and any deployed solution meets applicable legal and regulatory requirements.  This may require the implementation of additional features and functions not included in the Program.
+Licensee is responsible for the ensuring Licenseeís use of this Program and any deployed solution meets applicable legal and regulatory requirements.  This may require the implementation of additional features and functions not included in the Program. 
 
 
 Apple License issue
 
 This Program is intended solely for use with an Apple iOS product and intended to be used in conjunction with officially licensed Apple development tools and further customized and distributed under the terms and conditions of Licenseeís licensed Apple iOS Developer Program or Licenseeís licensed Apple iOS Enterprise Program.  
 
-Licensee agrees to use the Program to customize and build the application for Licenseeís own purpose and distribute in accordance with the terms of Licenseeís Apple developer program
+Licensee agrees to use the Program to customize and build the application for Licenseeís own purpose and distribute in accordance with the terms of Licenseeís Apple developer program 
 
 
 Risk Mitigation / Product Liability Issues
@@ -45,12 +44,189 @@ If the Program includes components that are Redistributable, they will be identi
 Feedback License
 
 In the event Licensee provides feedback to IBM regarding the Program, Licensee agrees to assign to IBM all right, title, and interest (including ownership of copyright) in any data, suggestions, or written materials that 1) are related to the Program and 2) that Licensee provides to IBM.
+******************************************************/
 
+var regionDataClient = angular.module('regionDataClient', []);
 
-UI: http://host:port/dashboard/
+var usStatesIds = [];
+var usStatesFromId = {};
+var usStatesFromNameOrCode = {};
+var usCountiesIds = [];
+var usCountiesFromId = {};
+var usCountiesFromName = {};
 
-API: http://host>:port/api/
+var statePromise = null;
+var countyPromise = null;
 
-Swagger: http://host:port/dist/
+function getUSStatePromise($q) {
+  if (!statePromise) {
+    statePromise = $q(function(resolve, reject) {
+      d3.json('/dashboard/assets/geomap/usStates.json', function(json) {
+        json.states.forEach(function(state) {
+          usStatesIds.push(state.id);
+          usStatesFromId[state.id] = state;
+          usStatesFromNameOrCode[state.name.toLowerCase()] = state;
+          usStatesFromNameOrCode[state.code.toLowerCase()] = state;
+        });
+        resolve();
+      }, function(err) {
+        reject(err);
+      });
+    });
+  }
+  return statePromise;
+}
 
-Deployed on http://iot4i-insurance-dashboard.mybluemix.net/dashboard/
+function getUSCountiesPromise($q) {
+  if (!countyPromise) {
+    countyPromise = $q(function(resolve, reject) {
+      d3.json('/dashboard/assets/geomap/usCounties.json', function(json) {
+        json.counties.forEach(function(county) {
+          usCountiesIds.push(county.id);
+          usCountiesFromId[county.id] = county;
+          usCountiesFromName[county.name.toLowerCase()] = county;
+        });
+        resolve();
+      }, function(err) {
+        reject(err);
+      });
+    });
+  }
+  return countyPromise;
+}
+
+function isNumber(obj) {
+	return !isNaN(parseInt(obj));
+}
+
+function getStateId(countyId) {
+  var countyIdValue;
+  if (isNumber(countyId)) {
+    countyIdValue = countyId;
+  }
+  else if (isNumber(countyId.id)) {
+    countyIdValue = countyId.id;
+  }
+
+  return countyIdValue >= 10000 ? countyIdValue.toString().substring(0, 2) : countyIdValue.toString().substring(0, 1);
+}
+
+function locationToGeoID($q, location) {
+	return $q(function(resolve, reject) {
+		if (location == "USA" || location == "US") {
+			resolve({
+				country: "US"
+			});
+		}
+
+		if (isNumber(location)) {
+			var locationID = parseInt(location, 10);
+
+			if (location < 100) {
+				resolve({
+					country: "US",
+					region: location
+				});
+			} else {
+				resolve({
+					country: "US",
+					region: getStateId(locationID),
+					subregion: locationID
+				});
+			}
+		} else {
+			getUSStatePromise($q).then(function() {
+        var state = usStatesFromNameOrCode[location];
+				if (state) {
+					resolve({
+						country: "US",
+						region: state
+					});
+				} else {
+					getUSCountiesPromise($q).then(function() {
+            var county = usCountiesFromName[location];
+						if (county) {
+							resolve({
+								country: "US",
+								region: getStateId(county),
+								subregion: county
+							});
+						} else {
+							resolve({
+								country: "US"
+							});
+						}
+					}, function(err) {
+						reject(err);
+					});
+				}
+			}, function(err) {
+				reject(err);
+			});
+		}
+	});
+}
+
+regionDataClient.provider('regionData', function() {
+  this.$get = function($q) {
+    return {
+      getUSStateIdsPromise: function() {
+        return $q(function(resolve, reject) {
+          getUSStatePromise($q).then(function() {
+            resolve(usStatesIds);
+          }, function(err) {
+            reject(err);
+          });
+        });
+      },
+      getUSCountiesIdsPromise: function() {
+        return $q(function(resolve, reject) {
+          getUSCountiesPromise($q).then(function() {
+            resolve(usCountiesIds);
+          }, function(err) {
+            reject(err);
+          });
+        });
+      },
+      getUSStateByIdMapPromise: function() {
+        return $q(function(resolve, reject) {
+          getUSStatePromise($q).then(function() {
+            resolve(usStatesFromId);
+          }, function(err) {
+            reject(err);
+          });
+        });
+      },
+      getUSStateByNameOrCodeMapPromise: function() {
+        return $q(function(resolve, reject) {
+          getUSStatePromise($q).then(function() {
+            resolve(usStatesFromNameOrCode);
+          }, function(err) {
+            reject(err);
+          });
+        });
+      },
+      getUSCountyByIdMapPromise: function() {
+        return $q(function(resolve, reject) {
+          getUSCountiesPromise($q).then(function() {
+            resolve(usCountiesFromId);
+          }, function(err) {
+            reject(err);
+          });
+        });
+      },
+      getUSCountyByNameMapPromise: function() {
+        return $q(function(resolve, reject) {
+          getUSCountiesPromise($q).then(function() {
+            resolve(usCountiesFromName);
+          }, function(err) {
+            reject(err);
+          });
+        });
+      },
+      getGeoIDFromLocation: function(location) {
+        return locationToGeoID($q, location);
+      }
+    };
+  };
+});

@@ -1,19 +1,18 @@
-# iot4i-dashboard
-
+/*****************************************************
 Data Privacy Disclaimer
 
 This Program has been developed for demonstration purposes only to illustrate the technical capabilities and potential business uses of the IBM IoT for Insurance
 
 The components included in this Program may involve the processing of personal information (for example location tracking and behavior analytics). When implemented in practice such processing may be subject to specific legal and regulatory requirements imposed by country specific data protection and privacy laws.  Any such requirements are not addressed in this Program.
 
-Licensee is responsible for the ensuring Licenseeís use of this Program and any deployed solution meets applicable legal and regulatory requirements.  This may require the implementation of additional features and functions not included in the Program.
+Licensee is responsible for the ensuring Licenseeís use of this Program and any deployed solution meets applicable legal and regulatory requirements.  This may require the implementation of additional features and functions not included in the Program. 
 
 
 Apple License issue
 
 This Program is intended solely for use with an Apple iOS product and intended to be used in conjunction with officially licensed Apple development tools and further customized and distributed under the terms and conditions of Licenseeís licensed Apple iOS Developer Program or Licenseeís licensed Apple iOS Enterprise Program.  
 
-Licensee agrees to use the Program to customize and build the application for Licenseeís own purpose and distribute in accordance with the terms of Licenseeís Apple developer program
+Licensee agrees to use the Program to customize and build the application for Licenseeís own purpose and distribute in accordance with the terms of Licenseeís Apple developer program 
 
 
 Risk Mitigation / Product Liability Issues
@@ -45,12 +44,122 @@ If the Program includes components that are Redistributable, they will be identi
 Feedback License
 
 In the event Licensee provides feedback to IBM regarding the Program, Licensee agrees to assign to IBM all right, title, and interest (including ownership of copyright) in any data, suggestions, or written materials that 1) are related to the Program and 2) that Licensee provides to IBM.
+******************************************************/
+
+var sw = require("swagger-node-express");
+var paramTypes = sw.paramTypes;
+var url = require("url");
+var swe = sw.errors;
+var http = require('http');
+var db = require("../util/db.js");
+var util = require("../util/util.js");
+
+// temporary to be able to switch between api mockup data and aggregator data
+var USE_LOCAL_AGGREGATOR = false;
+
+var usStates = require('../assets/geomap/usStates.json');
+var statesMap = {};
+usStates.states.forEach(function(state) {
+	statesMap[state.id] = {
+		name: state.name,
+		code: state.code
+	};
+
+	statesMap[ state.name] = state.id;
+	statesMap[ state.code] = state.id;
+});
+
+var usCounties = require('../assets/geomap/usCounties.json');
+var countiesMap = {};
+usCounties.counties.forEach(function(county) {
+	countiesMap[county.id] = {
+		name: county.name
+	};
+
+	countiesMap[county.name] = county.id;
+});
+
+// TODO: remove need or move to env var
+var agg_port = USE_LOCAL_AGGREGATOR ? 3100 : 80 ;
+var agg_host = USE_LOCAL_AGGREGATOR ? 'localhost': 'iot4i-aggregator.mybluemix.net';
+
+function writeResponse(response, data) {
+	response.header('Access-Control-Allow-Origin', "*");
+	response.header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT");
+	response.header("Access-Control-Allow-Headers", "Content-Type");
+	response.header("Content-Type", "application/json; charset=utf-8");
+	response.send(JSON.stringify(data));
+}
 
 
-UI: http://host:port/dashboard/
+exports.getUserAlerts = {
+		'spec' : {
+			description : "Aggregated data for user",
+			path : "/aggregated/alerts/{userName}",
+			method : "GET",
+			summary : "Get the aggregated alert information for the user",
+			notes : "Returns the aggregated alerts for the user",
+			type : "Notifications",
+			nickname : "getUserAssets",
+			produces : ["application/json"],
+			parameters : [paramTypes.path("userName", "Username of user that needs to be fetched", "string")],
+			responseMessages : [swe.notFound('users')]
+		},
+		'action' : function(req, res) {
+			// TODO: remove, this is redundant now as the verification is done at login time in app.js
+			util.validateUser(req, res, 13, function(er, validated) {
+				if (!validated)
+					swe.forbidden(res);
+				else {
+			if (!req.params.userName) {
+				swe.invalid('userName');
+				return;
+			}
 
-API: http://host>:port/api/
+			var user = req.params.userName;
 
-Swagger: http://host:port/dist/
+			var aggregatedAlerts = {};
 
-Deployed on http://iot4i-insurance-dashboard.mybluemix.net/dashboard/
+			var alerts = [];
+
+			db.getUserHazardEvents( user, true, function( err, data) {
+
+				if ( err) {
+					console.log( "Error getting alert data: " + err);
+					return;
+				}
+
+				data.rows.forEach( function( row) {
+
+					var date = "";
+					try
+					{
+						date = new Date( row.doc.timestamp).toISOString().toString( 10).slice(0, 10);
+					}
+					catch( err) {
+						//console.log( "Invalid user alert date: " + row.doc.timestamp)
+						date = new Date( ).toISOString().toString( 10).slice(0, 10);
+					}
+
+					if ( aggregatedAlerts[ date] === undefined) {
+						aggregatedAlerts[ date] = 0;
+					}
+
+					aggregatedAlerts[ date]++;
+				});
+
+				for (var property in aggregatedAlerts) {
+				    if (aggregatedAlerts.hasOwnProperty(property)) {
+				        alerts.push( {"date" : property, "alerts": aggregatedAlerts[property]});
+				    }
+				}
+
+				alerts.sort(function(a, b) {
+                    return a.date ? a.date.localeCompare( b.date) : -1;
+                });
+
+				res.send( alerts);
+			});
+		}});
+	}
+};

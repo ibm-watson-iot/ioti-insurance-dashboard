@@ -1,0 +1,49 @@
+<div class="user-contact">
+  <span class="user-title" translate>Contact Info</span>
+
+  <div class="separator" />
+
+  <loading-indicator data-ng-show="userContactLoading"/>
+
+  <div class="rTable" data-ng-show="!userContactLoading">
+    <div class="rTableRow">
+      <div class="rTableHeading"><span class="title" translate>First Name</span></div>
+      <div class="rTableCell"><span class="data">{{userData.firstname}}</span></div>
+    </div>
+    <div class="rTableRow">
+      <div class="rTableHeading"><span class="title" translate>Surname</span></div>
+      <div class="rTableCell"><span class="data">{{userData.lastname}}</span></div>
+    </div>
+    <div class="rTableRow">
+      <div class="rTableHeading"><span class="title" translate>Address</span></div>
+      <div class="rTableCell"><span class="data">{{userData.contact.address}}</span></div>
+    </div>
+    <div class="rTableRow">
+      <div class="rTableHeading"><span class="title" translate>Zip Code</span></div>
+      <div class="rTableCell"><span class="data">{{userData.contact.zipcode}}</span></div>
+    </div>
+    <div class="rTableRow">
+      <div class="rTableHeading"><span class="title" translate>Email</span></div>
+      <div class="rTableCell"><span class="data">{{userData.contact.email}}</span></div>
+    </div>
+    <div class="rTableRow">
+      <div class="rTableHeading"><span class="title" translate>Phone</span></div>
+      <div class="rTableCell"><span class="data">{{userData.contact.phone}}</span></div>
+    </div>
+  </div>
+  <br/>
+
+	<span class="user-title" translate>Insurance Policy Info</span>
+	<div class="separator"></div>
+	<div  class="insurance-info">Lorem ipsum dolor sit amet, consectetur adipiscing elit</div>
+	 	<div class="rTable"  data-ng-repeat="asset in assets" data-ng-show="!userContactLoading">
+	    <div class="rTableRow">
+	      <div class="rTableHeading"><span class="name" translate>asset_name</span></div>
+	      <div class="rTableCell"><span class="data">{{asset.name}}</span></div>
+	    </div>
+	    <div class="rTableRow">
+	      <div class="rTableHeading"><span class="title" translate>asset_address</span></div>
+	      <div class="rTableCell"><span class="data">{{asset.address}}</span></div>
+	    </div>
+	  </div>
+</div>

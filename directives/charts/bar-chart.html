@@ -1,0 +1,17 @@
+<div class="bar-chart">
+	<div class="legend">
+		<div class="type1">
+			<div class="title"></div>
+			<span>{{datasource.headers.type1}}</span>
+		</div>
+		<div class="type2" data-ng-if="datasource.headers.type2!=undefined">
+			<div class="title" ></div>
+				<span>{{datasource.headers.type2}}</span>
+		</div>
+	</div>
+	<div class="bars">
+		<div ng-repeat="chartbar in datasource.data" >
+			<bar-chart-single datasource="chartbar" maxwidth="datasource.maxWidth" headers="datasource.headers" />
+		</div>
+	</div>
+</div>

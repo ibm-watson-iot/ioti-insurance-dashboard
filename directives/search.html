@@ -1,0 +1,27 @@
+<div class="search">
+  <div class="panel panel-default">
+    <div class="panel-heading" translate>Search</div>
+    <div class="panel-body">
+      <form data-ng-submit="doSearch()">
+    	   <div class="search-area">
+    	      <input type="text" data-ng-model="searchString" placeholder="{{ 'State, County or Username' | translate }}">
+    	      <div class="search-icon">
+    	        <div class="icon search" data-ng-click="doSearch()"></div>
+    	      </div>
+    	   </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <a class="pull-right" data-ng-click="clearSearchList()" href="#" translate>Clear</a>
+      <span translate>Recent:</span>
+    </div>
+    <div class="panel-body">
+      <div data-ng-repeat="search in searchList track by $index" data-ng-show="!searchLoading">
+        <span style="cursor:pointer" data-ng-click="doSearch(search)">{{search}}</span>
+      </div>
+    </div>
+  </div>
+</div>

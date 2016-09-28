@@ -1,0 +1,37 @@
+<div class="nav-bar" >
+
+    <div class="title-info">
+      <div data-ng-if="context.currentLocation" class="icon location"></div>
+      <div data-ng-if="context.currentUser" class="icon user"></div>
+      <span data-ng-if="context.currentLabel">{{context.currentLabel}}</span>
+      <span data-ng-if="!context.currentLabel">{{context.currentLocation}}{{context.currentUser}}</span>
+    </div>
+
+    <div class="actions">
+
+      <datepicker-popup>
+        <span data-ng-click="openCalendar()" type="hidden" uib-datepicker-popup="{{format}}"
+        	  data-ng-model="context.selectedDate" is-open="calendar.opened" datepicker-options="dateOptions"
+        	  data-ng-required="true" alt-input-formats="altInputFormats" style="" close-text="{{ 'Done' | translate }}" current-text="{{ 'Today' | translate }}">
+          <div class="icon calendar"> </div>
+          <span>{{context.selectedDate  | date:'MM/dd/yyyy' }}</span>
+          <div  class="icon arrow-down"> </div>
+      </datepicker-popup>
+
+      <div class="separator" ></div>
+
+      <div class="create-message" data-ng-click="toggleModal()">
+        <div class="icon create-message"></div>
+        <span translate>Create Message</span>
+      </div>
+
+      <div class="favorites" data-ng-click="saveFavorite()">
+        <div class="icon favorites"></div>
+        <span translate>Add to favorites</span>
+      </div>
+    </div>
+
+
+
+    <div data-ng-if="currentUser && activeAlert" class="message"><img src="assets/icons/mark 24px yellow.png" width="16px" height="16px"/><span style="padding-left: 5px" translate>One or more active alerts!</span> </div>
+</div>

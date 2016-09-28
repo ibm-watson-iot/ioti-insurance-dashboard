@@ -1,19 +1,18 @@
-# iot4i-dashboard
-
+/*****************************************************
 Data Privacy Disclaimer
 
 This Program has been developed for demonstration purposes only to illustrate the technical capabilities and potential business uses of the IBM IoT for Insurance
 
 The components included in this Program may involve the processing of personal information (for example location tracking and behavior analytics). When implemented in practice such processing may be subject to specific legal and regulatory requirements imposed by country specific data protection and privacy laws.  Any such requirements are not addressed in this Program.
 
-Licensee is responsible for the ensuring Licenseeís use of this Program and any deployed solution meets applicable legal and regulatory requirements.  This may require the implementation of additional features and functions not included in the Program.
+Licensee is responsible for the ensuring Licenseeís use of this Program and any deployed solution meets applicable legal and regulatory requirements.  This may require the implementation of additional features and functions not included in the Program. 
 
 
 Apple License issue
 
 This Program is intended solely for use with an Apple iOS product and intended to be used in conjunction with officially licensed Apple development tools and further customized and distributed under the terms and conditions of Licenseeís licensed Apple iOS Developer Program or Licenseeís licensed Apple iOS Enterprise Program.  
 
-Licensee agrees to use the Program to customize and build the application for Licenseeís own purpose and distribute in accordance with the terms of Licenseeís Apple developer program
+Licensee agrees to use the Program to customize and build the application for Licenseeís own purpose and distribute in accordance with the terms of Licenseeís Apple developer program 
 
 
 Risk Mitigation / Product Liability Issues
@@ -45,12 +44,169 @@ If the Program includes components that are Redistributable, they will be identi
 Feedback License
 
 In the event Licensee provides feedback to IBM regarding the Program, Licensee agrees to assign to IBM all right, title, and interest (including ownership of copyright) in any data, suggestions, or written materials that 1) are related to the Program and 2) that Licensee provides to IBM.
+******************************************************/
 
+function devicesPageDirective(){
+	return {
+	    restrict: 'E', // C: class, E: element, M: comments, A: attributes
+	    replace: true, // replaces original content with template
+	    templateUrl: "directives/devices-page.html",
+	    controller: devicesPageController
+	  };
+}
 
-UI: http://host:port/dashboard/
+function devicesPageController($scope, $http, $q, aggregator, regionData) {
 
-API: http://host>:port/api/
+	$scope.$watch('context.selectedDate', function(newValue, oldValue) {
+		if (newValue) {
+		  getPageData($scope, $http, $q, aggregator, regionData, newValue.toISOString(), $scope.context.currentLocation);
+		}
+	});
 
-Swagger: http://host:port/dist/
+	$scope.$watch('context.currentLocation', function(newValue, oldValue) {
+		if (newValue) {
+		  getPageData($scope, $http, $q, aggregator, regionData, $scope.context.selectedDate.toISOString(), newValue);
+		}
+	});
+}
 
-Deployed on http://iot4i-insurance-dashboard.mybluemix.net/dashboard/
+function getId(obj) {
+	return obj.id ? obj.id : obj;
+}
+
+function getPageData($scope, $http, $q, aggregator, regionData, date, location) {
+
+	$scope.progress.geodataLoading += 2;
+
+	var shields = {
+		title : "Shields",
+		icon : "/icons/shield.png",
+		table : {
+				headers: [
+				"Shield",
+				"Uncompliant",
+				"Total"
+			],
+			data: []
+		},
+		bar : {
+			headers: {
+			type1 : "Compliant",
+			type2 : "Uncompliant"
+		},
+		data: []
+		}
+	};
+
+	var devices = {
+			title : "Device Status",
+			icon : "/icons/device.png",
+			table : {
+					headers: [
+					"Devices",
+					"Disconnected",
+					"Total"
+				],
+				data: []
+			},
+			bar : {
+				headers: {
+				type1 : "Connected",
+				type2 : "Disconnected"
+			},
+			data: []
+			}
+		};
+
+	var promise;
+	var promiseStats;
+	regionData.getGeoIDFromLocation(location).then(function(geo) {
+		if (geo.subregion) {
+			promise = aggregator.getSubregion(geo.country, geo.region, getId(geo.subregion), date);
+			promiseStats = $q(function(resolve, reject) {
+				promise.then(function(result) {
+					resolve([result]);
+				}, function(err) {
+					reject(err);
+				});
+			});
+		} else if (geo.region) {
+			promise = aggregator.getRegion(geo.country, getId(geo.region), date);
+			promiseStats = aggregator.getSubregions(geo.country, getId(geo.region), date);
+		} else {
+			promise = aggregator.getCountry(geo.country, date);
+			promiseStats = aggregator.getRegions(geo.country, date);
+		}
+		promise.then(function(obj) {
+			if (!obj) {
+				$scope.chartshields = null;
+				$scope.chartdevices = null;
+				return;
+			}
+			var shieldsPerType = obj.shieldsPerType;
+			var sTabledata = [];
+			var sBardata = [];
+			for ( var i in shieldsPerType) {
+				var sTotal = shieldsPerType[i].total || 0;
+				var uncompliant = shieldsPerType[i].uncompliant || 0;
+				var sTableitem = [ i, uncompliant, sTotal ];
+				sTabledata.push(sTableitem);
+				var sBaritem = [ i, sTotal, uncompliant ];
+				sBardata.push(sBaritem);
+			}
+			shields.table.data = sTabledata;
+			shields.bar.data = sBardata;
+			$scope.chartshields = shields;
+
+			var devicesPerType = obj.devicesPerType;
+			var tabledata = [];
+			var bardata = [];
+			for ( var j in devicesPerType) {
+				var total = devicesPerType[j].total || 0;
+				var connected = devicesPerType[j].connected || 0;
+				var disconnected = total - connected;
+				var tableitem = [ j, disconnected, total ];
+				tabledata.push(tableitem);
+				var baritem = [ j, connected, disconnected ];
+				bardata.push(baritem);
+			}
+			devices.table.data = tabledata;
+			devices.bar.data = bardata;
+			$scope.chartdevices = devices;
+
+		},
+		function(err) {
+			console.warn(err);
+		}).finally(function() {
+			$scope.progress.geodataLoading -= 1;
+		});
+		promiseStats.then(function(data) {
+			$scope.statistics = data;
+
+			var values = [];
+			for ( i = 0; i < data.length; ++i) {
+				// TODO: using shields instead of users for now
+				values.push( [ data[i].name, data[i].totalDevices, data[i].totalShields ]);
+			}
+			$scope.statstable= {
+					title : "Aggregated Statistics",
+					headers: [ geo.region ? "County":"State", "Device Count", "User Count"],
+					data: values
+			};
+		}).finally(function() {
+			$scope.progress.geodataLoading -= 1;
+		});
+	}, function(err) {
+		$scope.chartshields = null;
+		$scope.chartdevices = null;
+		$scope.progress.geodataLoading -= 2;
+
+		console.warn(err);
+	});
+}
+
+// module
+var app = angular.module('iot-dashboard');
+
+// directives
+app.directive('devicesPage', [devicesPageDirective]);

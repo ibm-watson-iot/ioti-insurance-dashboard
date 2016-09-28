@@ -1,19 +1,18 @@
-# iot4i-dashboard
-
+/*****************************************************
 Data Privacy Disclaimer
 
 This Program has been developed for demonstration purposes only to illustrate the technical capabilities and potential business uses of the IBM IoT for Insurance
 
 The components included in this Program may involve the processing of personal information (for example location tracking and behavior analytics). When implemented in practice such processing may be subject to specific legal and regulatory requirements imposed by country specific data protection and privacy laws.  Any such requirements are not addressed in this Program.
 
-Licensee is responsible for the ensuring Licenseeís use of this Program and any deployed solution meets applicable legal and regulatory requirements.  This may require the implementation of additional features and functions not included in the Program.
+Licensee is responsible for the ensuring Licenseeís use of this Program and any deployed solution meets applicable legal and regulatory requirements.  This may require the implementation of additional features and functions not included in the Program. 
 
 
 Apple License issue
 
 This Program is intended solely for use with an Apple iOS product and intended to be used in conjunction with officially licensed Apple development tools and further customized and distributed under the terms and conditions of Licenseeís licensed Apple iOS Developer Program or Licenseeís licensed Apple iOS Enterprise Program.  
 
-Licensee agrees to use the Program to customize and build the application for Licenseeís own purpose and distribute in accordance with the terms of Licenseeís Apple developer program
+Licensee agrees to use the Program to customize and build the application for Licenseeís own purpose and distribute in accordance with the terms of Licenseeís Apple developer program 
 
 
 Risk Mitigation / Product Liability Issues
@@ -45,12 +44,84 @@ If the Program includes components that are Redistributable, they will be identi
 Feedback License
 
 In the event Licensee provides feedback to IBM regarding the Program, Licensee agrees to assign to IBM all right, title, and interest (including ownership of copyright) in any data, suggestions, or written materials that 1) are related to the Program and 2) that Licensee provides to IBM.
+******************************************************/
+
+function datepickerPopupDirective(){
+	return {
+	    restrict: 'E', // C: class, E: element, M: comments, A: attributes
+	    replace: true, // replaces original content with template
+	    controller: datepickerPopupController
+	  };
+}
+
+function datepickerPopupController($scope, $http){
+
+  $scope.clear = function() {
+      console.log("asfd");
+  };
+
+  $scope.inlineOptions = {
+    customClass: getDayClass,
+    minDate: new Date(),
+    showWeeks: true
+  };
+
+  $scope.dateOptions = {
+    formatYear: 'yy',
+    maxDate: new Date(),
+    minDate: new Date(),
+    startingDay: 1
+  };
+
+  // Disable weekend selection
+  function disabled(data) {
+    var date = data.date,
+      mode = data.mode;
+    return mode === 'day' && (date.getDay() === 0 || date.getDay() === 6);
+  }
+
+  $scope.toggleMin = function() {
+    $scope.inlineOptions.minDate = $scope.inlineOptions.minDate ? null : new Date();
+    $scope.dateOptions.minDate = $scope.inlineOptions.minDate;
+  };
+
+  $scope.toggleMin();
+
+  $scope.openCalendar = function() {
+    $scope.calendar.opened = true;
+  };
+
+  $scope.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
+  $scope.format = $scope.formats[2];
+  $scope.altInputFormats = ['M!/d!/yyyy'];
+
+  $scope.calendar = {
+    opened: false
+  };
+
+  function getDayClass(data) {
+      console.log("asdf");
+    var date = data.date,
+      mode = data.mode;
+    if (mode === 'day') {
+      var dayToCheck = new Date(date).setHours(0,0,0,0);
+
+      for (var i = 0; i < $scope.events.length; i++) {
+        var currentDay = new Date($scope.events[i].date).setHours(0,0,0,0);
+
+        if (dayToCheck === currentDay) {
+          return $scope.events[i].status;
+        }
+      }
+    }
+
+    return '';
+  }
+}
 
 
-UI: http://host:port/dashboard/
+// module
+var app = angular.module('iot-dashboard');
 
-API: http://host>:port/api/
-
-Swagger: http://host:port/dist/
-
-Deployed on http://iot4i-insurance-dashboard.mybluemix.net/dashboard/
+// directives
+app.directive('datepickerPopup', [datepickerPopupDirective]);

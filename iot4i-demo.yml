@@ -1,0 +1,19 @@
+---
+applications:
+- name: <Name>-insurance-dashboard
+  memory: 1024M
+  disc quota: 512M  
+  instances: 1
+  path: .
+  domain: mybluemix.net
+  command: node app.js
+  timeout: 60
+  buildpack: sdk-for-nodejs
+  no-route: false
+  services:
+  - iot4i-iotf-service
+  - iot4i-cloudantNoSQLDB  
+  env:
+    NODE_MODULES_CACHE: false
+    APIDOMAIN: <Name>-insurance-dashboard.mybluemix.net
+    ENV: iot4i-demo

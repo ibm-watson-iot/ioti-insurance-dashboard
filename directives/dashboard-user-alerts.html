@@ -1,0 +1,14 @@
+<div class="user-alerts">
+	<div class="user-alerts-header">
+		<span translate>Alert history</span>
+	</div>
+
+	<loading-indicator data-ng-show="alerts.loading"/>
+
+	<div class="user-alerts-chart">
+		<div class="tooltip"></div>
+		<div class="nodata" data-ng-if="alerts.nodata && !alerts.loading" translate>No alert history available for the selected user</div>
+		<svg class="chart"></svg>
+	</div>
+
+</div>

@@ -1,19 +1,18 @@
-# iot4i-dashboard
-
+/*****************************************************
 Data Privacy Disclaimer
 
 This Program has been developed for demonstration purposes only to illustrate the technical capabilities and potential business uses of the IBM IoT for Insurance
 
 The components included in this Program may involve the processing of personal information (for example location tracking and behavior analytics). When implemented in practice such processing may be subject to specific legal and regulatory requirements imposed by country specific data protection and privacy laws.  Any such requirements are not addressed in this Program.
 
-Licensee is responsible for the ensuring Licenseeís use of this Program and any deployed solution meets applicable legal and regulatory requirements.  This may require the implementation of additional features and functions not included in the Program.
+Licensee is responsible for the ensuring Licenseeís use of this Program and any deployed solution meets applicable legal and regulatory requirements.  This may require the implementation of additional features and functions not included in the Program. 
 
 
 Apple License issue
 
 This Program is intended solely for use with an Apple iOS product and intended to be used in conjunction with officially licensed Apple development tools and further customized and distributed under the terms and conditions of Licenseeís licensed Apple iOS Developer Program or Licenseeís licensed Apple iOS Enterprise Program.  
 
-Licensee agrees to use the Program to customize and build the application for Licenseeís own purpose and distribute in accordance with the terms of Licenseeís Apple developer program
+Licensee agrees to use the Program to customize and build the application for Licenseeís own purpose and distribute in accordance with the terms of Licenseeís Apple developer program 
 
 
 Risk Mitigation / Product Liability Issues
@@ -45,12 +44,164 @@ If the Program includes components that are Redistributable, they will be identi
 Feedback License
 
 In the event Licensee provides feedback to IBM regarding the Program, Licensee agrees to assign to IBM all right, title, and interest (including ownership of copyright) in any data, suggestions, or written materials that 1) are related to the Program and 2) that Licensee provides to IBM.
+******************************************************/
 
+function iotUserAlertsDirective(){
+	return {
+	    restrict: 'E', // C: class, E: element, M: comments, A: attributes
+	    replace: true, // replaces original content with template
+	    templateUrl: "directives/dashboard-user-alerts.html",
+	    controller: iotUserAlertsController
+	}
+}
 
-UI: http://host:port/dashboard/
+function clearChart() {
+		d3.select(".user-alerts-chart .chart").selectAll("*").remove();
+		d3.select(".tooltip").style("opacity", 0);
 
-API: http://host>:port/api/
+		d3.select(".user-alerts-chart .chart")
+			.attr("width", 0)
+	        .attr("height", 0);
+}
 
-Swagger: http://host:port/dist/
+function plotChart(data) {
 
-Deployed on http://iot4i-insurance-dashboard.mybluemix.net/dashboard/
+	d3.select(".user-alerts-chart .chart").selectAll("*").remove();
+
+	var svg = d3.select(".user-alerts-chart .chart");
+
+	if ( data.length == 0) {
+
+		svg
+        .attr("width", 0)
+        .attr("height", 0)
+
+		return;
+	}
+
+	var margin = {top: 20, right: 20, bottom: 70, left: 40},
+    width = 600 - margin.left - margin.right,
+    height = 300 - margin.top - margin.bottom;
+
+	// Parse the date / time
+    var	parseDate = d3.timeParse("%Y-%m-%d");
+
+    var x = d3.scaleBand().range([0, width], .05);
+    var y = d3.scaleLinear().range([height, 0]);
+
+    var xAxis = d3.axisBottom(x)
+        .tickFormat(d3.timeFormat("%b %d"));
+
+    var yAxis = d3.axisLeft(y)
+        .tickSize(5)
+        .ticks(10);
+
+    svg
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform",  "translate(" + margin.left + "," + margin.top + ")");
+
+    // Define the div for the tooltip
+    var tooltip = d3.select(".tooltip").style("opacity", 0);
+
+    	data.forEach(function(d) {
+    		d.date = parseDate(d.date);
+    		d.alerts = d.alerts*1;
+        });
+
+	  x.domain(data.map(function(d) { return d.date; }));
+	  y.domain([0, d3.max(data, function(d) { return d.alerts; })]);
+
+	  svg.append("g")
+	      .attr("class", "x axis")
+	      .attr("transform", "translate( 20," + height + ")")
+	      .call(xAxis)
+	    .selectAll("text")
+	      .style("text-anchor", "end")
+	      .attr("dx", "-.8em")
+	      .attr("dy", "-.55em")
+	      .attr("transform", "translate( 30, 15)" );
+
+	  svg.append("g")
+	      .attr("class", "y axis")
+	      .attr("transform", "translate ( 20, 0)")
+	      .call(yAxis)
+	    .append("text")
+	      .attr("transform", "rotate(-90)")
+	      .attr("y", 6)
+	      .attr("dy", ".71em")
+	      .style("text-anchor", "end")
+	      .text("Alerts");
+
+	  svg.selectAll("bar")
+	      .data(data)
+	    .enter()
+	     .append("rect")
+	      .style("fill", "steelblue")
+	      .attr("x", function(d) { return x(d.date)+x.bandwidth() / 4; })
+	      .attr("width", x.bandwidth() / 2)
+	      .attr("y", function(d) { return y(d.alerts); })
+	      .attr("height", function(d) { return height - y(d.alerts); })
+	      .attr("transform", "translate ( 20, 0)")
+	      .on("mouseover", function(d) {
+            tooltip.transition()
+                .duration(200)
+                .style("opacity", .9);
+
+            tooltip.html( d.date.toLocaleString("en-US", { month: "long", day: 'numeric' }) + " - " + d.alerts)
+                .style("left", (d3.event.pageX) + "px")
+                .style("top", (d3.event.pageY - 128) + "px");
+            })
+	      .on("mouseout", function(d) {
+	            tooltip.transition()
+	                .duration(500)
+	                .style("opacity", 0);
+	        });
+
+	  svg.selectAll("bar")
+	    .data(data)
+	    .enter()
+		 .append("text")
+			.attr("x", function(d, i) { return x(d.date) + x.bandwidth()*0.5; })
+		    .attr("y", function(d) { return y(d.alerts) + 15; })
+		    .attr("class", "chart-value-label")
+		    .attr("text-anchor", "middle")
+		    .attr("transform", "translate ( 20, 0)")
+	    	.text(function(d) {
+	    		return d.alerts;
+	    	});
+}
+
+function loadIoTUserAlerts($scope, $http){
+
+	clearChart();
+
+	$scope.alerts.loading = true;
+	$http.get('/data/aggregated/alerts/' + $scope.context.currentUser).success(function(data) {
+
+		$scope.alerts.loading = false;
+		$scope.alerts.nodata = (data.length == 0);
+
+		plotChart(data);
+	 });
+}
+
+function iotUserAlertsController($scope, $http){
+
+	$scope.alerts = { loading: false, nodata:false};
+
+	loadIoTUserAlerts($scope, $http);
+
+	 $scope.$watch('context.currentUser', function(newValue, oldValue) {
+		if ( newValue && newValue != oldValue) {
+			loadIoTUserAlerts($scope, $http);
+		}
+	});
+}
+
+// module
+var app = angular.module('iot-dashboard');
+
+// directives
+app.directive('iotUserAlerts', [iotUserAlertsDirective]);

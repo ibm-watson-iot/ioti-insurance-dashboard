@@ -1,19 +1,18 @@
-# iot4i-dashboard
-
+/*****************************************************
 Data Privacy Disclaimer
 
 This Program has been developed for demonstration purposes only to illustrate the technical capabilities and potential business uses of the IBM IoT for Insurance
 
 The components included in this Program may involve the processing of personal information (for example location tracking and behavior analytics). When implemented in practice such processing may be subject to specific legal and regulatory requirements imposed by country specific data protection and privacy laws.  Any such requirements are not addressed in this Program.
 
-Licensee is responsible for the ensuring Licenseeís use of this Program and any deployed solution meets applicable legal and regulatory requirements.  This may require the implementation of additional features and functions not included in the Program.
+Licensee is responsible for the ensuring Licenseeís use of this Program and any deployed solution meets applicable legal and regulatory requirements.  This may require the implementation of additional features and functions not included in the Program. 
 
 
 Apple License issue
 
 This Program is intended solely for use with an Apple iOS product and intended to be used in conjunction with officially licensed Apple development tools and further customized and distributed under the terms and conditions of Licenseeís licensed Apple iOS Developer Program or Licenseeís licensed Apple iOS Enterprise Program.  
 
-Licensee agrees to use the Program to customize and build the application for Licenseeís own purpose and distribute in accordance with the terms of Licenseeís Apple developer program
+Licensee agrees to use the Program to customize and build the application for Licenseeís own purpose and distribute in accordance with the terms of Licenseeís Apple developer program 
 
 
 Risk Mitigation / Product Liability Issues
@@ -45,12 +44,82 @@ If the Program includes components that are Redistributable, they will be identi
 Feedback License
 
 In the event Licensee provides feedback to IBM regarding the Program, Licensee agrees to assign to IBM all right, title, and interest (including ownership of copyright) in any data, suggestions, or written materials that 1) are related to the Program and 2) that Licensee provides to IBM.
+******************************************************/
+
+.charts .charts-header {
+  padding:10px;
+}
+
+.charts .charts-header .icon {
+  height: 25px;
+  width: 25px;
+  display:inline-block;
+}
+
+.charts .charts-header .title {
+  display:inline-block;
+  color: #666666;
+}
+
+.charts .chart-icon {
+  float:right;
+}
+
+.charts .chart-icon .icon {
+  display:inline-block;
+}
+
+.charts .chart-icon .icon.bar-chart {
+  background-image : url('/icons/chart_bar.png');
+}
+
+.charts .chart-icon.active .icon.bar-chart {
+  background-image : url('/icons/chart_bar_blue.png');
+}
+
+.charts .chart-icon .icon.table-chart {
+  background-image : url('/icons/chart_table.png');
+}
+
+.charts .chart-icon.active .icon.table-chart {
+  background-image : url('/icons/chart_table_blue.png');
+}
+
+.charts .tab-content {
+  height:100%;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+.charts bar-chart {
+  width:100%;
+}
 
 
-UI: http://host:port/dashboard/
+/* Alterring the nav tabs */
 
-API: http://host>:port/api/
+.charts .nav.nav-tabs {
+  border-bottom: 1px solid grey;
+}
 
-Swagger: http://host:port/dist/
+.charts .nav-tabs>li.active>a, .charts .nav-tabs>li.active>a:focus, .charts .nav-tabs>li.active>a:hover {
+  border: 0;
+}
 
-Deployed on http://iot4i-insurance-dashboard.mybluemix.net/dashboard/
+.charts .nav-tabs>li, .charts .nav-tabs>li:focus, .charts .nav-tabs>li:hover {
+  border: 0;
+}
+
+.charts .nav>li>a {
+  border: 0;
+}
+
+.charts .nav>li>a:focus, .charts .nav>li>a:hover {
+    background-color: inherit;
+    border: 0;
+}
+
+.charts .nav>li, .charts .nav>li>a {
+  position:inherit;
+}
+/* done with nav tabs */

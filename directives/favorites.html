@@ -1,0 +1,10 @@
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <span translate>favorites:</span>
+  </div>
+  <div class="panel-body">
+  <div ng-repeat="favorite in favorites track by $index">
+    <span style="cursor:pointer" ng-click="changeLocation(favorite)">{{favorite}}</span>
+  </div>
+  </div>
+</div>

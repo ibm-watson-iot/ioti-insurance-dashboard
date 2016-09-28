@@ -1,19 +1,18 @@
-# iot4i-dashboard
-
+/*****************************************************
 Data Privacy Disclaimer
 
 This Program has been developed for demonstration purposes only to illustrate the technical capabilities and potential business uses of the IBM IoT for Insurance
 
 The components included in this Program may involve the processing of personal information (for example location tracking and behavior analytics). When implemented in practice such processing may be subject to specific legal and regulatory requirements imposed by country specific data protection and privacy laws.  Any such requirements are not addressed in this Program.
 
-Licensee is responsible for the ensuring Licenseeís use of this Program and any deployed solution meets applicable legal and regulatory requirements.  This may require the implementation of additional features and functions not included in the Program.
+Licensee is responsible for the ensuring Licenseeís use of this Program and any deployed solution meets applicable legal and regulatory requirements.  This may require the implementation of additional features and functions not included in the Program. 
 
 
 Apple License issue
 
 This Program is intended solely for use with an Apple iOS product and intended to be used in conjunction with officially licensed Apple development tools and further customized and distributed under the terms and conditions of Licenseeís licensed Apple iOS Developer Program or Licenseeís licensed Apple iOS Enterprise Program.  
 
-Licensee agrees to use the Program to customize and build the application for Licenseeís own purpose and distribute in accordance with the terms of Licenseeís Apple developer program
+Licensee agrees to use the Program to customize and build the application for Licenseeís own purpose and distribute in accordance with the terms of Licenseeís Apple developer program 
 
 
 Risk Mitigation / Product Liability Issues
@@ -45,12 +44,60 @@ If the Program includes components that are Redistributable, they will be identi
 Feedback License
 
 In the event Licensee provides feedback to IBM regarding the Program, Licensee agrees to assign to IBM all right, title, and interest (including ownership of copyright) in any data, suggestions, or written materials that 1) are related to the Program and 2) that Licensee provides to IBM.
+******************************************************/
 
+function loginFormDirective(){
+	return {
+	    restrict: 'E', // C: class, E: element, M: comments, A: attributes
+	    replace: true, // replaces original content with template
+	    templateUrl: "directives/login-form.html",
+	    controller: loginFormController
+	  };
+}
 
-UI: http://host:port/dashboard/
+function loginFormController($scope, $http, $cookies){
+	 $scope.username = "";
+	 $scope.password = "";
+	 $scope.csrfToken = $cookies.get("XSRF-TOKEN");
 
-API: http://host>:port/api/
+	 $scope.doLogin = function( ) {
+		 console.log( "USER: " + $scope.username);
+		 console.log( "PASS: " +  $scope.password);
+		 console.log( "_csrf: " + $scope.csrfToken);
 
-Swagger: http://host:port/dist/
+		 var req = {
+				 method: 'POST',
+				 url: '/login',
 
-Deployed on http://iot4i-insurance-dashboard.mybluemix.net/dashboard/
+				 headers: {
+				   'Content-Type': 'application/x-www-form-urlencoded',
+				   'XSRF-TOKEN':  $scope.csrfToken
+				 },
+
+				 data: "username=" + encodeURIComponent( $scope.username) + "&password=" + encodeURIComponent( $scope.password)
+		}
+
+		$http(req).success(function(data) {
+		    console.log(data);
+		  }).error(function(data) {
+		    console.log(data);
+		  });
+	 }
+}
+
+// module
+var app = angular.module('iot-dashboard-login', ['ngCookies', 'pascalprecht.translate']);
+
+app.config(function($translateProvider) {
+	$translateProvider
+		.useStaticFilesLoader({
+	  	prefix: 'languages/',
+	  	suffix: '.json'
+		})
+		.useSanitizeValueStrategy('escape')
+		.determinePreferredLanguage()
+		.fallbackLanguage('en');
+});
+
+// directives
+app.directive('loginForm', [loginFormDirective]);

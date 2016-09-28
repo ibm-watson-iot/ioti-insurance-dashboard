@@ -1,19 +1,18 @@
-# iot4i-dashboard
-
+/*****************************************************
 Data Privacy Disclaimer
 
 This Program has been developed for demonstration purposes only to illustrate the technical capabilities and potential business uses of the IBM IoT for Insurance
 
 The components included in this Program may involve the processing of personal information (for example location tracking and behavior analytics). When implemented in practice such processing may be subject to specific legal and regulatory requirements imposed by country specific data protection and privacy laws.  Any such requirements are not addressed in this Program.
 
-Licensee is responsible for the ensuring Licenseeís use of this Program and any deployed solution meets applicable legal and regulatory requirements.  This may require the implementation of additional features and functions not included in the Program.
+Licensee is responsible for the ensuring Licenseeís use of this Program and any deployed solution meets applicable legal and regulatory requirements.  This may require the implementation of additional features and functions not included in the Program. 
 
 
 Apple License issue
 
 This Program is intended solely for use with an Apple iOS product and intended to be used in conjunction with officially licensed Apple development tools and further customized and distributed under the terms and conditions of Licenseeís licensed Apple iOS Developer Program or Licenseeís licensed Apple iOS Enterprise Program.  
 
-Licensee agrees to use the Program to customize and build the application for Licenseeís own purpose and distribute in accordance with the terms of Licenseeís Apple developer program
+Licensee agrees to use the Program to customize and build the application for Licenseeís own purpose and distribute in accordance with the terms of Licenseeís Apple developer program 
 
 
 Risk Mitigation / Product Liability Issues
@@ -45,12 +44,64 @@ If the Program includes components that are Redistributable, they will be identi
 Feedback License
 
 In the event Licensee provides feedback to IBM regarding the Program, Licensee agrees to assign to IBM all right, title, and interest (including ownership of copyright) in any data, suggestions, or written materials that 1) are related to the Program and 2) that Licensee provides to IBM.
+******************************************************/
 
+function barChartDirective(){
+	return {
+	    restrict: 'E', // C: class, E: element, M: comments, A: attributes
+	    replace: true, // replaces original content with template
+	    templateUrl: "directives/charts/bar-chart.html",
+	    controller: barChartController,
+		scope: {
+			datasource : "=",
+		}
+	  };
+}
 
-UI: http://host:port/dashboard/
+function barChartController($scope, $http){
+	// assumption - this is sorted
+	refreshData($scope);
 
-API: http://host>:port/api/
+	$scope.$watch('datasource', function(newValue, oldValue) {
+		if (newValue) {
+		  refreshData($scope, $http, newValue);
+		}
+	});
+}
 
-Swagger: http://host:port/dist/
+function refreshData($scope) {
 
-Deployed on http://iot4i-insurance-dashboard.mybluemix.net/dashboard/
+	if( $scope.datasource && $scope.datasource.data && $scope.datasource.data[0]) {
+		
+		$scope.datasource.data.sort(function(a,b) {
+			var totalA = a[1] + (a[2] || 0);
+			var totalB = b[1] + (b[2] || 0);
+
+			if (totalA === totalB) {
+				return 0;
+			}
+			else {
+				return (totalA > totalB) ? -1 : 1;
+			}
+		});
+		
+		var firstRow = $scope.datasource.data[0];
+
+		var maxWidth = firstRow[1];
+
+		if ( firstRow.length > 2) {
+			maxWidth += firstRow[2];
+		}
+
+		$scope.datasource.maxWidth = maxWidth;
+	}
+}
+
+// module
+var app = angular.module('iot-dashboard');
+
+// directives
+app.directive('barChart', [barChartDirective]);
+
+// controllers
+//app.controller('iotUserInfoController', ['$scope', '$http', iotUserInfoController]);

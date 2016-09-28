@@ -1,0 +1,28 @@
+<div class="charts">
+	<ul class="nav nav-tabs">
+		<li>
+			<div class="charts-header">
+				<div class="icon" ng-style="{'background-image':'url(' + datasource.icon + ')'}"></div>
+				<div class="title"> {{datasource.title}} </div>
+			</div>
+		</li>
+			<li class="chart-icon">
+				<a data-toggle="tab" href="#bars{{uniqueId}}">
+					<div class="icon bar-chart"></div>
+				</a>
+			</li>
+			<li class="active chart-icon">
+				<a data-toggle="tab" href="#table{{uniqueId}}">
+					<div class="icon table-chart"></div>
+				</a>
+			</li>
+	</ul>
+	<div class="tab-content">
+		<div id="table{{uniqueId}}" class="tab-pane fade in active">
+			<table-chart datasource="datasource.table"/>
+		</div>
+		<div id="bars{{uniqueId}}" class="tab-pane fade">
+			<bar-chart datasource="datasource.bar"/>
+		</div>
+	</div>
+</div>

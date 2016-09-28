@@ -1,19 +1,18 @@
-# iot4i-dashboard
-
+/*****************************************************
 Data Privacy Disclaimer
 
 This Program has been developed for demonstration purposes only to illustrate the technical capabilities and potential business uses of the IBM IoT for Insurance
 
 The components included in this Program may involve the processing of personal information (for example location tracking and behavior analytics). When implemented in practice such processing may be subject to specific legal and regulatory requirements imposed by country specific data protection and privacy laws.  Any such requirements are not addressed in this Program.
 
-Licensee is responsible for the ensuring Licenseeís use of this Program and any deployed solution meets applicable legal and regulatory requirements.  This may require the implementation of additional features and functions not included in the Program.
+Licensee is responsible for the ensuring Licenseeís use of this Program and any deployed solution meets applicable legal and regulatory requirements.  This may require the implementation of additional features and functions not included in the Program. 
 
 
 Apple License issue
 
 This Program is intended solely for use with an Apple iOS product and intended to be used in conjunction with officially licensed Apple development tools and further customized and distributed under the terms and conditions of Licenseeís licensed Apple iOS Developer Program or Licenseeís licensed Apple iOS Enterprise Program.  
 
-Licensee agrees to use the Program to customize and build the application for Licenseeís own purpose and distribute in accordance with the terms of Licenseeís Apple developer program
+Licensee agrees to use the Program to customize and build the application for Licenseeís own purpose and distribute in accordance with the terms of Licenseeís Apple developer program 
 
 
 Risk Mitigation / Product Liability Issues
@@ -45,12 +44,101 @@ If the Program includes components that are Redistributable, they will be identi
 Feedback License
 
 In the event Licensee provides feedback to IBM regarding the Program, Licensee agrees to assign to IBM all right, title, and interest (including ownership of copyright) in any data, suggestions, or written materials that 1) are related to the Program and 2) that Licensee provides to IBM.
+******************************************************/
 
+function searchDirective(){
+	return {
+	    restrict: 'E', // C: class, E: element, M: comments, A: attributes
+	    replace: true, // replaces original content with template
+	    templateUrl: "directives/search.html",
+	    controller: searchController
+	  };
+}
 
-UI: http://host:port/dashboard/
+function searchController($scope, $http) {
+	$scope.searchLoading = false;
+	reloadsearch($scope, $http);
 
-API: http://host>:port/api/
+	$scope.reloadsearch = reloadsearch;
 
-Swagger: http://host:port/dist/
+	$scope.clearSearchList = function() {
+		$scope.searchLoading = true;
 
-Deployed on http://iot4i-insurance-dashboard.mybluemix.net/dashboard/
+		$http.post('/data/search/clear').success(function(result) {
+			$scope.searchList = result;
+		}).finally( function() {
+			$scope.searchLoading = false;
+		});
+	};
+
+	$scope.doSearch = function(search) {
+		var searchString;
+		if (search === undefined) {
+			searchString = $scope.searchString;
+			$scope.searchString = "";
+		}
+		else {
+			searchString = search;
+		}
+
+		searchString = encodeURIComponent(searchString); // to prevent XSS
+
+		processLocationUser($scope, $http, searchString);
+
+		$scope.searchLoading = true;
+		$scope.context.currentLocation = undefined;
+		$scope.context.currentUser = undefined;
+
+		$http.post('/data/search/searchString/' + searchString).then(function successCallback(result) {
+			$scope.searchList = result.data.slice();
+			if (result.data.username) {
+				$scope.context.currentUser = searchString;
+				$scope.context.currentLabel = result.data.firstname + " " + result.data.lastname + " (" + result.data.username + ")";
+			}
+		},
+		function errorCallback(result) {
+			$scope.searchList = result.data.slice();
+			$scope.context.currentLocation = searchString;
+			$scope.context.currentLabel = location;
+		}).finally(function() {
+			$scope.searchLoading = false;
+		});
+	};
+
+	$scope.changeLocation = function(location) {
+		processLocationUser($scope, $http, location);
+	};
+}
+
+function processLocationUser($scope, $http, location) {
+	$scope.searchLoading = true;
+
+	// reset vars
+	$scope.context.currentLabel = "";
+	$scope.context.currentLocation = undefined;
+	$scope.context.currentUser = undefined;
+
+	$http.get('/data/user/' + location).then(function successCallback(result) {
+		if (result.data.username) {
+			$scope.context.currentUser = location;
+			$scope.context.currentLabel = result.data.firstname + " " + result.data.lastname + " (" + result.data.username + ")";
+		}
+	},
+	function errorCallback(result) {
+		$scope.context.currentLocation = location;
+		$scope.context.currentLabel = location;
+	}).finally(function() {
+		$scope.searchLoading = false;
+	});
+}
+
+function reloadsearch($scope, $http) {
+	$http.get('/data/search').success(function(result) {
+		$scope.searchList = result.slice().reverse();
+	});
+}
+
+// module
+var app = angular.module('iot-dashboard');
+// directives
+app.directive('search', [searchDirective]);

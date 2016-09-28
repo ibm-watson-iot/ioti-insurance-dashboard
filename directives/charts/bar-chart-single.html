@@ -1,0 +1,25 @@
+<div class="bar-chart-single">
+  <div class="title">
+    <span>{{datasource[0]}}</span>
+  </div>
+  <div class="data">
+    <div class="chart-bar-wrapper" ng-style="{'width' : (((datasource[1] + datasource[2]) / maxwidth) * 70) + '%'}">
+      <div class="chart-bar">
+        <div class="bar-tooltip">
+          <span>{{datasource[0]}}</span>
+          <div>
+            <span data-ng-if="datasource.length>2">Total {{datasource[1] + datasource[2]}}</span>
+            <span>{{headers.type1}} {{datasource[1]}}</span>
+            <span data-ng-if="datasource.length>2">{{headers.type2}} {{datasource[2]}}</span>
+          </div>
+        </div>
+
+        <div class="bar-type type1" data-ng-if="datasource.length>2" data-ng-style="{'width' : ((datasource[1] / (datasource[1] + datasource[2])) * 100) + '%'}" style=""></div>
+        <div class="bar-type type1" data-ng-if="datasource.length==2" data-ng-style="{'width' : '100%'}" style=""></div>
+        <div class="bar-type type2" data-ng-if="datasource.length>2" data-ng-style="{'width' : ((datasource[2] / (datasource[1] + datasource[2])) * 100) + '%'}" style=""></div>
+      </div>
+    </div>
+
+    <span >{{(datasource[1] + datasource[2]).format()}}</span>
+  </div>
+</div>

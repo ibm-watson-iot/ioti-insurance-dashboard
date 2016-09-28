@@ -1,0 +1,13 @@
+<div class="login-page">
+	<div class="form">
+		<div class="login-title">{{ 'login_title' | translate }}</div>
+
+		<form method="post" action="/login">
+			<span></span><input type="text" name="username" placeholder="{{ 'username_placeholder' | translate }}" size="25" /><br /><br />
+			<span></span><input type="password" name="password" placeholder="{{ 'password_placeholder' | translate }}" size="25" autocomplete="off" /><br /> <br />
+			<input type="hidden" name="_csrf" value="{{csrfToken}}">
+
+			<input class="button" type="submit" value="{{ 'login_button_label' | translate }}" />
+		</form>
+	</div>
+</div>

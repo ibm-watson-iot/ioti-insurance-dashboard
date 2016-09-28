@@ -1,19 +1,18 @@
-# iot4i-dashboard
-
+/*****************************************************
 Data Privacy Disclaimer
 
 This Program has been developed for demonstration purposes only to illustrate the technical capabilities and potential business uses of the IBM IoT for Insurance
 
 The components included in this Program may involve the processing of personal information (for example location tracking and behavior analytics). When implemented in practice such processing may be subject to specific legal and regulatory requirements imposed by country specific data protection and privacy laws.  Any such requirements are not addressed in this Program.
 
-Licensee is responsible for the ensuring Licenseeís use of this Program and any deployed solution meets applicable legal and regulatory requirements.  This may require the implementation of additional features and functions not included in the Program.
+Licensee is responsible for the ensuring Licenseeís use of this Program and any deployed solution meets applicable legal and regulatory requirements.  This may require the implementation of additional features and functions not included in the Program. 
 
 
 Apple License issue
 
 This Program is intended solely for use with an Apple iOS product and intended to be used in conjunction with officially licensed Apple development tools and further customized and distributed under the terms and conditions of Licenseeís licensed Apple iOS Developer Program or Licenseeís licensed Apple iOS Enterprise Program.  
 
-Licensee agrees to use the Program to customize and build the application for Licenseeís own purpose and distribute in accordance with the terms of Licenseeís Apple developer program
+Licensee agrees to use the Program to customize and build the application for Licenseeís own purpose and distribute in accordance with the terms of Licenseeís Apple developer program 
 
 
 Risk Mitigation / Product Liability Issues
@@ -45,12 +44,70 @@ If the Program includes components that are Redistributable, they will be identi
 Feedback License
 
 In the event Licensee provides feedback to IBM regarding the Program, Licensee agrees to assign to IBM all right, title, and interest (including ownership of copyright) in any data, suggestions, or written materials that 1) are related to the Program and 2) that Licensee provides to IBM.
+******************************************************/
 
+var cred = {};
 
-UI: http://host:port/dashboard/
+// Loading credentials only if we are locally
+if (process.env.VCAP_SERVICES === undefined && GLOBAL.credentials === undefined) {
 
-API: http://host>:port/api/
+    try {
+        var fs = require('fs');
+        var credFileFolderPath = require('path').dirname(process.argv[1]);
+        var credFilePath = credFileFolderPath + '/credentials.json';
 
-Swagger: http://host:port/dist/
+        // If no exception - file exists
+        fs.accessSync(credFilePath, fs.F_OK);
 
-Deployed on http://iot4i-insurance-dashboard.mybluemix.net/dashboard/
+        // Try to load the file only if we are on dev mode. otherwise the file won't be present (cfignore)
+        var credFile = require(credFilePath);
+        var selected = credFile.current;
+        var credentials = credFile.environments[selected];
+
+        if (credentials.warning) {
+            console.log("You are working locally and connected to " + selected);
+            console.log("This environment has been flagged with a warning. ");
+            var readlineSync = require('readline-sync');
+            var answer = readlineSync.question('do you wish to continue? (y/n)');
+
+            if (answer !== "y") {
+                process.exit(1);
+            }
+        }
+
+        GLOBAL.credentials = credentials;
+    } catch (e) {
+        console.log("Credentials file not exists in folder " + credFileFolderPath);
+        process.exit(1);
+    }
+}
+
+cred.getCredentialsByServiceName = function(serviceName) {
+    var credentials;
+
+    if (process && process.env && process.env.VCAP_SERVICES) {
+        var vcap_services = JSON.parse(process.env.VCAP_SERVICES);
+
+        if (vcap_services && vcap_services[serviceName]) {
+            credentials = vcap_services[serviceName][0].credentials;
+        }
+    } else {
+        credentials = GLOBAL.credentials[serviceName];
+    }
+
+    return (credentials);
+};
+
+cred.getEnvURL = function() {
+    var url;
+    if (process && process.env && process.env.VCAP_APPLICATION) {
+        var vcap_application = JSON.parse(process.env.VCAP_APPLICATION);
+        url = vcap_application.application_uris[0];
+    } else {
+        url = GLOBAL.credentials.currentURL;
+    }
+
+    return (url);
+};
+
+module.exports = cred;

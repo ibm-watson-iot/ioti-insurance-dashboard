@@ -1,0 +1,65 @@
+<div class="main">
+  <div>
+    <ul class="main-menu nav nav-tabs">
+      <li>
+        <div class="insurance-name">
+          <div class="icon insurance-logo"></div>
+          <span translate>Insurance Name</span>
+        </div>
+      </li>
+
+      <li class="active"><a data-toggle="tab" href="#devices" translate>Devices</a></li>
+      <li><a data-toggle="tab" href="#claims" translate>Claims avoidance</a></li>
+      <li><a data-toggle="tab" href="#permissions" translate>Permissions</a></li>
+
+      <li role="presentation" class="dropdown pull-right">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+          <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+          {{myUser}}
+          <span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu">
+          <li>
+            <a class="preferences" href="#" data-toggle="modal" data-target="#preferencesModal"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span>&nbsp;<span translate>Preferences</span></a>
+          </li>
+          <li role="separator" class="divider"></li>
+          <li ng-click="logout()">
+            <a class="logout" href="#"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>&nbsp;<span translate>Logout</span></a>
+          </li>
+        </ul>
+      </li>
+      <li role="presentation" class="pull-right">
+        <a href="#"><span class="glyphicon glyphicon-share-alt" aria-hidden="true"></span>&nbsp;<span translate>Share</span></a>
+      </li>
+    </ul>
+  </div>
+
+  <div class="page">
+      <nav-bar />
+
+    <div class="tab-content">
+
+      <div class="loading" data-ng-show="progress.geodataLoading != 0">
+        <loading-indicator />
+      </div>
+
+      <div id="devices" class="tab-pane fade in active">
+        <devices-page ng-if="context.currentLocation"/>
+        <user-page ng-if="context.currentUser"/>
+      </div>
+
+      <div id="claims" class="tab-pane fade">
+        <claims-page />
+      </div>
+
+      <div id="permissions" class="tab-pane fade">
+        <permissions-page />
+      </div>
+    </div>
+
+    <modal-dialog show='modalShown'></modal-dialog>
+  </div>
+
+  <preferences-modal />
+  <side-bar/>
+</div>

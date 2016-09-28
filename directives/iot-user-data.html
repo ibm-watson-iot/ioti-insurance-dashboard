@@ -1,0 +1,18 @@
+<div class="user-data">
+
+	<loading-indicator data-ng-show="userInfoLoading"/>
+	
+	<ul class="nav nav-tabs" data-ng-show="!userInfoLoading">
+		<li data-ng-repeat="table in datasource.tables" data-ng-class="{active : $first}">
+			<a data-toggle="tab" href="#{{table.title}}">
+				<span>{{table.title}}</span>
+				<span class="count">({{table.data.length}})</span>
+			</a>
+		</li>
+	</ul>
+	<div class="tab-content" style="height:100%;" data-ng-show="!userInfoLoading">
+		<div data-ng-repeat="table in datasource.tables" id="{{table.title}}" class="tab-pane fade in" data-ng-class="{active : $first}">
+			<table-chart datasource="table" style="text-align:left;width: 100%"/>
+		</div>
+	</div>
+</div>

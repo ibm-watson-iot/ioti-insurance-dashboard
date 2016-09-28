@@ -1,0 +1,90 @@
+<!--
+  Licensed Materials - Property of IBM
+  (c) Copyright IBM Corporation 2016. All Rights Reserved.
+
+  Note to U.S. Government Users Restricted Rights:
+  Use, duplication or disclosure restricted by GSA ADP Schedule
+  Contract with IBM Corp.
+ -->
+
+<html>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>IBM Insurance Dashboard</title>
+  <link rel="stylesheet" type="text/css" href="directives/dashboard-geo-map.css">
+  <link rel="stylesheet" type="text/css" href="directives/dashboard-user-contact.css">
+  <link rel="stylesheet" type="text/css" href="directives/iot-user-data.css">
+  <link rel="stylesheet" type="text/css" href="directives/dashboard-user-alerts.css">
+  <link rel="stylesheet" type="text/css" href="directives/charts/table-chart.css">
+  <link rel="stylesheet" type="text/css" href="directives/charts/bar-chart-single.css">
+  <link rel="stylesheet" type="text/css" href="directives/charts/bar-chart.css">
+  <link rel="stylesheet" type="text/css" href="directives/charts.css">
+  <link rel="stylesheet" type="text/css" href="directives/search.css">
+  <link rel="stylesheet" type="text/css" href="directives/main.css">
+  <link rel="stylesheet" type="text/css" href="directives/favorites.css">
+  <link rel="stylesheet" type="text/css" href="directives/devices-page.css">
+  <link rel="stylesheet" type="text/css" href="directives/user-page.css">
+  <link rel="stylesheet" type="text/css" href="directives/permissions-page.css">
+  <link rel="stylesheet" type="text/css" href="directives/claims-page.css">
+  <link rel="stylesheet" type="text/css" href="directives/nav-bar.css">
+  <link rel="stylesheet" type="text/css" href="directives/side-bar.css">
+  <link rel="stylesheet" type="text/css" href="directives/loading-indicator.css">
+  <link rel="stylesheet" type="text/css" href="directives/modal-dialog.css">
+
+  <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="node_modules/angular/angular-csp.css">
+
+  <link rel="stylesheet" type="text/css" href="index.css">
+</head>
+
+<body>
+  <main data-ng-app="iot-dashboard" />
+
+  <script src="node_modules/angular/angular.min.js"></script>
+  <script src="node_modules/angular-animate/angular-animate.min.js"></script>
+  <script>
+    var locale = window.navigator.language || window.navigator.userLanguage;
+    if (locale) {
+      document.write('<script src="node_modules/angular-i18n/angular-locale_' + locale + '.js"><\/script>');
+    }
+  </script>
+  <script src="node_modules/angular-translate/dist/angular-translate.min.js"></script>
+	<script src="node_modules/angular-translate-loader-static-files/angular-translate-loader-static-files.min.js"></script>
+  <script src="node_modules/jquery/dist/jquery.min.js"></script>
+  <script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+  <script src="node_modules/angular-ui-bootstrap/dist/ui-bootstrap-tpls.js"></script>
+  <script src="node_modules/d3/build/d3.min.js"></script>
+  <script src="node_modules/d3-queue/build/d3-queue.min.js"></script>
+  <script src="node_modules/topojson/build/topojson.min.js"></script>
+
+  <script src="providers/regionDataClient.js"></script>
+  <script src="providers/aggregatorClient.js"></script>
+
+  <script src="directives/dashboard.js"></script>
+  <script src="directives/dashboard-geo-map.js"></script>
+  <script src="directives/dashboard-user-contact.js"></script>
+  <script src="directives/iot-user-data.js"></script>
+  <script src="directives/dashboard-user-alerts.js"></script>
+  <script src="directives/date-picker.js"></script>
+  <script src="directives/favorites.js"></script>
+  <script src="directives/loading-indicator.js"></script>
+  <script src="directives/modal-dialog.js"></script>
+  <script src="directives/search.js"></script>
+  <script src="directives/charts.js"></script>
+  <script src="directives/main.js"></script>
+  <script src="directives/nav-bar.js"></script>
+  <script src="directives/side-bar.js"></script>
+  <script src="directives/devices-page.js"></script>
+  <script src="directives/user-page.js"></script>
+  <script src="directives/claims-page.js"></script>
+  <script src="directives/permissions-page.js"></script>
+  <script src="directives/preferences-modal.js"></script>
+  <script src="directives/charts/table-chart.js"></script>
+  <script src="directives/charts/bar-chart.js"></script>
+  <script src="directives/charts/bar-chart-single.js"></script>
+</body>
+
+</html>
