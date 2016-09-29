@@ -1,0 +1,35 @@
+IBM IoT for Insurance Dashboard Sample App Redistributables:
+
+
+
+The following list includes files that are provided to Licensee pursuant to the Redistributables section of the IBM International Program License Agreements License Information that applies to this Program:
+
+
+
+All source files in one the following list of directories (or subdirectories of these directories) may be compiled and redistributed in object form only:
+
+- Not Applicable
+
+
+
+All SDL models in the following list of directories (or subdirectories of these directories) may be used for code generation followed by compilation to be redistributed in object form only:
+
+- Not Applicable
+
+
+
+All object files in the following list of directories (or subdirectories of these directories) may be redistributed:
+
+- <installation dir>\assests
+
+- <installation dir>\directives
+
+- <installation dir>\languages
+
+- <installation dir>\providers
+
+- <installation dir>\resources
+
+- <installation dir>\util
+
+- <installation dir>\.   ALL ROOT OBJECT FILES IN THE ROOT DIRECTORY
