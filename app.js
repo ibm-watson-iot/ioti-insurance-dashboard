@@ -300,7 +300,7 @@ app.post("/login", parseForm, function (req, res) {
 });
 
 if (workingOnLocalDeveloperLaptop) {
-	// use self-signed cert for dev env
+	// use self-signed cert for dev env. See /dev_ssl/HowTogenerate.md for information on how to create self-signed certificates
 	var server = https.createServer({
     key: fs.readFileSync('./dev_ssl/server.key'),
     cert: fs.readFileSync('./dev_ssl/server-cert.pem'),
