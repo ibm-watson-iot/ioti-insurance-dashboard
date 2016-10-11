@@ -1,6 +1,9 @@
-# iot4i-dashboard
+# IoT for Insurance Dashboard
 
-Data Privacy Disclaimer
+## License
+http://www14.software.ibm.com/cgi-bin/weblap/lap.pl?li_formnum=L-DDIN-ADQPWU&popup=y&title=IBM%20IoT%20for%20Insurance%20Sample%20Apps
+
+## Data Privacy Disclaimer
 
 This Program has been developed for demonstration purposes only to illustrate the technical capabilities and potential business uses of the IBM IoT for Insurance
 
