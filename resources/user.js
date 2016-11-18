@@ -260,9 +260,9 @@ exports.getIoTDataForUser = {
                                     userShields.push(shieldInfo);
                                 }
                             });
+                            
+                            callback();
                         });
-
-                        callback();
                     });
                 });
 
@@ -313,7 +313,15 @@ exports.getIoTDataForUser = {
                             devices.push(newDevice);
                         });
 
-                        callback();
+                        // add the default device if any
+                        db.getUserByUsername( user, function(err, userdata) {
+                        	if( userdata && userdata.iotresult) {
+                        		devices.push( [userdata.iotresult.deviceId, "", userdata.iotresult.typeId, ""]);
+                        	}
+                        	
+                        	callback();
+                        });
+                        
                     });
                 });
 
@@ -340,7 +348,6 @@ exports.getIoTDataForUser = {
                 });
 
                 async.parallel(tasks, function() {
-
                     var data = {
                         "activeAlert": activeAlert,
                         tables: [{

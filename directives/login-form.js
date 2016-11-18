@@ -56,8 +56,32 @@ function loginFormDirective(){
 }
 
 function loginFormController($scope, $http, $cookies){
-	 $scope.username = "";
-	 $scope.password = "";
+	
+	function getParameterByName(name) {
+        name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+        var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+            results = regex
+            .exec(location.search);
+        return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g,
+            " "));
+    }
+	 
+	$scope.username = "";
+	$scope.password = "";
+	var auth = getParameterByName( "auth");
+	//console.log( "AUTH: " + auth);
+	if ( auth != "") {
+		auth = atob( auth);
+		//console.log( "AUTH DECODED: " + auth);
+		
+		var pos = auth.indexOf( ":");
+		$scope.username = auth.substr( 0, pos);
+		//console.log( "USR: " + $scope.username);
+		
+		$scope.password = auth.substr( pos+1);
+		//console.log( "PWD: " + $scope.password);
+	}
+	 
 	 $scope.csrfToken = $cookies.get("XSRF-TOKEN");
 
 	 $scope.doLogin = function( ) {

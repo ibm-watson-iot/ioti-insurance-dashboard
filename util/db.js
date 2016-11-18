@@ -60,10 +60,11 @@ if (cloudant) {
     var swe = sw.errors;
 
     db.getDB = function(dbName, useCloudantLib) {
-        var mydb;
+        /*
+    	var mydb;
         if (useCloudantLib) {
             var Cloudant = require('cloudant');
-            var cloudantDB = Cloudant(cloudant.url);
+            var cloudantDB = Cloudant({url: cloudant.url, plugin:'retry', retryAttempts:10});
 
             mydb = cloudantDB.db.use(dbName);
             return mydb;
@@ -73,6 +74,13 @@ if (cloudant) {
             mydb.url = cloudant.url;
             return mydb;
         }
+        */
+        
+        var Cloudant = require('cloudant');
+        var cloudantDB = Cloudant({url: cloudant.url, plugin:'retry', retryAttempts:10});
+
+        var mydb = cloudantDB.db.use(dbName);
+        return mydb;
     };
 
     var usersdb = db.getDB("users");

@@ -66,13 +66,20 @@ var userResources = require("./resources/user.js");
 var aggregatedResources = require("./resources/aggregated.js");
 var snapshotResources = require("./resources/snapshot.js");
 
+var messages = require('./messages.js');
+var nodeuuid = require('node-uuid');
+
 if (global.v8debug) {
 	global.v8debug.Debug.setBreakOnException();
 }
 
-process.on('uncaughtException', function(err) {
-    console.log(err);
+process.on('uncaughtException', function (err) {
+    var errid = nodeuuid.v4();
+    console.error(messages.uncaught_error, errid, err.stack);
+    console.error("Error %s %j", errid, err);
 });
+
+app.disable('x-powered-by');
 
 var workingOnLocalDeveloperLaptop = (process && process.env && process.env.VCAP_SERVICES) === undefined;
 if (workingOnLocalDeveloperLaptop) {
@@ -196,13 +203,13 @@ app.use("/dashboard", express.static('.'));
 app.use( "/data", api);
 app.use( "/icons", express.static("./assets/icons"));
 
-var port = (process.env.VCAP_APP_PORT || 3000);
-var host = (process.env.VCAP_APP_HOST || 'localhost');
+var port = process.env.VCAP_APPLICATION ? process.env.PORT || 8080 : 3000;
+var host = process.env.VCAP_APPLICATION ? '0.0.0.0' : 'localhost';
 
 // swagger
 var swagger = require("swagger-node-express").createNew(api);
 // use HTTPS by default
-var swaggerport = process.env.VCAP_APP_PORT ? 443 : port;
+var swaggerport = process.env.VCAP_APPLICATION ? 443 : port;
 var host2 = host;
 if(process.env.APIDOMAIN)//process.env.application_uris && process.env.application_uris[0])
 	host2 = process.env.APIDOMAIN;//process.env.application_uris[0];
@@ -299,21 +306,23 @@ app.post("/login", parseForm, function (req, res) {
 		});
 });
 
+console.log( messages.server_starting);
+
 if (workingOnLocalDeveloperLaptop) {
-	// use self-signed cert for dev env. See /dev_ssl/HowTogenerate.md for information on how to create self-signed certificates
+	// use self-signed cert for dev env
 	var server = https.createServer({
     key: fs.readFileSync('./dev_ssl/server.key'),
-    cert: fs.readFileSync('./dev_ssl/server-cert.pem'),
+    cert: fs.readFileSync('./dev_ssl/server.crt'),
     ca: fs.readFileSync('./dev_ssl/ca.crt'),
     requestCert: true,
     rejectUnauthorized: false
 	}, app);
 	server.listen(port, host, function() {
-	  console.log('Express server listening on host' + host + ':' + port);
+		console.log( messages.server_started, server.address().address, server.address().port);
 	});
 } else {
 	// Start the server on port 80
 	var server = app.listen(port, host, function() {
-	  console.log('Express server listening on ' + server.address().address + ':' + server.address().port);
+	  console.log( messages.server_started, server.address().address, server.address().port);
 	});
 }
