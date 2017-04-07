@@ -53,47 +53,28 @@ var cloudant = credentials.getCredentialsByServiceName('cloudantNoSQLDB');
 
 // If no DB service connected, do nothing...
 if (cloudant) {
-    //var pouchdb = require('pouchdb');
-    var nano = require('nano');
     var fs = require('fs');
     var sw = require("swagger-node-express");
     var swe = sw.errors;
 
     db.getDB = function(dbName, useCloudantLib) {
-        /*
-    	var mydb;
-        if (useCloudantLib) {
-            var Cloudant = require('cloudant');
-            var cloudantDB = Cloudant({url: cloudant.url, plugin:'retry', retryAttempts:10});
-
-            mydb = cloudantDB.db.use(dbName);
-            return mydb;
-        } else {
-            var nano = require('nano')(cloudant.url);
-            mydb = nano.use(dbName);
-            mydb.url = cloudant.url;
-            return mydb;
-        }
-        */
-        
         var Cloudant = require('cloudant');
         var cloudantDB = Cloudant({url: cloudant.url, plugin:'retry', retryAttempts:10});
-
-        var mydb = cloudantDB.db.use(dbName);
-        return mydb;
+        
+        return cloudantDB.db.use(dbName);
     };
-
+    
     var usersdb = db.getDB("users");
     var shieldsdb = db.getDB("shields");
     var shieldassociationsdb = db.getDB("shieldassociations");
-    var eventsdb = db.getDB("hazardevents");
+    var eventsdb = db.getDB("hazards");
     var messagesdb = db.getDB("messages");
     var devicesdb = db.getDB("devices");
+    var dashboarddb = db.getDB("favorites");
    
     db.hashPasswordWithSalt = function(data, salt) {
-        return require('crypto').createHash('md5').update( (data && data != "" ? data : salt) + "-X-Y-" + salt).digest("hex");
+        return require('crypto').createHash('md5').update( (data && data !== "" ? data : salt) + "-X-Y-" + salt).digest("hex");
     };
-
 
     db.checkUserCredentialsFull = function(username, password, callback) {
         var query = {
@@ -207,28 +188,27 @@ if (cloudant) {
         });
     };
 
-    var favoritesdb = db.getDB("favorites");
-
     db.getFavoritesByUsername = function(username, callback) {
-        var mydb = favoritesdb;
+        var mydb = dashboarddb;
 
         mydb.get(username, function(err, doc) {
             if (err) {
                 callback(err, null);
             } else {
-                callback(null, doc.favorites);
+                callback(null, doc.favorites || []);
             }
         });
     };
     
     db.addFavoritesByUsername = function(username, favorite, callback) {
-        var mydb = favoritesdb;
+        var mydb = dashboarddb;
 
         mydb.get(username, function(err, doc) {
             if (err) {
                 mydb.insert({
                     username: username,
                     favorites: [favorite],
+                    history: doc.history || []
                 }, username, function(err2, doc2) {
                     if (err2) {
                         callback(err2, null);
@@ -237,6 +217,8 @@ if (cloudant) {
                     }
                 });
             } else {
+            	doc.favorites = doc.favorites || [];
+            	
                 if (doc.favorites.length > 8) {
                     doc.favorites.shift();
                 }
@@ -258,28 +240,27 @@ if (cloudant) {
         });
     };
 
-    var searchHistorydb = db.getDB("search_history");
-
     db.getSearchHistoryByUsername = function(username, callback) {
-        var mydb = searchHistorydb;
+        var mydb = dashboarddb;
 
         mydb.get(username, function(err, doc) {
             if (err) {
                 callback(err, null);
             } else {
-                callback(null, doc.history);
+                callback(null, doc.history || []);
             }
         });
     };
 
     db.addSearchHistoryByUsername = function(username, searchString, callback) {
-        var mydb = searchHistorydb;
+        var mydb = dashboarddb;
 
         mydb.get(username, function(err, doc) {
             if (err) {
                 mydb.insert({
                     username: username,
-                    history: [searchString],
+                    favorites: doc.favorites || [],
+                    history: [searchString]
                 }, username, function(err2, doc2) {
                     if (err2) {
                         callback(err2, null);
@@ -288,6 +269,7 @@ if (cloudant) {
                     }
                 });
             } else {
+            	doc.history = doc.history || [];
                 if (doc.history.length > 8) {
                     doc.history.shift();
                 }
@@ -304,7 +286,7 @@ if (cloudant) {
     };
 
     db.clearSearchHistoryByUsername = function(username, callback) {
-        var mydb = searchHistorydb;
+        var mydb = dashboarddb;
 
         mydb.get(username, function(err, doc) {
             if (err) {

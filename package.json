@@ -1,14 +1,24 @@
 {
   "name": "iot4i-dashboard",
-  "version": "0.1.0",
-  "description": "IoT for Insurance Dashboard",
+  "version": "1.2.0",
+  "private": true,
   "main": "app.js",
+  "description": "IoT for Insurance Dashboard",
+  "author": "IBM",
+  "license": "IPL-1.0",
   "repository": {
     "type": "git",
-    "url": "git://github.ibm.com/Iot4i/iot4i-dashboard.git"
+    "url": "https://github.ibm.com/IoT-Insurance/iot4i-dashboard.git"
+  },
+  "bugs": {
+    "url": "https://github.ibm.com/IoT-Insurance/iot4i-dashboard/issues"
   },
   "scripts": {
-    "start": "node app.js"
+    "start": "node app.js",
+    "test": "mocha --reporter spec",
+    "test-partial": "mocha --grep User --reporter spec",
+    "test-build": "mocha --reporter xunit-file",
+    "linter": "./node_modules/jshint/bin/jshint app.js providers resources test util"
   },
   "keywords": [
     "dashboard",
@@ -16,33 +26,38 @@
     "iot"
   ],
   "dependencies": {
-    "angular": "^1.5.5",
-    "angular-cookies": "^1.5.7",
-    "angular-animate": "^1.5.7",
-    "angular-i18n": "^1.4.4",
-    "angular-ui-bootstrap": "^1.3.3",
-    "angular-translate": "^2.11.0",
-    "angular-translate-loader-static-files": "^2.11.0",
-    "bootstrap": "^3.3.6",
-    "async": "^1.5.2",
-    "basic-auth": "^1.0.3",
-    "body-parser": "^1.15.0",
-    "cloudant": "^1.4.1",
-    "express": "4.2.x",
-    "express-session": "^1.13.0",
-    "helmet": "^2.1.1",
-    "jquery": "^2.2.4",
-    "d3": "^4.2.0",
-    "d3-queue": "^1.0.7",
+    "angular": "~1.5.5",
+    "angular-cookies": "~1.5.7",
+    "angular-animate": "~1.5.7",
+    "angular-i18n": "~1.6.0",
+    "angular-ui-bootstrap": "~1.3.3",
+    "angular-translate": "~2.12.0",
+    "angular-translate-loader-static-files": "~2.13.0",
+    "async": "~2.1.2",
+    "bootstrap": "~3.3.6",
+    "basic-auth": "~1.1.0",
+    "body-parser": "~1.15.0",
+    "cloudant": "~1.7.1",
+    "cookie-parser": "~1.4.1",
+    "csurf": "~1.8.3",
+    "d3": "~4.4.1",
+    "d3-queue": "~1.2.0",
+    "express": "4.13.4",
+    "express-session": "1.13.0",
+    "helmet": "~2.1.1",
+    "jquery": "~2.2.4",
     "nano": "~6.1.2",
     "node-uuid": "~1.4.7",
-    "request": "2.57.0",
-    "topojson": "^1.6.26",
-    "swagger-node-express": "2.1.3",
-    "cookie-parser": "1.4.1",
-    "csurf": "1.8.3"
+    "request": "~2.79.0",
+    "topojson": "~1.6.26",
+    "swagger-node-express": "~2.1.3"
   },
-  "devDependencies": {},
-  "private": true,
-  "license": "IBM"
+  "devDependencies": {
+  	"jshint": "~2.9.0",
+    "mocha": "~2.5.3",
+    "should": "~9.0.2",
+    "supertest": "~1.2.0",
+    "supertest-session": "~3.0.0",
+    "xunit-file": "~0.0.7"
+  }
 }
