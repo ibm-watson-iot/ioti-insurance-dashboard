@@ -3,7 +3,7 @@
     <div class="title-info">
       <div data-ng-if="context.currentLocation" class="icon location"></div>
       <div data-ng-if="context.currentUser" class="icon user"></div>
-      <span data-ng-if="context.currentLabel">{{context.currentLabel}}</span>
+      <span data-ng-if="context.currentLabel">{{ context.currentLabel | limitTo: 50 }}</span>
       <span data-ng-if="!context.currentLabel">{{context.currentLocation}}{{context.currentUser}}</span>
     </div>
 

@@ -131,15 +131,16 @@ app.use(function(req, res, next) {
 });
 
 var authUser = function(req, res, next) {
-	if ( req.path == "/login" || req.path == "/dashboard/login.html" || req.path.indexOf( "/dashboard/directives/login") == 0 || req.path.indexOf("node_modules") >= 0 || req.path.indexOf("languages") >= 0 || req.path.indexOf( "/icons") == 0 ) {
+	
+	if ( req.path == "/login" || req.path == "/dashboard/login.html" || req.path.indexOf( "/dashboard/directives/login") === 0 || req.path.indexOf("node_modules") >= 0 || req.path.indexOf("languages") >= 0 || req.path.indexOf( "/icons") === 0 ) {
 		next();
 		return;
 	}
 
-	if (!req.session.user || req.session.loggedStatus!=0) {
+	if (!req.session.user || req.session.loggedStatus!==0) {
 		req.session.loggedStatus = 2;
 
-		if ( req.session.originalPath == undefined) {
+		if ( req.session.originalPath === undefined) {
 			req.session.originalPath = req.path;
 		}
 
@@ -161,7 +162,7 @@ app.use(csurf({cookie: {secure: true, httpOnly: true}}));
 
 app.use(function (req, res, next) {
   res.cookie('XSRF-TOKEN', req.csrfToken(), {secure: true});
-	if (req.session.loggedStatus != 0) {
+	if (req.session.loggedStatus !== 0) {
 	  res.setHeader( "X-iot4i-web-auth-msg", "authrequired");
 	  res.setHeader( "X-iot4i-web-auth", "/login");
   }
@@ -204,7 +205,7 @@ app.use( "/data", api);
 app.use( "/icons", express.static("./assets/icons"));
 
 var port = process.env.VCAP_APPLICATION ? process.env.PORT || 8080 : 3000;
-var host = process.env.VCAP_APPLICATION ? '0.0.0.0' : 'localhost';
+var host = '0.0.0.0';
 
 // swagger
 var swagger = require("swagger-node-express").createNew(api);
@@ -276,6 +277,7 @@ var parseForm = bodyParser.urlencoded({ extended: false });
 
 app.post("/login", parseForm, function (req, res) {
 
+
 	util.validateUser( req, res, 13, function(err, isUserValid) {
 
 			if (err) {
@@ -294,7 +296,7 @@ app.post("/login", parseForm, function (req, res) {
 					req.session.loggedStatus = 0;
 					req.session.pass = req.body.password;
 
-					console.log( "Redirecting to dashboard " + req.session.originalPath);
+					console.log( "Succesfully authenticated %s. Redirecting to %s.", req.body.username, req.session.originalPath || '/dashboard');
 
 					if ( req.session.originalPath) {
 						res.redirect(req.session.originalPath);

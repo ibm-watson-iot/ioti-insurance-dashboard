@@ -7,10 +7,14 @@
 
   <div class="rTable" data-ng-show="!userContactLoading">
     <div class="rTableRow">
+      <div class="rTableHeading"><span class="title" translate>Full Name</span></div>
+      <div class="rTableCell"><span class="data">{{userData.fullname}}</span></div>
+    </div>
+    <div class="rTableRow" data-ng-show="userData.firstname || userData.lastname">
       <div class="rTableHeading"><span class="title" translate>First Name</span></div>
       <div class="rTableCell"><span class="data">{{userData.firstname}}</span></div>
     </div>
-    <div class="rTableRow">
+    <div class="rTableRow" data-ng-show="userData.firstname || userData.lastname">
       <div class="rTableHeading"><span class="title" translate>Surname</span></div>
       <div class="rTableCell"><span class="data">{{userData.lastname}}</span></div>
     </div>

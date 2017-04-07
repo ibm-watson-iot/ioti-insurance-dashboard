@@ -91,7 +91,7 @@ exports.getMyUser = {
             else {
                 var userName = req.session.user;
                 db.getUserByUsername(userName, function(err, doc) {
-                    console.log("Logged user: " + userName);
+                    //console.log("Logged user: " + userName);
                     if (err) {
                         swe.notFound('user', res);
                     } else {
@@ -126,13 +126,18 @@ exports.getUserAssets = {
         responseMessages: [swe.notFound('users')]
     },
     'action': function(req, res) {
+    	if ( req.params.userName && req.params.userName.length > 100) {
+    		swe.invalid('Argument cannot exceed 100 characters', res);
+    		return;
+    	}
+    	
     	// TODO: remove, this is redundant now as the verification is done at login time in app.js
         util.validateUser(req, res, 13, function(er, validated) {
             if (!validated)
                 swe.forbidden(res);
             else {
                 if (!req.params.userName) {
-                    swe.invalid('userName');
+                    swe.invalid('userName', res);
                     return;
                 }
 
@@ -166,48 +171,85 @@ exports.getUserByUserName = {
         responseMessages: [swe.notFound('users')]
     },
     'action': function(req, res) {
+    	
+    	if ( req.params.userName && req.params.userName.length > 100) {
+    		swe.invalid('Argument cannot exceed 100 characters', res);
+    		return;
+    	}
+    	
     	// TODO: remove, this is redundant now as the verification is done at login time in app.js
         util.validateUser(req, res, 13, function(er, validated) {
             if (!validated)
                 swe.forbidden(res);
             else {
                 if (!req.params.userName) {
-                    swe.invalid('userName');
+                    swe.invalid('userName', res);
                     return;
                 }
 
                 var userName = req.params.userName;
-
-                db.getUserByUsername(userName, function(err, user) {
-                    if (err) {
-                        console.log("User not found " + userName);
+                
+                var query = {
+                		"selector": {
+                			"$or": [
+                				  { "fullname": { "$regex": "(?i)" + userName }},
+                				  { "username":  { "$regex": "(?i)" + userName }}
+                			 ]
+                		}
+                };
+                
+                db.getDB( "users").find(query, function(err, doc) {
+                	
+                	if (err || !doc || !doc.docs || !doc.docs[0]) {
+                		console.log("User not found " + userName);
                         swe.notFound('user', res);
                         return;
-                    } else {
-                        var data = {
-                            username: user.username,
-                            firstname: user.firstname,
-                            lastname: user.lastname,
-                            contact: {
-                                address: user.address,
-                                zipcode: user.zipcode,
-                                email: user.email,
-                                phone: user.phone
-                            },
-                            assets: []
-                        };
+                	}
+                	else { 
+                		userName = doc.docs[0].username;
+                		
+                		db.getUserByUsername(userName, function(err, user) {
+                            if (err) {
+                                console.log("User not found " + userName);
+                                swe.notFound('user', res);
+                                return;
+                            } else {
+                                var data = {
+                                    username: user.username,
+                                    fullname: user.fullname,
+                                    firstname: user.firstname,
+                                    lastname: user.lastname,
+                                    contact: {
+                                        address: user.address,
+                                        zipcode: user.zipcode,
+                                        email: user.email,
+                                        phone: user.phone
+                                    },
+                                    assets: []
+                                };
+                                
+                                if ( user.address && user.address.street) {
+                                	data.contact.address = user.address.street + ", " + user.address.city;
+                                }
+                                
+                                if ( user.address && user.address.zipcode) {
+                                	data.contact.zipcode = user.address.zipcode;
+                                }
 
-                        if (user.assets) {
-                            user.assets.forEach(function(asset) {
-                                data.assets.push({
-                                    name: asset.name,
-                                    address: asset.address
-                                });
-                            });
-                        }
+                                if (user.assets) {
+                                    user.assets.forEach(function(asset) {
+                                        data.assets.push({
+                                            name: asset.name,
+                                            address: asset.address
+                                        });
+                                    });
+                                }
 
-                        res.send(data);
-                    }
+                                res.send(data);
+                            }
+                        });
+                	}
+                	
                 });
             }
         });
@@ -399,6 +441,12 @@ exports.postUserSearch = {
         parameters: [paramTypes.path("searchString", "Username of user that needs to be fetched", "string")],
     },
     'action': function(req, res) {
+    	
+    	if ( req.params.searchString && req.params.searchString.length > 100) {
+    		swe.invalid('Argument cannot exceed 100 characters', res);
+    		return;
+    	}
+
     	// TODO: remove, this is redundant now as the verification is done at login time in app.js
         util.validateUser(req, res, 13, function(er, validated) {
             if (!validated)

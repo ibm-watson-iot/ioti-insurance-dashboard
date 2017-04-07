@@ -81,6 +81,7 @@ function searchController($scope, $http) {
 			searchString = search;
 		}
 
+		searchString = searchString.substring( 0, 100);	// limit input to 100 characters
 		searchString = encodeURIComponent(searchString); // to prevent XSS
 
 		processLocationUser($scope, $http, searchString);
@@ -93,7 +94,15 @@ function searchController($scope, $http) {
 			$scope.searchList = result.data.slice();
 			if (result.data.username) {
 				$scope.context.currentUser = searchString;
-				$scope.context.currentLabel = result.data.firstname + " " + result.data.lastname + " (" + result.data.username + ")";
+				
+				if ( result.data.firstname && result.data.lastname) {
+					$scope.context.currentLabel = result.data.firstname + " " + result.data.lastname;
+				}
+				else {
+					$scope.context.currentLabel = result.data.fullname;
+				}
+				
+				$scope.context.currentLabel += " (" + result.data.username + ")";
 			}
 		},
 		function errorCallback(result) {
@@ -120,8 +129,16 @@ function processLocationUser($scope, $http, location) {
 
 	$http.get('/data/user/' + location).then(function successCallback(result) {
 		if (result.data.username) {
-			$scope.context.currentUser = location;
-			$scope.context.currentLabel = result.data.firstname + " " + result.data.lastname + " (" + result.data.username + ")";
+			$scope.context.currentUser = result.data.username;
+			
+			if ( result.data.firstname && result.data.lastname) {
+				$scope.context.currentLabel = result.data.firstname + " " + result.data.lastname;
+			}
+			else {
+				$scope.context.currentLabel = result.data.fullname;
+			}
+			
+			$scope.context.currentLabel += " (" + result.data.username + ")";
 		}
 	},
 	function errorCallback(result) {
