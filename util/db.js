@@ -208,7 +208,7 @@ if (cloudant) {
                 mydb.insert({
                     username: username,
                     favorites: [favorite],
-                    history: doc.history || []
+                    history: []
                 }, username, function(err2, doc2) {
                     if (err2) {
                         callback(err2, null);
@@ -259,7 +259,7 @@ if (cloudant) {
             if (err) {
                 mydb.insert({
                     username: username,
-                    favorites: doc.favorites || [],
+                    favorites: [],
                     history: [searchString]
                 }, username, function(err2, doc2) {
                     if (err2) {
