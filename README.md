@@ -1,30 +1,58 @@
-# IoT4Insurance Demo
+# IoT4Insurance Demo Application
 
-The directory structure of the repo is as follows:
+
+The directory structure of the application is as follows:
 ```
-├── LICENSE.txt              <- License file.
-├── demo-app/                <- Demo Application
-├── demos/                   <- Demo Application
-│   ├── ecall/               <- Bosch Ecall demo resources.
-│   ├── elderly-care/        <- Elderly care demo resources.
-│   ├── water-leakage/       <- Water leakage demo resources.
+├── .travis.yml              <- TravisCI configuration file.
+├── bower.json               <- Front-end library dependencies.
+├── brunch-config.coffee     <- Brunch configuration file.
+├── package.json             <- Development environment dependencies.
+├── docs/                    <- Documentation
+├── app/                     <- Demo Application
+│   ├── app.js               <- Angular application entry point. Used for managing dependencies
+│   ├── assets/              <- Static files (images, fonts etc.)
+│   |   ├── 404.html         <-
+│   |   ├── index.html       <-
+│   │   ├── fonts/           <- Fonts
+│   │   ├── img/             <- Images
+│   │   ├── pages/           <- UI router pages. Templates of the pages.
+│   │   ├── theme/           <- Theme components. Contains various common widgets, panels which used across application
+│   ├── scripts/             <-
+│   │   ├── services/        <- angular services
+│   │   ├── utils/           <- utilities
+│   ├── styles/              <- sass styles
+│   │   ├── app/             <- application styles. Used mostly for demonstration purposes. Put your app styles here.
+│   │   ├── theme/           <- theme styles. Used to customize bootstrap and other common components used in tempate.
+│   ├── vendor/              <- Non-bower dependencies
 ```
 
 
 
-## Contribution
 
-We are more than happy to accept external contributions to this project, be it in the form of issues and pull requests. If you find a bug, please report it via the issues section or even better, fork the project and submit a pull request with your fix! Pull requests will be evaluated on an individual basis based on value add to the sample application.
+### Documentation
+Installation, customization and other useful articles:
 
-## License
+## How can I support developers?
+- Star our GitHub repo
+- Create pull requests, submit bugs, suggest new features or documentation updates
 
-This sample code is licensed under Apache 2.0. See the [license file](License.txt) for more information.
+
+## Features
+* Responsive layout
+* High resolution
+* Bootstrap CSS Framework
+* Sass
+* Gulp build
+* AngularJS
+* Jquery
+* Charts (amChart, Chartist, Chart.js, Morris)
+* Maps (Google, Leaflet, amMap)
+* etc
+
+License
+-------------
+<a href=/LICENSE.txt target="_blank">MIT</a> license.
 
 
-## Data Privacy Disclaimer
-
-This Program has been developed for demonstration purposes only to illustrate the technical capabilities and potential business uses of the IBM IoT for Insurance
-
-The components included in this Program may involve the processing of personal information (for example location tracking and behavior analytics). When implemented in practice such processing may be subject to specific legal and regulatory requirements imposed by country specific data protection and privacy laws. Any such requirements are not addressed in this Program.
-
-Licensee is responsible for the ensuring Licenseeís use of this Program and any deployed solution meets applicable legal and regulatory requirements. This may require the implementation of additional features and functions not included in the Program.
+Enjoy!
+We're always happy to hear your feedback.

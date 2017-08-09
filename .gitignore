@@ -18,3 +18,15 @@
 .tmproj
 nbproject
 Thumbs.db
+
+# NPM packages folder.
+node_modules/
+
+# Bower packages folder.
+bower_components/
+
+# Brunch output folder.
+public/
+
+# Developer specific config file
+app/config-dev.js
