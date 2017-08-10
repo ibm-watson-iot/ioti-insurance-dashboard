@@ -2,9 +2,9 @@
   "baseUrl": "/blur-admin/",
   "locals": {
     "url": "http://localhost:8080",
-    "name": "The Wintersmith's blog",
+    "name": "IoT4Insurance Insurance Starter Dashboard",
     "owner": "Someone",
-    "description": "Ramblings of an immor(t)al demigod"
+    "description": "Example code for IoT4I"
   },
   "plugins": [
     "./plugins/paginator.coffee"

@@ -1,4 +1,4 @@
-# IoT4Insurance Demo Application
+# IoT for Insurance - Insurance Starter Dashboard
 
 
 The directory structure of the application is as follows:
