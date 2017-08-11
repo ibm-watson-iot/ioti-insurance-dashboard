@@ -51,7 +51,7 @@ Installation, customization and other useful articles:
 
 License
 -------------
-<a href=/LICENSE.txt target="_blank">MIT</a> license.
+<a href=/LICENSE target="_blank">MIT</a> license.
 
 
 Enjoy!
