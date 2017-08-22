@@ -46,7 +46,7 @@ function DashboardPieChartCtrl($rootScope, $scope, $timeout, $filter, baConfig, 
     var allHazardCount = data.totalItems;
     var hazardEvents = $filter('filter')(data.items, {ishandled: false});
     var allNonAcknowledgedCount = hazardEvents.length;
-    $scope.charts[0].stats = allHazardCount + ' / ' + allNonAcknowledgedCount;
+    $scope.charts[0].stats = allNonAcknowledgedCount + ' / ' + allHazardCount;
   }).error(function(err) {
     console.error("Fetching user's hazards is failed!");
   });
