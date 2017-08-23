@@ -51,7 +51,7 @@ angular.module('BlurAdmin.services').factory('authenticationService', function(
     }
     var token = response.data;
     localStorage.setItem(tokenKey, token.access_token);
-    var authenticatedUser = jwtHelper.decodeToken(token.id_token);
+    var authenticatedUser = jwtHelper.decodeToken(token.access_token);
     localStorage.setItem(userKey, JSON.stringify(authenticatedUser));
     return authenticatedUser;
   })
