@@ -32,6 +32,30 @@ The directory structure of the application is as follows:
 ### Documentation
 Installation, customization and other useful articles:
 
+
+#### Configure
+This app can be configured for `dev`, `staging` and `production`
+1. edit manifest.yml file `host` and `name` as you wish for a bluemix app
+2. Copy the `app/config-staging.js` to `app/config-production.js` or `app/config-dev.js` depending on the target environment and set the values
+  * set tenantId to your own tenant ID
+  * set backendHost value
+  * note that `backendHost` and `apiHost` must **not** start with `http(s)://`
+
+
+#### Build and deploy
+To build this app first install the requirements:
+* `npm install`
+* `bower install`
+
+afterwards you can run
+* for development: `brunch b`
+* for production: `brunch b --env production`
+* for staging: `brunch b --env staging`
+
+then deploy the **public** folder
+* `cd public`
+* `cf push`
+
 ## How can I support developers?
 - Star our GitHub repo
 - Create pull requests, submit bugs, suggest new features or documentation updates
