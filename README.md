@@ -43,6 +43,10 @@ This app can be configured for `dev`, `staging` and `production`
 
 
 #### Build and deploy
+Install if needed the build tools:
+* `npm install -g bower`  
+* `npm install -g brunch`
+
 To build this app first install the requirements:
 * `npm install`
 * `bower install`
