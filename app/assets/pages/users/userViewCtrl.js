@@ -20,7 +20,7 @@ function UserViewCtrl($stateParams, userService, shieldActivationService,
         vm.userDevices = data.items;
       });
 
-      hazardService.findAll({userId: $stateParams.userId}).success(function(data) {
+      hazardService.findAll({descending: true, userId: $stateParams.userId}).success(function(data) {
         vm.userHazards = data.items;
       });
 

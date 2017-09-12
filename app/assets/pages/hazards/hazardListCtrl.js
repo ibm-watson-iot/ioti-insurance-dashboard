@@ -29,9 +29,9 @@ function HazardListCtrl($filter, $scope, editableThemes, toastr, baConfig, cityL
   };
 
   function getHazards() {
-    hazardService.findAll().then(function(res) {
+    hazardService.findAll({descending: true}).then(function(res) {
       vm.isLoading = false;
-      vm.hazards = $filter('orderBy')(res.data.items, 'createdAt');
+      vm.hazards = $filter('orderBy')(res.data.items, 'createdAt', true);
       vm.paginatedHazards = vm.hazards.slice(0, 10);
       vm.totalItems = res.data.totalItems;
       vm.currentPage = 1;

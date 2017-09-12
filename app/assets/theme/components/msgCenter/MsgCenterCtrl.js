@@ -10,7 +10,7 @@ angular.module('BlurAdmin.theme.components').controller('MsgCenterCtrl', MsgCent
 function MsgCenterCtrl($scope, $filter, $interval, toastr, hazardService, claimService, webSocketService) {
 
   function getHazards() {
-    hazardService.findAll().success(function(data) {
+    hazardService.findAll({descending: true}).success(function(data) {
       // TODO: remove this hack when we have proper timestamps.
       _.each(data.items, function(hazard) {
         if (hazard.ishandled === 'true') {

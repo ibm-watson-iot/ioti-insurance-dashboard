@@ -42,7 +42,7 @@ function DashboardPieChartCtrl($rootScope, $scope, $timeout, $filter, baConfig, 
     icon: 'device'
   }];
 
-  hazardService.findAll().success(function(data) {
+  hazardService.findAll({descending: true}).success(function(data) {
     var allHazardCount = data.totalItems;
     var hazardEvents = $filter('filter')(data.items, {ishandled: false});
     var allNonAcknowledgedCount = hazardEvents.length;
