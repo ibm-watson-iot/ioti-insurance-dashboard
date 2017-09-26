@@ -60,13 +60,13 @@ function DashboardPieChartCtrl($rootScope, $scope, $timeout, $filter, baConfig, 
   userService.findAll().success(function (data) {
     $scope.charts[2].stats = data.totalItems;
   }).error(function (err) {
-    console.error("Fetching user'sis failed!");
+    console.error("Fetching users is failed!");
   });
 
   shieldService.findAll().success(function(data) {
     $scope.charts[3].stats = data.totalItems;
   }).error(function(err) {
-    console.error("Fetching user's shields is failed!");
+    console.error("Fetching user shields is failed!");
   });
 
   deviceService.findAll().success(function (data) {
