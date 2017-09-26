@@ -92,7 +92,7 @@
               <tr ui-sref="main.user-device-view({deviceId: device._id})"  ng-repeat="device in userViewCtrlVm.userDevices" class="editable-tr-wrap">
                 <td class="table-id">{{$index + 1}}</td>
                 <td>
-                  {{device.extra.deviceDesc}}
+                  {{device.vendorId}} {{device.extra.deviceDesc}}
                 </td>
               </tr>
             </table>
