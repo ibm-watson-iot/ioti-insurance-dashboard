@@ -3,12 +3,21 @@
 
 angular.module('BlurAdmin.pages.users').controller('UserViewCtrl', UserViewCtrl);
 
-function UserViewCtrl($stateParams, userService, shieldActivationService,
+function UserViewCtrl($stateParams, userService, shieldService, shieldActivationService,
   deviceService, hazardService, claimService) {
   var vm = this;
   vm.user = {};
+  vm.uuidToShieldMap = {};
 
   if ($stateParams.userId) {
+    shieldService.findAll().success(function(data) {
+      _.each(data.items, function(shield) {
+        vm.uuidToShieldMap[shield._id] = shield;
+      });
+    }).error(function(err) {
+      console.error("Fetching all shields has failed!");
+    });
+
     userService.find($stateParams.userId).success(function(user) {
       vm.user = user;
       initializeLocationMap(user.address.street + ", " + user.address.zipcode + " " + user.address.city + ", " + user.address.country);

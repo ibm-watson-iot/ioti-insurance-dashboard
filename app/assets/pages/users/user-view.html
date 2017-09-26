@@ -8,9 +8,9 @@
               <div class="row">
                 <div class="col-sm-6">
                   <div class="form-group">
-                    <label for="fullname">Name</label>
-                    <span class="form-control" id="fullname">
-                      {{userViewCtrlVm.user.fullname}}
+                    <label for="name">Name</label>
+                    <span class="form-control" id="name">
+                      {{userViewCtrlVm.user.name}}
                   </div>
                 </div>
                 <div class="col-sm-6">
@@ -75,7 +75,7 @@
               <tr ui-sref="main.user-shield-view({shieldId: shield.shieldId})"  ng-repeat="shield in userViewCtrlVm.userShields" class="editable-tr-wrap">
                 <td class="table-id">{{$index + 1}}</td>
                 <td>
-                  {{shield.shieldId}}
+                  {{userViewCtrlVm.uuidToShieldMap[shield.shieldId].name}}
                 </td>
               </tr>
             </table>
@@ -116,13 +116,13 @@
                   {{$index + 1}}
                 </td>
                 <td>
-                  {{hazard.title}}
+                  {{hazard.actionParams.hazardTitle}}
                 </td>
                 <td>
                   {{hazard.createdAt | date:'mediumTime'}} {{hazard.createdAt | date:'mediumTime'}}
                 </td>
                 <td>
-                  {{hazardListCtrlVm.uuidToShieldMap[hazard.shieldId].name}}
+                  {{userViewCtrlVm.uuidToShieldMap[hazard.shieldId].name}}
                 </td>
               </tr>
             </table>
