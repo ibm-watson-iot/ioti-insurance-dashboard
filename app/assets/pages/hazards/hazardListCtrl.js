@@ -49,7 +49,8 @@ function HazardListCtrl($filter, $scope, editableThemes, toastr, baConfig, cityL
           vm.userMap[hazard.userId] = {
             customer: '-',
             cityName: '-',
-            cityId: '-'
+            cityId: '-',
+            name: hazard.userId
           };
         }
       });
