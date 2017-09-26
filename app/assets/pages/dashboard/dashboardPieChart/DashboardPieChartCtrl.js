@@ -8,7 +8,7 @@
 angular.module('BlurAdmin.pages.dashboard').controller('DashboardPieChartCtrl', DashboardPieChartCtrl);
 
 function DashboardPieChartCtrl($rootScope, $scope, $timeout, $filter, baConfig, baUtil,
-  shieldService, hazardService, deviceService, userService, claimService) {
+                               shieldService, hazardService, deviceService, userService, claimService) {
 
   var pieColor = baUtil.hexToRGB(baConfig.colors.defaultText, 0.2);
   $scope.charts = [{
@@ -26,7 +26,7 @@ function DashboardPieChartCtrl($rootScope, $scope, $timeout, $filter, baConfig, 
   }, {
     color: pieColor,
     description: 'Customers',
-    stats: 7472,
+    stats: 0,
     icon: 'person',
     link: 'main.customers'
   }, {
@@ -38,7 +38,7 @@ function DashboardPieChartCtrl($rootScope, $scope, $timeout, $filter, baConfig, 
   }, {
     color: pieColor,
     description: 'Devices',
-    stats: 37471,
+    stats: 0,
     icon: 'device'
   }];
 
@@ -57,10 +57,22 @@ function DashboardPieChartCtrl($rootScope, $scope, $timeout, $filter, baConfig, 
     console.error("Fetching claims has failed!");
   });
 
+  userService.findAll().success(function (data) {
+    $scope.charts[2].stats = data.totalItems;
+  }).error(function (err) {
+    console.error("Fetching user'sis failed!");
+  });
+
   shieldService.findAll().success(function(data) {
     $scope.charts[3].stats = data.totalItems;
   }).error(function(err) {
     console.error("Fetching user's shields is failed!");
+  });
+
+  deviceService.findAll().success(function (data) {
+    $scope.charts[4].stats = data.totalItems;
+  }).error(function (err) {
+    console.error("Fetching user's devices is failed!");
   });
 
   function getRandomArbitrary(min, max) {
