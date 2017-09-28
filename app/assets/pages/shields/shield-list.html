@@ -3,6 +3,8 @@
     <div class="col-md-12">
       <div ba-panel ba-panel-class="with-scroll horizontal-tabs tabs-panel medium-panel">
         <uib-tabset active="$tabSetStatus.activeTab">
+          <!--
+          This is a policy holder task not an operator's task.
           <uib-tab heading="Active Shields">
             <div class="heading-widget section-block ng-scope" ng-if="shieldListCtrlVm.userShields.length === 0">
               <h2>No Activated Shield</h2>
@@ -28,6 +30,8 @@
               </tr>
             </table>
           </uib-tab>
+        -->
+
           <uib-tab heading="All Shields">
             <div class="add-row-editable-table">
               <button class="btn btn-primary" ui-sref="main.shield-edit({shieldId: 'new'})">Add Shield</button>
@@ -46,11 +50,14 @@
                   </span>
                 </td>
                 <td>
+                  <!--
+                  This is a policy holder task not an operator's task.
                   <button class="btn btn-primary editable-table-button btn-xs"
                       ng-if="!shieldListCtrlVm.activeShields[shield._id]"
                       ng-click="shieldListCtrlVm.activate(shield)">
                         Activate
                   </button>
+                -->
                   <button type="button" class="btn btn-xs btn-primary"
                       ng-if="isAdmin"
                       ui-sref="main.shield-edit({shieldId: shield._id})">

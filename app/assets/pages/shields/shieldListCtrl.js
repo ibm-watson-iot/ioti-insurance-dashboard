@@ -18,6 +18,9 @@ function ShieldListCtrl($rootScope, $uibModal, editableThemes, toastr, shieldSer
   shieldService.findAll().success(function(data) {
     vm.allShields = data.items;
 
+/*
+    // Only Policy Holder have active shields. this is a dashboard for admins
+
     shieldActivationService.findAll($rootScope.loggedInUser.userId).success(function(data) {
       shieldActivations = data.items;
 
@@ -36,6 +39,7 @@ function ShieldListCtrl($rootScope, $uibModal, editableThemes, toastr, shieldSer
     }).error(function(err) {
       console.error("Fetching all shields is failed!");
     });
+    */
 
   }).error(function(err) {
     console.error("Fetching all shields is failed!");
