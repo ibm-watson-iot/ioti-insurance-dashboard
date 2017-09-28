@@ -1,12 +1,13 @@
 <div class="widgets">
   <div class="row" ng-controller="ShieldListCtrl as shieldListCtrlVm">
     <div class="col-md-12">
-      <div ba-panel ba-panel-class="with-scroll horizontal-tabs tabs-panel medium-panel">
-        <uib-tabset active="$tabSetStatus.activeTab">
-          <uib-tab heading="All Shields">
-            <div class="add-row-editable-table">
-              <button class="btn btn-primary" ui-sref="main.shield-edit({shieldId: 'new'})">Add Shield</button>
-            </div>
+      <div class="panel panel-primary bootstrap-panel with-scroll">
+        <div class="panel-heading">All Shields</div>
+        <div class="panel-body">
+          <div class="add-row-editable-table">
+            <button class="btn btn-primary" ui-sref="main.shield-edit({shieldId: 'new'})">Add Shield</button>
+          </div>
+          <div class="horizontal-scroll">
             <table class="table table-hover">
               <tr class="header-row">
                 <th class="table-id">#</th>
@@ -32,10 +33,12 @@
                     <i class="fa fa-trash"></i>
                   </button>
                 </td>
-              </tr>
-            </table>
-          </uib-tab>
-        </uib-tabset>
+                </tr>
+              </table>
+            </div
+          </div>
+        </div>
       </div>
+    </div>
   </div>
 </div>
