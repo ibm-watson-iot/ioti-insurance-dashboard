@@ -1,45 +1,51 @@
 <div class="widgets">
   <div class="row" ng-controller="ActionListCtrl as actionListCtrlVm">
     <div class="col-md-12">
-      <div ba-panel ba-panel-class="with-scroll medium-panel">
-        <div class="heading-widget section-block ng-scope" ng-if="actionListCtrlVm.actions.length === 0">
-          <h2>No Actions</h2>
+      <div class="panel panel-primary bootstrap-panel with-scroll">
+        <div class="panel-heading">All Actions</div>
+        <div class="panel-body">
+          <div class="add-row-editable-table">
+            <button class="btn btn-primary" ui-sref="main.action-edit({actionId: 'new'})">Add Action</button>
+          </div>
+          <div class="horizontal-scroll">
+            <div class="heading-widget section-block ng-scope" ng-if="actionListCtrlVm.actions.length === 0">
+              <h2>No Actions</h2>
+            </div>
+
+          <table class="table table-hover" ng-if="actionListCtrlVm.actions.length > 0">
+            <tr class="header-row">
+              <th class="table-id">#</th>
+              <th>Name</th>
+              <th>Description</th>
+              <th>Action</th>
+            </tr>
+            <tr ng-repeat="action in actionListCtrlVm.actions" class="editable-tr-wrap">
+              <td class="table-id">
+                {{$index + 1}}
+              </td>
+              <td>
+                <span editable-text="action.name" blur="cancel"
+                      onaftersave="actionListCtrlVm.saveAction(action)">{{action.name}}
+                </span>
+              </td>
+              <td>
+                <span editable-text="action.description" blur="cancel"
+                      onaftersave="actionListCtrlVm.saveAction(action)">{{action.description}}
+                </span>
+              </td>
+              <td>
+                <button type="button" class="btn btn-xs btn-primary"
+                        ng-if="isAdmin"
+                        ui-sref="main.action-edit({actionId: action._id})">
+                  <i class="fa fa-pencil"></i>
+                </button>
+                <button class="btn btn-danger delete-table-button btn-xs"
+                        ng-click="actionListCtrlVm.deleteAction(action)">Delete</button>
+              </td>
+            </tr>
+          </table>
         </div>
-        <div class="add-row-editable-table">
-          <button class="btn btn-primary" ui-sref="main.action-edit({actionId: 'new'})">Add Action</button>
-        </div>
-        <table class="table table-hover" ng-if="actionListCtrlVm.actions.length > 0">
-          <tr class="header-row">
-            <th class="table-id">#</th>
-            <th>Name</th>
-            <th>Description</th>
-            <th>Action</th>
-          </tr>
-          <tr ng-repeat="action in actionListCtrlVm.actions" class="editable-tr-wrap">
-            <td class="table-id">
-              {{$index + 1}}
-            </td>
-            <td>
-              <span editable-text="action.name" blur="cancel"
-                    onaftersave="actionListCtrlVm.saveAction(action)">{{action.name}}
-              </span>
-            </td>
-            <td>
-              <span editable-text="action.description" blur="cancel"
-                    onaftersave="actionListCtrlVm.saveAction(action)">{{action.description}}
-              </span>
-            </td>
-            <td>
-              <button type="button" class="btn btn-xs btn-primary"
-                      ng-if="isAdmin"
-                      ui-sref="main.action-edit({actionId: action._id})">
-                <i class="fa fa-pencil"></i>
-              </button>
-              <button class="btn btn-danger delete-table-button btn-xs"
-                      ng-click="actionListCtrlVm.deleteAction(action)">Delete</button>
-            </td>
-          </tr>
-        </table>
       </div>
+    </div>
   </div>
 </div>
