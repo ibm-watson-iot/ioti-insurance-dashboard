@@ -10,70 +10,12 @@ angular.module('BlurAdmin.pages.shields').controller('ShieldListCtrl', ShieldLis
 function ShieldListCtrl($rootScope, $uibModal, editableThemes, toastr, shieldService, shieldActivationService) {
   var vm = this;
   vm.allShields = [];
-  vm.userShields = [];
-  vm.activeShields = {};
-  var shieldActivations = [];
-  var shieldToActivationsMap = {};
 
   shieldService.findAll().success(function(data) {
     vm.allShields = data.items;
-
-/*
-    // Only Policy Holder have active shields. this is a dashboard for admins
-
-    shieldActivationService.findAll($rootScope.loggedInUser.userId).success(function(data) {
-      shieldActivations = data.items;
-
-      _.each(shieldActivations, function(shieldActivation) {
-        _.each(vm.allShields, function(shield) {
-          if (shield._id === shieldActivation.shieldId) {
-            if (vm.userShields.indexOf(shield) === -1) {
-              vm.userShields.push(shield);
-              vm.activeShields[shield._id] = true;
-            }
-          }
-        });
-        shieldToActivationsMap[shieldActivation.shieldId] = shieldActivation;
-      });
-
-    }).error(function(err) {
-      console.error("Fetching all shields is failed!");
-    });
-    */
-
   }).error(function(err) {
     console.error("Fetching all shields is failed!");
   });
-
-  vm.activate = function(shield) {
-    var shieldActivation = {
-      shieldId: shield._id,
-      userId: $rootScope.loggedInUser.userId,
-      hazardDetectionOnCloud: true
-    };
-    shieldActivationService.save(shieldActivation).success(function(savedActivation) {
-      vm.userShields.push(shield);
-      vm.activeShields[shield._id] = true;
-      shieldActivations.push(savedActivation);
-      shieldToActivationsMap[savedActivation.shieldId] = savedActivation;
-      toastr.success(null, "Activating the shield is successful.");
-    }).error(function(err) {
-      console.error("Saving shield activation is failed!");
-    });
-  };
-
-  vm.deactivate = function(shield) {
-    var shieldActivation = shieldToActivationsMap[shield._id];
-    shieldActivationService.remove(shieldActivation._id).success(function() {
-      delete vm.activeShields[shield._id];
-      _.remove(vm.userShields, function(userShield) {
-          return userShield._id === shield._id;
-      });
-      toastr.success(null, "Deactivating the shield is successful.");
-    }).error(function(err) {
-      console.error("Deleting shield activation is failed!");
-    });
-  };
 
   vm.deleteShield = function(shield) {
     var modalInstance = $uibModal.open({
@@ -89,12 +31,8 @@ function ShieldListCtrl($rootScope, $uibModal, editableThemes, toastr, shieldSer
     });
     modalInstance.result.then(function(shieldToDelete) {
       shieldService.remove(shieldToDelete._id).success(function(data) {
-        delete vm.activeShields[shield._id];
         _.remove(vm.allShields, function(shield) {
             return shield._id === shieldToDelete._id;
-        });
-        _.remove(vm.userShields, function(userShield) {
-            return userShield._id === shieldToDelete._id;
         });
         toastr.success(null, "Deleting the shield is successful.");
       }).error(function(err) {
