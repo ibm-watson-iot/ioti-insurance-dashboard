@@ -12,7 +12,7 @@ angular.module('BlurAdmin.services').factory('authenticationService', function(
   var userKey = $location.host() + '_' + $location.port() + '_' + 'dashboardUser';
   var apiUrl = apiProtocol + '://' + apiHost + apiPath + '/' + tenantId + '/';
   var nonDefaultPort = '';
-  if ($location.port() !== 80) {
+  if ($location.protocol()==="http" && $location.port() !== 80) {
     nonDefaultPort = ':' + $location.port();
   }
   var redirectUrl = $location.protocol() + '://' + $location.host() + nonDefaultPort + '/';
