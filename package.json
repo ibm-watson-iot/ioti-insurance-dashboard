@@ -1,12 +1,12 @@
 {
-  "name": "iot4i-demo-app",
-  "author": "IoT4Insurance Team",
-  "license": "ISC",
-  "version": "0.0.1",
+  "name": "ioti-insurance-dashboard",
+  "author": "IBM IoT for Insurance Team",
+  "license": "Apache",
+  "version": "1.0.0",
   "private": true,
   "repository": {
     "type": "git",
-    "url": "git@github.ibm.com:IoT-Insurance/iot4i-demo.git"
+    "url": "git@github.com:ibm-watson-iot/ioti-insurance-dashboard.git"
   },
   "scripts": {
     "postinstall": "bower install",
