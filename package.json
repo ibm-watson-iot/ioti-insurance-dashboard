@@ -3,7 +3,6 @@
   "author": "IBM IoT for Insurance Team",
   "license": "MIT",
   "version": "1.0.0",
-  "private": true,
   "repository": {
     "type": "git",
     "url": "git@github.com:ibm-watson-iot/ioti-insurance-dashboard.git"
