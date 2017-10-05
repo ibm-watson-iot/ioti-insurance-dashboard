@@ -1,7 +1,7 @@
 {
   "name": "ioti-insurance-dashboard",
   "author": "IBM IoT for Insurance Team",
-  "license": "Apache",
+  "license": "MIT",
   "version": "1.0.0",
   "private": true,
   "repository": {
