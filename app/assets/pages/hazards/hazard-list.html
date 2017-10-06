@@ -20,8 +20,7 @@
                   ng-if="!hazardListCtrlVm.isLoading && hazardListCtrlVm.hazards.length === 0">
                 <h2>You don't have any hazards.</h2>
               </div>
-              <table class="table table-hover"
-                  ng-if="!hazardListCtrlVm.isLoading && hazardListCtrlVm.hazards.length > 0">
+              <table class="table table-hover">
                 <tr class="header-row">
                   <th class="table-id">#</th>
                   <th>Event Time</th>
@@ -59,6 +58,7 @@
                 <tr ng-if="hazardListCtrlVm.totalItems > hazardListCtrlVm.itemsPerPage">
                   <td colspan="6" class="text-center">
                     <ul uib-pagination direction-links="false" total-items="hazardListCtrlVm.totalItems"
+                        ng-change="hazardListCtrlVm.pageChanged()" max-size="10" force-ellipses="true"
                         ng-model="hazardListCtrlVm.currentPage" items-per-page="hazardListCtrlVm.itemsPerPage"></ul>
                   </td>
                 </tr>

@@ -19,6 +19,7 @@ angular.module('BlurAdmin', [
   'ui.select',
   'angular-progress-button-styles',
   'angular-jwt',
+  'angular-loading-bar',
 
   'permission',
   'permission.ui',

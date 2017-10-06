@@ -18,8 +18,7 @@
                  ng-if="!userListCtrlVm.isLoading && userListCtrlVm.users.length === 0">
                 <h2>You don't have any customers.</h2>
               </div>
-              <table class="table table-hover"
-                  ng-if="!userListCtrlVm.isLoading && userListCtrlVm.users.length > 0">
+              <table class="table table-hover">
                 <tr class="header-row">
                   <th class="table-id">#</th>
                   <th>Full Name</th>
@@ -35,6 +34,7 @@
                 <tr ng-if="userListCtrlVm.totalItems > userListCtrlVm.itemsPerPage">
                   <td colspan="6" class="text-center">
                     <ul uib-pagination direction-links="false" total-items="userListCtrlVm.totalItems"
+                        ng-change="userListCtrlVm.pageChanged()" max-size="10" force-ellipses="true"
                       ng-model="userListCtrlVm.currentPage" items-per-page="userListCtrlVm.itemsPerPage"></ul>
                   </td>
                 </tr>
