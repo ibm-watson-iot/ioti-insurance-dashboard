@@ -13,10 +13,13 @@ function HazardListCtrl($filter, $scope, editableThemes, toastr, baConfig, cityL
   vm.hazards = [];
   vm.isLoading = true;
   vm.uuidToShieldMap = {};
+  vm.currentPage = 1;
   var latlong = {};
 
   $scope.$watch("hazardListCtrlVm.currentPage", function() {
-    vm.paginatedHazards = vm.hazards.slice((vm.currentPage-1)*vm.itemsPerPage, (vm.currentPage-1)*vm.itemsPerPage+vm.itemsPerPage);
+    var start = (vm.currentPage-1)*vm.itemsPerPage-vm.itemsOffset;
+    var end = (vm.currentPage-1)*vm.itemsPerPage+vm.itemsPerPage-vm.itemsOffset;
+    vm.paginatedHazards = vm.hazards.slice(start, end);
   });
 
   vm.acknowledgeHazard = function(hazard) {
@@ -28,14 +31,16 @@ function HazardListCtrl($filter, $scope, editableThemes, toastr, baConfig, cityL
     });
   };
 
-  function getHazards() {
-    hazardService.findAll({descending: true}).then(function(res) {
+  function getHazards(offset) {
+    vm.isLoading = true;
+    hazardService.findAll({descending: true, skip: offset}).then(function(res) {
       vm.isLoading = false;
       vm.hazards = $filter('orderBy')(res.data.items, 'createdAt', true);
       vm.paginatedHazards = vm.hazards.slice(0, 10);
       vm.totalItems = res.data.totalItems;
-      vm.currentPage = 1;
       vm.itemsPerPage = 10;
+      vm.itemsOffset = offset;
+      vm.itemLengthLimit = res.data.limit;
 
       var cityHazardCount = {};
       _.each(vm.hazards, function(hazard) {
@@ -92,7 +97,7 @@ function HazardListCtrl($filter, $scope, editableThemes, toastr, baConfig, cityL
         };
       });
 
-      getHazards();
+      getHazards(0);
 
     }).error(function(err) {
       console.error("Fetching all users failed!");
@@ -207,7 +212,20 @@ function HazardListCtrl($filter, $scope, editableThemes, toastr, baConfig, cityL
     $timeout(function() {
       map.write('map-bubbles');
     }, 100);
+  }
 
+  vm.pageChanged = function () {
+    var offset = parseInt((vm.currentPage-1) * vm.itemsPerPage / vm.itemLengthLimit) * vm.itemLengthLimit;
+    if (offset !== vm.itemsOffset) {
+      if (vm.nextItemLoad) {
+        clearTimeout(vm.nextItemLoad);
+      }
+      vm.isLoading = true;
+      vm.nextItemLoad = setTimeout(function () {
+        getHazards(offset);
+        vm.nextItemLoad = null;
+      }, 1000);
+    }
   }
 }
 

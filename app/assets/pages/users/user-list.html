@@ -7,19 +7,19 @@
     <div class="row">
       <div class="col-md-12">
         <div class="panel panel-primary bootstrap-panel with-scroll">
-          <div class="panel-heading">All Customers</div>
+          <div class="panel-heading">
+            All Customers
+            <span class="ng-scope" ng-if="hazardListCtrlVm.isLoading" style="display: inline-block;">
+              <loading-spinner type="bounce"></loading-spinner>
+            </span>
+          </div>
           <div class="panel-body">
             <div class="horizontal-scroll">
-              <div class="heading-widget section-block ng-scope"
-                 ng-if="userListCtrlVm.isLoading">
-                <h2>Loading...</h2>
-              </div>
               <div class="heading-widget section-block ng-scope"
                  ng-if="!userListCtrlVm.isLoading && userListCtrlVm.users.length === 0">
                 <h2>You don't have any customers.</h2>
               </div>
-              <table class="table table-hover"
-                  ng-if="!userListCtrlVm.isLoading && userListCtrlVm.users.length > 0">
+              <table class="table table-hover">
                 <tr class="header-row">
                   <th class="table-id">#</th>
                   <th>Full Name</th>
@@ -35,6 +35,7 @@
                 <tr ng-if="userListCtrlVm.totalItems > userListCtrlVm.itemsPerPage">
                   <td colspan="6" class="text-center">
                     <ul uib-pagination direction-links="false" total-items="userListCtrlVm.totalItems"
+                        ng-change="userListCtrlVm.pageChanged()" max-size="10" force-ellipses="true"
                       ng-model="userListCtrlVm.currentPage" items-per-page="userListCtrlVm.itemsPerPage"></ul>
                   </td>
                 </tr>
