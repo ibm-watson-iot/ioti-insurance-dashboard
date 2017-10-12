@@ -8,11 +8,15 @@ function UserViewCtrl($stateParams, userService, shieldService, shieldActivation
   var vm = this;
   vm.user = {};
   vm.uuidToShieldMap = {};
+  vm.userShields = [];
 
   if ($stateParams.userId) {
     shieldService.findAll().success(function(data) {
       _.each(data.items, function(shield) {
         vm.uuidToShieldMap[shield._id] = shield;
+        if (shield.needsActivationCheck !== true) {
+          vm.userShields.push({ shieldId: shield._id });
+        }
       });
     }).error(function(err) {
       console.error("Fetching all shields has failed!");
@@ -22,7 +26,7 @@ function UserViewCtrl($stateParams, userService, shieldService, shieldActivation
       vm.user = user;
       initializeLocationMap(user.address.street + ", " + user.address.zipcode + " " + user.address.city + ", " + user.address.country);
       shieldActivationService.findAll({userId: $stateParams.userId}).success(function(data) {
-        vm.userShields = data.items;
+        vm.userShields = vm.userShields.concat(data.items);
       });
 
       deviceService.findAll({userId: $stateParams.userId}).success(function(data) {
