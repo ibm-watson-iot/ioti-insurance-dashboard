@@ -4,6 +4,41 @@
  */
 'use strict';
 
+// global window variables for Medallia NPS
+var Medallia =  {
+    loaded: false,
+    scan: null,
+    daysSinceFirstLogin: 0
+};
+
+function loadScript(src,callback){
+
+   var script = document.createElement("script");
+   if (Medallia.loaded) return true;;
+   script.type = "text/javascript";
+   if(callback)script.onload=callback;
+   Medallia.loaded = true;
+   console.log("Loading Medallia embed script");
+
+   document.getElementsByTagName("head")[0].appendChild(script);
+   script.src = src;
+   return true;
+}
+
+function loadScriptCb(){
+   console.log("Medallia embed script loaded - loading rest");
+   Medallia.scan = setInterval(function() {
+      if (window.KAMPYLE_ONSITE_SDK != undefined) {
+         console.log("Medallia NPS code ready " + window.KAMPYLE_ONSITE_SDK);
+         clearInterval(Medallia.scan)
+         Medallia.scan = null;
+      }
+      //else console.log("KAMPYLE not ready yet");
+   });
+   return true;
+}
+
+
 angular.module('BlurAdmin', [
   'uuid',
   'toastr',
@@ -58,6 +93,10 @@ angular.module('BlurAdmin', [
     });
 
     $rootScope.$on('$stateChangeStart', function(event, toState, params) {
+      if (window.KAMPYLE_ONSITE_SDK && authenticationService.isStillAuthenticated()) {
+        // notify NPS code of page update
+        window.KAMPYLE_ONSITE_SDK.updatePageView();
+      }
       if (toState.redirectTo) {
         event.preventDefault();
         $state.go(toState.redirectTo, params, { location: 'replace' });

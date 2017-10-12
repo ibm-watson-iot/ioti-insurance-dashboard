@@ -29,4 +29,4 @@ bower_components/
 public/
 
 # Developer specific config file
-app/config-dev.js
+#app/config-dev.js
