@@ -66,15 +66,17 @@ then deploy the **public** folder
 
 All that is required to run the dashboard for preconfigured sandbox tenant is to build the docker image with
  
-    docker build -f Dockerfile.test -t iotidash .
+    ./docker-build
 
 then deploy and run the image with
 
-    docker run -p 4000:443 -t iotidash
+    docker run -p 8080:443 -t iotidash
 
-Point your browser to https://localhost:4000
+Point your browser to https://localhost:8080
 
-**Note** that the port number *must* be 4000 to match the OpenId identity provider's settings. Currently the identity is provided by w3id which requires to define valid redirection URLs and https://localhost:4000/auth/sso/callback is defined as valid.<br>
+The docker-build script generates self-signed certificates, checks for a proper configuration file and then proceeds with assembling the docker images.
+
+**Note** that the port number *must* be 8080 for the internal test environment.
 
 
 ## How can I support developers?
