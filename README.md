@@ -62,22 +62,6 @@ then deploy the **public** folder
 * `cd public`
 * `cf push`
 
-#### How to build the insurance dashboard for running tests locally in a docker container
-
-All that is required to run the dashboard for preconfigured sandbox tenant is to build the docker image with
- 
-    ./docker-build
-
-then deploy and run the image with
-
-    docker run -p 8080:443 -t iotidash
-
-Point your browser to https://localhost:8080
-
-The docker-build script generates self-signed certificates, checks for a proper configuration file and then proceeds with assembling the docker images.
-
-**Note** that the port number *must* be 8080 for the internal test environment.
-
 
 ## How can I support developers?
 - Star our GitHub repo
