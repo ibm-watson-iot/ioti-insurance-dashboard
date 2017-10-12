@@ -6,7 +6,7 @@
 
 angular.module('BlurAdmin.services').factory('authenticationService', function(
   $http, $httpParamSerializer, $q, $location, $window, jwtHelper, userService,
-  apiProtocol, apiHost, apiPath, tenantId, toastr) {
+  apiProtocol, apiHost, apiPath, authCallbackPath, tenantId, toastr) {
 
   var tokenKey = $location.host() + '_' + $location.port() + '_' + 'dashboardAuthToken';
   var userKey = $location.host() + '_' + $location.port() + '_' + 'dashboardUser';
@@ -16,7 +16,9 @@ angular.module('BlurAdmin.services').factory('authenticationService', function(
     ($location.protocol()==="https" && $location.port() !== 443)) {
     nonDefaultPort = ':' + $location.port();
   }
-  var redirectUrl = $location.protocol() + '://' + $location.host() + nonDefaultPort + '/';
+  // allow for non standard auth callback paths
+  //        to specify authorized redirection URL, for example /auth/sso/callback as configured in w3id auth service for localhost
+  var redirectUrl = $location.protocol() + '://' + $location.host() + nonDefaultPort + authCallbackPath;
 
   var authorizeCode = $q.resolve()
   .then(function () {
@@ -71,7 +73,9 @@ angular.module('BlurAdmin.services').factory('authenticationService', function(
       }
     });
   })
-  .then(function () {
+  .then(function (data) {
+    window.Medallia.daysSinceFirstLogin = Math.round((Date.now() - data.data.createdAt)/86400000);
+    console.log('New login: daysSinceFirstLogin is ' + window.Medallia.daysSinceFirstLogin);
     var expirationTime = jwtHelper.getTokenExpirationDate(localStorage.getItem(tokenKey));
     console.log('token will expire in ', (expirationTime - Date.now()) / 1000);
     setTimeout(function () {
@@ -88,6 +92,9 @@ angular.module('BlurAdmin.services').factory('authenticationService', function(
         state: 'test'
       };
       $window.location.href = apiUrl + 'authorization?' + $httpParamSerializer(query);
+    },
+    isStillAuthenticated: function() {
+      return !!localStorage.getItem(tokenKey);
     },
     isAuthenticated: function() {
       return authorizeCode.then(function() {

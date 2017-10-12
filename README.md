@@ -40,6 +40,8 @@ This app can be configured for `dev`, `staging` and `production`
   * set tenantId to your own tenant ID
   * set backendHost value
   * note that `backendHost` and `apiHost` must **not** start with `http(s)://`
+  * set authCallbackPath value - default is root path, for test purposes /auth/sso/callback is required (and supported by nginx redirect)
+  * for production set customerICN to the correct value !
 
 
 #### Build and deploy
@@ -59,6 +61,23 @@ afterwards you can run
 then deploy the **public** folder
 * `cd public`
 * `cf push`
+
+#### How to build the insurance dashboard for running tests locally in a docker container
+
+All that is required to run the dashboard for preconfigured sandbox tenant is to build the docker image with
+ 
+    ./docker-build
+
+then deploy and run the image with
+
+    docker run -p 8080:443 -t iotidash
+
+Point your browser to https://localhost:8080
+
+The docker-build script generates self-signed certificates, checks for a proper configuration file and then proceeds with assembling the docker images.
+
+**Note** that the port number *must* be 8080 for the internal test environment.
+
 
 ## How can I support developers?
 - Star our GitHub repo

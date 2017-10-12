@@ -11,3 +11,5 @@ angular.module('BlurAdmin.configs').constant('backendProtocol', 'https');
 angular.module('BlurAdmin.configs').constant('backendHost', '<iot4i-starter-backend hostname>');
 angular.module('BlurAdmin.configs').constant('backendPath', '/api/v1');
 angular.module('BlurAdmin.configs').constant('backendWebSocketPath', '/notifications');
+angular.module('BlurAdmin.configs').constant('authCallbackPath', '/');
+angular.module('BlurAdmin.configs').constant('customerICN', '999999');
