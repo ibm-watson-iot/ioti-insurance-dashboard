@@ -62,7 +62,7 @@ then deploy the **public** folder
 * `cd public`
 * `cf push`
 
-#### How to build the insurance dashboard for running tests locally
+#### How to build the insurance dashboard for running tests locally in a docker container
 
 All that is required to run the dashboard for preconfigured sandbox tenant is to build the docker image with
  

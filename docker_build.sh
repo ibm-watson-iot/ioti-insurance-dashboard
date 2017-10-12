@@ -28,7 +28,7 @@ fi
 
 echo "Check for proper configuration"
 
-if [[ ! -e app/config-dev.js || ! -e app/config-prod.js ]]; then 
+if [[ ! -e app/config-dev.js && ! -e app/config-prod.js ]]; then 
   echo "please create a valid configuration file 'config-dev.js', resp. 'config-prod.js' in the app subdirectory"
    
   echo "for the internal IBM sandbox environment, a valid configuration file (config-dev.js)"
