@@ -40,6 +40,8 @@ This app can be configured for `dev`, `staging` and `production`
   * set tenantId to your own tenant ID
   * set backendHost value
   * note that `backendHost` and `apiHost` must **not** start with `http(s)://`
+  * set authCallbackPath value - default is root path, for test purposes /auth/sso/callback is required (and supported by nginx redirect)
+  * for production set customerICN to the correct value !
 
 
 #### Build and deploy
@@ -59,6 +61,7 @@ afterwards you can run
 then deploy the **public** folder
 * `cd public`
 * `cf push`
+
 
 ## How can I support developers?
 - Star our GitHub repo
