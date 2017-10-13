@@ -3,16 +3,14 @@
 
 angular.module('BlurAdmin.pages.hazards').controller('HazardViewCtrl', HazardViewCtrl);
 
-function HazardViewCtrl($stateParams, $filter, toastr, hazardService, shieldService, userService, claimService) {
+function HazardViewCtrl($stateParams, $filter, toastr, hazardService, shieldService, gmapsHandler, claimService) {
   var vm = this;
   vm.hazard = {};
 
   if ($stateParams.hazardEventId) {
     hazardService.find($stateParams.hazardEventId).success(function(hazard) {
       vm.hazard = hazard;
-
-      initializeLocationMap(hazard.userId);
-
+      showInMap(hazard);
       shieldService.find(vm.hazard.shieldId).success(function(shield) {
         vm.shield = shield;
       });
@@ -24,6 +22,23 @@ function HazardViewCtrl($stateParams, $filter, toastr, hazardService, shieldServ
     });
   }
 
+  const showInMap = function(hazard) {
+    gmapsHandler.initGmaps();
+    if (hazard.locations) {
+      hazard.locations.forEach(function(location) {
+        if (location.geometry && location.geometry.coordinates) {
+          gmapsHandler.showInMap({
+            type: 'latLng',
+            latLng: {
+              lat: location.geometry.coordinates[0],
+              lng: location.geometry.coordinates[1]
+            }
+          });
+        }
+      });
+    }
+  };
+
   vm.acknowledgeHazard = function(hazard) {
     hazard.ishandled = true;
     hazardService.updatePartial(hazard._id, {ishandled: true}).success(function(data) {
@@ -32,54 +47,6 @@ function HazardViewCtrl($stateParams, $filter, toastr, hazardService, shieldServ
       toastr.error("Saving hazard has failed!", "Error");
     });
   };
-
-  function initializeLocationMap(userId) {
-    // get user location
-    userService.find(userId).then(function(resp) {
-      var user = resp.data;
-      var address = user.address.street + ", " + user.address.zipcode + " " + user.address.city + ", " + user.address.country;
-      var geocoder;
-      var map;
-
-      geocoder = new google.maps.Geocoder();
-      var latlng = new google.maps.LatLng(-34.397, 150.644);
-      var myOptions = {
-        zoom: 14,
-        center: latlng,
-        mapTypeControl: true,
-        mapTypeControlOptions: { style: google.maps.MapTypeControlStyle.DROPDOWN_MENU },
-        navigationControl: true,
-        mapTypeId: google.maps.MapTypeId.ROADMAP
-      };
-      map = new google.maps.Map(document.getElementById("google-maps"), myOptions);
-      if (geocoder) {
-        geocoder.geocode({ 'address': address }, function (results, status) {
-          if (status == google.maps.GeocoderStatus.OK) {
-            if (status != google.maps.GeocoderStatus.ZERO_RESULTS) {
-              map.setCenter(results[0].geometry.location);
-              var infowindow = new google.maps.InfoWindow(
-                {
-                  content: '<b>' + address + '</b>',
-                  size: new google.maps.Size(150, 50)
-                });
-              var marker = new google.maps.Marker({
-                position: results[0].geometry.location,
-                map: map,
-                title: address
-              });
-              google.maps.event.addListener(marker, 'click', function () {
-                infowindow.open(map, marker);
-              });
-            } else {
-              console.log("No results found");
-            }
-          } else {
-            console.log("Geocode was not successful for the following reason: " + status);
-          }
-        });
-      }
-    });
-  }
 }
 
 })();
