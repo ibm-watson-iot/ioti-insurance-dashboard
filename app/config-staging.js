@@ -3,7 +3,7 @@
 angular.module('BlurAdmin.configs', []);
 
 angular.module('BlurAdmin.configs').constant('apiProtocol', 'https');
-angular.module('BlurAdmin.configs').constant('apiHost', 'ioti.us-south.containers.mybluemix.net/docs');
+angular.module('BlurAdmin.configs').constant('apiHost', 'ioti.us-south.containers.mybluemix.net');
 angular.module('BlurAdmin.configs').constant('apiPath', '/api/v1');
 angular.module('BlurAdmin.configs').constant('tenantId', '<tenantid>');
 
