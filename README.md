@@ -43,6 +43,11 @@ This app can be configured for `dev`, `staging` and `production`
   * set authCallbackPath value - default is root path, for test purposes /auth/sso/callback is required (and supported by nginx redirect)
   * for production set customerICN to the correct value !
 
+#### Net promoter score
+By default this app collects user feedback periodically and sends it to the Medallia cloud on behalf of IBM.
+<br> In order to provide meaningful feedback, the user's email, full name and country is required.
+These data are available for the current implementation based on w3id; for customer specific authentication providers, the implementation in app/scripts/services/AuthenticationService.js and app/scripts/services/WebSocketService.js need to be modified accordingly.
+
 
 #### Build and deploy
 Install if needed the build tools:
