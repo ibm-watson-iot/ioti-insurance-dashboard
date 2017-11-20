@@ -13,3 +13,4 @@ angular.module('BlurAdmin.configs').constant('backendPath', '/api/v1');
 angular.module('BlurAdmin.configs').constant('backendWebSocketPath', '/notifications');
 angular.module('BlurAdmin.configs').constant('authCallbackPath', '/');
 angular.module('BlurAdmin.configs').constant('customerICN', '999999');
+angular.module('BlurAdmin.configs').constant('NPStest', 'no');

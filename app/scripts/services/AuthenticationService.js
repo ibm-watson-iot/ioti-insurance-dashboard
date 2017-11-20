@@ -6,7 +6,7 @@
 
 angular.module('BlurAdmin.services').factory('authenticationService', function(
   $http, $httpParamSerializer, $q, $location, $window, jwtHelper, userService,
-  apiProtocol, apiHost, apiPath, authCallbackPath, tenantId, toastr) {
+  apiProtocol, apiHost, apiPath, authCallbackPath, tenantId, NPStest, toastr) {
 
   var tokenKey = $location.host() + '_' + $location.port() + '_' + 'dashboardAuthToken';
   var userKey = $location.host() + '_' + $location.port() + '_' + 'dashboardUser';
@@ -75,9 +75,13 @@ angular.module('BlurAdmin.services').factory('authenticationService', function(
   })
   .then(function (data) {
     window.Medallia.daysSinceFirstLogin = Math.round((Date.now() - data.data.createdAt)/86400000);
+    if (NPStest === 'yes')
+       window.Medallia.daysSinceFirstLogin = window.Medallia.daysSinceFirstLogin + 100;
     console.log('New login: daysSinceFirstLogin is ' + window.Medallia.daysSinceFirstLogin);
+
     var expirationTime = jwtHelper.getTokenExpirationDate(localStorage.getItem(tokenKey));
     console.log('token will expire in ', (expirationTime - Date.now()) / 1000);
+
     setTimeout(function () {
       toastr.warning('Your session will expire in '+parseInt((expirationTime - Date.now())/(1000*60))+'min, at ' + expirationTime.toLocaleTimeString());
     }, expirationTime - Date.now() -  5*60*1000);

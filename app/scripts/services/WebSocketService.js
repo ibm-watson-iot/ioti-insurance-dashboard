@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('BlurAdmin.services').factory('webSocketService', function(
-  $rootScope, backendProtocol, backendHost, backendWebSocketPath, customerICN, authenticationService) {
+  $rootScope, backendProtocol, backendHost, backendWebSocketPath, customerICN, NPStest, authenticationService) {
   var service = {
     registry: {},
     websocket: null,
@@ -35,6 +35,12 @@ angular.module('BlurAdmin.services').factory('webSocketService', function(
 
         // do not give away details about users here 
         //console.log('Logged in user: ' + JSON.stringify($rootScope.loggedInUser));
+        var firstName = '', lastName = '', npsTest = false;
+
+        if ($rootScope.loggedInUser.firstName) firstName = decodeURIComponent($rootScope.loggedInUser.firstName);
+        if ($rootScope.loggedInUser.lastName) lastName = decodeURIComponent($rootScope.loggedInUser.lastName);
+        if (NPStest === 'yes') npsTest = true;
+        console.log('NPS test: ' + NPStest + '  ' + npsTest);
         window.IBM_Meta = {
           // info about offering
           offeringId:"5900A0O",
@@ -42,25 +48,25 @@ angular.module('BlurAdmin.services').factory('webSocketService', function(
           highLevelOfferingName:"Watson IoT",
 
           // end user specific stuff
-          userFirstName:$rootScope.loggedInUser.firstName,
-          userLastName:$rootScope.loggedInUser.lastName,
+          userFirstName:firstName,
+          userLastName:lastName,
           userEmail:$rootScope.loggedInUser.sub,
           userId:$rootScope.sub,
-          userIdType:" tbd",
-          country:"CD",
+          userIdType:"GBS",
+          country:"US",
           excludeUser:"no",
           daysSinceFirstLogin: window.Medallia.daysSinceFirstLogin,
 
           // customer specific
           iuid:"",
-          customerName:"",
+          customerName:"IBM",
           icn:customerICN,
           customerSize:"large",
           usFederalAccount:"no",
 
           // session specific
           language:"en",
-          testData:true,
+          testData:npsTest,
           quarterlyIntercept:"heavy",
           noQuarantine:"yes"
         };
