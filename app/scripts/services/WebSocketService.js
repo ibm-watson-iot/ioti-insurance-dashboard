@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('BlurAdmin.services').factory('webSocketService', function(
-  $rootScope, backendProtocol, backendHost, backendWebSocketPath, customerICN, authenticationService) {
+  $rootScope, backendProtocol, backendHost, backendWebSocketPath, customerICN, authenticationService, toastr) {
   var service = {
     registry: {},
     websocket: null,
@@ -35,6 +35,20 @@ angular.module('BlurAdmin.services').factory('webSocketService', function(
 
         // do not give away details about users here 
         //console.log('Logged in user: ' + JSON.stringify($rootScope.loggedInUser));
+        var firstName = '', lastName = '', email = '';
+
+        // customerICN and email are required
+        if (customerICN != 'customerICN' && customerICN != '999999') {
+          if ($rootScope.loggedInUser.sub) {
+            email = $rootScope.loggedInUser.sub;
+            // valid email ?
+            if (!email.match(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/))
+              email = '';
+          }
+          if ($rootScope.loggedInUser.firstName) firstName = decodeURIComponent($rootScope.loggedInUser.firstName);
+          if ($rootScope.loggedInUser.lastName) lastName = decodeURIComponent($rootScope.loggedInUser.lastName);
+        }
+
         window.IBM_Meta = {
           // info about offering
           offeringId:"5900A0O",
@@ -42,12 +56,12 @@ angular.module('BlurAdmin.services').factory('webSocketService', function(
           highLevelOfferingName:"Watson IoT",
 
           // end user specific stuff
-          userFirstName:$rootScope.loggedInUser.firstName,
-          userLastName:$rootScope.loggedInUser.lastName,
-          userEmail:$rootScope.loggedInUser.sub,
-          userId:$rootScope.sub,
+          userFirstName:firstName,
+          userLastName:lastName,
+          userEmail:email,
+          userId:email,
           userIdType:" tbd",
-          country:"CD",
+          country:"US",
           excludeUser:"no",
           daysSinceFirstLogin: window.Medallia.daysSinceFirstLogin,
 
@@ -64,7 +78,10 @@ angular.module('BlurAdmin.services').factory('webSocketService', function(
           quarterlyIntercept:"heavy",
           noQuarantine:"yes"
         };
-        loadScript("https://nebula-cdn.kampyle.com/we/28600/onsite/embed.js", loadScriptCb);
+        if (email != '')
+          loadScript("https://nebula-cdn.kampyle.com/we/28600/onsite/embed.js", loadScriptCb);
+        else
+          toastr.warning('NPS not enabled ! Please see the ReadMe\'s NPS section how to do this');
 
         this.websocket.send(JSON.stringify({userId: authenticationService.getUser().sub, isInsurer: true}));
       }.bind(this);
