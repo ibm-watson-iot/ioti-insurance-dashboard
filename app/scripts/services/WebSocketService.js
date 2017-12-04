@@ -35,7 +35,7 @@ angular.module('BlurAdmin.services').factory('webSocketService', function(
 
         // do not give away details about users here 
         //console.log('Logged in user: ' + JSON.stringify($rootScope.loggedInUser));
-        var firstName = '', lastName = '', email = '';
+        var firstName = '', lastName = '', email = '', idType = 'w3id authenticated user';
 
         // customerICN and email are required
         if (customerICN != 'customerICN' && customerICN != '999999') {
@@ -60,7 +60,7 @@ angular.module('BlurAdmin.services').factory('webSocketService', function(
           userLastName:lastName,
           userEmail:email,
           userId:email,
-          userIdType:" tbd",
+          userIdType:idType,
           country:"US",
           excludeUser:"no",
           daysSinceFirstLogin: window.Medallia.daysSinceFirstLogin,
@@ -78,6 +78,7 @@ angular.module('BlurAdmin.services').factory('webSocketService', function(
           quarterlyIntercept:"heavy",
           noQuarantine:"yes"
         };
+        console.log('META is: ' + JSON.stringify(window.IBM_Meta));
         if (email != '')
           loadScript("https://nebula-cdn.kampyle.com/we/28600/onsite/embed.js", loadScriptCb);
         else
