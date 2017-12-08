@@ -74,9 +74,9 @@ angular.module('BlurAdmin.services').factory('webSocketService', function(
 
           // session specific
           language:"en",
-          testData:true,
+          testData:false,
           quarterlyIntercept:"heavy",
-          noQuarantine:"yes"
+          noQuarantine:"no"
         };
         console.log('META is: ' + JSON.stringify(window.IBM_Meta));
         if (email != '')
