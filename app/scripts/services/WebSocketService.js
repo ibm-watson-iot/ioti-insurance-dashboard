@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('BlurAdmin.services').factory('webSocketService', function(
-  $rootScope, backendProtocol, backendHost, backendWebSocketPath, customerICN, authenticationService) {
+  $rootScope, backendProtocol, backendHost, backendWebSocketPath, customerICN, authenticationService, toastr) {
   var service = {
     registry: {},
     websocket: null,
@@ -32,39 +32,7 @@ angular.module('BlurAdmin.services').factory('webSocketService', function(
       // When the connection is open, send some data to the server
       this.websocket.onopen = function () {
         console.log('websocket open');
-
-        // do not give away details about users here 
-        //console.log('Logged in user: ' + JSON.stringify($rootScope.loggedInUser));
-        window.IBM_Meta = {
-          // info about offering
-          offeringId:"5900A0O",
-          offeringName:"IBM IoT for insurance",
-          highLevelOfferingName:"Watson IoT",
-
-          // end user specific stuff
-          userFirstName:$rootScope.loggedInUser.firstName,
-          userLastName:$rootScope.loggedInUser.lastName,
-          userEmail:$rootScope.loggedInUser.sub,
-          userId:$rootScope.sub,
-          userIdType:" tbd",
-          country:"CD",
-          excludeUser:"no",
-          daysSinceFirstLogin: window.Medallia.daysSinceFirstLogin,
-
-          // customer specific
-          iuid:"",
-          customerName:"",
-          icn:customerICN,
-          customerSize:"large",
-          usFederalAccount:"no",
-
-          // session specific
-          language:"en",
-          testData:true,
-          quarterlyIntercept:"heavy",
-          noQuarantine:"yes"
-        };
-        loadScript("https://nebula-cdn.kampyle.com/we/28600/onsite/embed.js", loadScriptCb);
+        //NPSinit(($rootScope.loggedInUser) ? ($rootScope.loggedInUser) : {}, customerICN, toastr);
 
         this.websocket.send(JSON.stringify({userId: authenticationService.getUser().sub, isInsurer: true}));
       }.bind(this);
