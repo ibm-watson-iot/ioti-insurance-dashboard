@@ -47,9 +47,7 @@ This app can be configured for `dev`, `staging` and `production`
 By default this app collects user feedback periodically and sends it to the Medallia cloud on behalf of IBM.
 <br> In order to provide meaningful feedback, the user's email, full name and country is required.
 These data are available for the current implementation based on w3id; for customer specific authentication providers,
-the implementation in app/scripts/services/AuthenticationService.js and app/scripts/services/WebSocketService.js
-need to be modified accordingly.
-
+the implementation in app/scripts/services/AuthenticationService.js, app/setup.js and app/app.js need to be modified accordingly.  
 
 #### Build and deploy
 Install if needed the build tools:
@@ -69,6 +67,13 @@ then deploy the **public** folder
 * `cd public`
 * `cf push`
 
+#### Testing locally
+
+The code can easily be run on localhost by starting the brunch watcher in server mode<br><br>
+`brunch w -s`
+<br><br>and then employ the npm package `local-web-server` as HTTPS capable wrapper to the brunch server with <br><br>
+`ws --stack Rewrite --https --port 8080 --rewrite '/* -> http://localhost:3333/$1'`
+<br><br>The command above redirects HTTPS requests on port 8080 to the brunch server listening to its default port 3333.
 
 ## How can I support developers?
 - Star our GitHub repo

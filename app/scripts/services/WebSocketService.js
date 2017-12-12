@@ -32,7 +32,7 @@ angular.module('BlurAdmin.services').factory('webSocketService', function(
       // When the connection is open, send some data to the server
       this.websocket.onopen = function () {
         console.log('websocket open');
-        NPSinit(($rootScope.loggedInUser) ? ($rootScope.loggedInUser) : {}, customerICN, toastr);
+        //NPSinit(($rootScope.loggedInUser) ? ($rootScope.loggedInUser) : {}, customerICN, toastr);
 
         this.websocket.send(JSON.stringify({userId: authenticationService.getUser().sub, isInsurer: true}));
       }.bind(this);

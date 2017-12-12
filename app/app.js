@@ -70,7 +70,7 @@ angular.module('BlurAdmin', [
   uiSelectConfig.theme = 'selectize';
   $locationProvider.html5Mode(true);
 })
-.run(function($rootScope, $state, editableOptions, editableThemes, PermRoleStore, authenticationService) {
+.run(function($rootScope, $state, editableOptions, editableThemes, PermRoleStore, authenticationService, customerICN, toastr) {
 
     // xeditable theme
     editableOptions.theme = 'bs3';
@@ -90,6 +90,8 @@ angular.module('BlurAdmin', [
 
     authenticationService.isAuthenticated().then(function() {
       $rootScope.loggedInUser = authenticationService.getUser();
+      NPSinit(($rootScope.loggedInUser) ? ($rootScope.loggedInUser) : {}, customerICN, toastr);
+
     });
 
     $rootScope.$on('$stateChangeStart', function(event, toState, params) {
