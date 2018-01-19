@@ -12,7 +12,9 @@
     "start": "brunch watch --server",
     "prod": "brunch build --production"
   },
-  "dependencies": {},
+  "dependencies": {
+    "bower": "^1.6.5"
+  },
   "devDependencies": {
     "brunch": "^2.10.5",
     "css-brunch": "^2.6.1",
