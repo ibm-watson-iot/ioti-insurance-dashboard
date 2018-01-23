@@ -30,8 +30,18 @@ function ShieldCodeEditCtrl($state, $stateParams, toastr, uuid4, shieldCodeServi
 
   vm.saveShieldCode = function() {
     vm.saving = true;
-    shieldCodeService.save(vm.shieldCode)
-    .then(function(resp) {
+    var promise;
+    if (vm.isNewShieldCode || vm.shieldCode.codeFile) {
+      promise = shieldCodeService.save(vm.shieldCode)
+    } else {
+      var partial = {
+        description: vm.shieldCode.description,
+        jobOptions: vm.shieldCode.jobOptions,
+        enabled: vm.shieldCode.enabled
+      };
+      promise = shieldCodeService.updatePartial($stateParams.shieldCodeId, partial)
+    } 
+    promise.then(function(resp) {
       _.merge(vm.shieldCode, resp.data);
       vm.saving = false;
       toastr.success('Saving shieldCode was successful');
