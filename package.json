@@ -1,19 +1,20 @@
 {
-  "name": "iot4i-demo-app",
-  "author": "IoT4Insurance Team",
-  "license": "ISC",
-  "version": "0.0.1",
-  "private": true,
+  "name": "ioti-insurance-dashboard",
+  "author": "IBM IoT for Insurance Team",
+  "license": "EPL-1.0",
+  "version": "1.0.0",
   "repository": {
     "type": "git",
-    "url": "git@github.ibm.com:IoT-Insurance/iot4i-demo.git"
+    "url": "git@github.com:ibm-watson-iot/ioti-insurance-dashboard.git"
   },
   "scripts": {
     "postinstall": "bower install",
     "start": "brunch watch --server",
     "prod": "brunch build --production"
   },
-  "dependencies": {},
+  "dependencies": {
+    "bower": "^1.6.5"
+  },
   "devDependencies": {
     "brunch": "^2.10.5",
     "css-brunch": "^2.6.1",

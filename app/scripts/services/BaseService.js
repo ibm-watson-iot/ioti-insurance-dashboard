@@ -29,7 +29,6 @@ angular.module('BlurAdmin.services').factory('BaseService', function(
 
     findAll: function(queryParams) {
       queryParams = queryParams || {};
-      queryParams.userId = queryParams.userId || 'all';
       return $http.get(this.apiUrl, {
         params: queryParams
       });

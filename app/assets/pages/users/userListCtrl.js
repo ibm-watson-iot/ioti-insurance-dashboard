@@ -12,21 +12,24 @@ function UserListCtrl($scope, $timeout, baConfig, layoutPaths, userService, city
   var latlong;
   vm.users = [];
   vm.isLoading = true;
+  vm.currentPage = 1;
 
   $scope.$watch("userListCtrlVm.currentPage", function() {
-    vm.paginatedUsers = vm.users.slice((vm.currentPage-1)*vm.itemsPerPage, (vm.currentPage-1)*vm.itemsPerPage+vm.itemsPerPage);
+    var start = (vm.currentPage-1)*vm.itemsPerPage-vm.userItemsOffset;
+    var end = (vm.currentPage-1)*vm.itemsPerPage+vm.itemsPerPage-vm.userItemsOffset;
+    vm.paginatedUsers = vm.users.slice(start, end);
   });
 
-  cityLocationService.me().success(function(data) {
-    latlong = data;
-
-    userService.findAll().success(function(data) {
+  function loadUsers(offset) {
+    vm.isLoading = true;
+    return userService.findAll({skip: offset}).success(function(data) {
       vm.isLoading = false;
       vm.users = data.items;
       vm.paginatedUsers = vm.users.slice(0, 10);
       vm.totalItems = data.totalItems;
-      vm.currentPage = 1;
       vm.itemsPerPage = 10;
+      vm.userItemsOffset = offset;
+      vm.itemLengthLimit = data.limit;
 
       var cityUserCount = {};
       _.each(vm.users, function(user) {
@@ -53,6 +56,11 @@ function UserListCtrl($scope, $timeout, baConfig, layoutPaths, userService, city
     }).error(function(err) {
       console.error("Fetching all users failed!");
     });
+  }
+
+  cityLocationService.me().success(function(data) {
+    latlong = data;
+    loadUsers(0);
   }).error(function(err) {
     console.error("Fetching city locations failed!");
   });
@@ -133,6 +141,19 @@ function UserListCtrl($scope, $timeout, baConfig, layoutPaths, userService, city
     }, 100);
   }
 
+  vm.pageChanged = function () {
+    var offset = parseInt((vm.currentPage-1) * vm.itemsPerPage / vm.itemLengthLimit) * vm.itemLengthLimit;
+    if (offset !== vm.userItemsOffset) {
+      if (vm.nextUserLoad) {
+        clearTimeout(vm.nextUserLoad);
+      }
+      vm.isLoading = true;
+      vm.nextUserLoad = setTimeout(function () {
+        loadUsers(offset);
+        vm.nextUserLoad = null;
+      }, 1000);
+    }
+  }
 }
 
 })();

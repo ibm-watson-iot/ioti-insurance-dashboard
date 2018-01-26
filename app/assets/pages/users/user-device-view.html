@@ -6,51 +6,47 @@
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label for="iot4i_device_id">iot4i_device_id</label>
-                                <input ng-disabled="true" style="color: black;" type="text" class="form-control" id="iot4i_device_id"
-                                       ng-model="userDeviceViewCtrlVm.userDevice.iot4i_device_id">
+                                <label for="vendorId">VendorId</label>
+                                <input ng-disabled="true" style="color: black;" type="text" class="form-control" id="vendorId"
+                                       ng-model="userDeviceViewCtrlVm.userDevice.vendorId">
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label for="activation">activation</label>
-                                <input ng-disabled="true" style="color: black;" type="text" class="form-control" id="activation"
-                                       ng-model="userDeviceViewCtrlVm.userDevice.activation">
+                                <label for="vendor">Vendor</label>
+                                <input ng-disabled="true" style="color: black;" type="text" class="form-control" id="vendor"
+                                       ng-model="userDeviceViewCtrlVm.userDevice.vendor">
                             </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label for="status">status</label>
-                                <input ng-disabled="true" style="color: black;" type="text" class="form-control" id="status"
-                                       ng-model="userDeviceViewCtrlVm.userDevice.status">
+                                <label for="type">Type</label>
+                                <input ng-disabled="true" style="color: black;" type="text" class="form-control" id="type"
+                                       ng-model="userDeviceViewCtrlVm.userDevice.type">
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label for="connection_updated_at">connection_updated_at</label>
-                                <input ng-disabled="true" style="color: black;" type="text" class="form-control" id="connection_updated_at"
-                                       ng-model="userDeviceViewCtrlVm.userDevice.connection_updated_at">
+                                <label for="tokens">Tokens</label>
+                                <input ng-disabled="true" style="color: black;" type="text" class="form-control" id="tokens"
+                                       ng-model="userDeviceViewCtrlVm.userDevice.tokens">
                             </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label for="deviceDesc">deviceDesc</label>
-                                <input ng-disabled="true" style="color: black;" type="text" class="form-control" id="deviceDesc"
-                                       ng-model="userDeviceViewCtrlVm.userDevice.extra.deviceDesc">
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label for="location">location</label>
-                                <input ng-disabled="true" style="color: black;" type="text" class="form-control" id="location"
-                                       ng-model="userDeviceViewCtrlVm.userDevice.location">
+                                <label for="address">Address</label>
+                                <input ng-disabled="true" style="color: black;" type="text" class="form-control" id="address"
+                                       ng-model="userDeviceViewCtrlVm.userDevice.location.properties.address">
                             </div>
                         </div>
                     </div>
+                </div>
+                <div ba-panel ba-panel-title="device Location" class="viewport100">
+                    <div id="google-maps"></div>
                 </div>
             </div>
         </div>
