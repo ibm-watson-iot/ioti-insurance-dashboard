@@ -31,6 +31,40 @@ function HazardListCtrl($filter, $scope, editableThemes, toastr, baConfig, cityL
     });
   };
 
+  function updateHazardsInfo() {
+    var cityHazardCount = {};
+    _.each(vm.hazards, function(hazard) {
+      var userInfo = vm.userMap[hazard.userId];
+      if (userInfo) {
+        if (!cityHazardCount[userInfo.cityId]) {
+          cityHazardCount[userInfo.cityId] = 0;
+        }
+        cityHazardCount[userInfo.cityId] = cityHazardCount[userInfo.cityId] + 1;
+      } else {
+        vm.userMap[hazard.userId] = {
+          customer: '-',
+          cityName: '-',
+          cityId: '-',
+          name: hazard.userId
+        };
+      }
+    });
+    // populate the map data
+    var mapData = [];
+    for (var city in cityHazardCount) {
+      var mapDataEntry = {};
+      mapDataEntry.name = city;
+      mapDataEntry.value = cityHazardCount[city];
+      mapDataEntry.code = city;
+      mapDataEntry.color = baConfig.colors.primaryDark;
+      mapData.push(mapDataEntry);
+    }
+
+    if (mapData.length > 0) {
+      loadMap(mapData);
+    }
+  }
+
   function getHazards(offset) {
     vm.isLoading = true;
     hazardService.findAll({descending: true, skip: offset}).then(function(res) {
@@ -42,37 +76,7 @@ function HazardListCtrl($filter, $scope, editableThemes, toastr, baConfig, cityL
       vm.itemsOffset = offset;
       vm.itemLengthLimit = res.data.limit;
 
-      var cityHazardCount = {};
-      _.each(vm.hazards, function(hazard) {
-        var userInfo = vm.userMap[hazard.userId];
-        if (userInfo) {
-          if (!cityHazardCount[userInfo.cityId]) {
-            cityHazardCount[userInfo.cityId] = 0;
-          }
-          cityHazardCount[userInfo.cityId] = cityHazardCount[userInfo.cityId] + 1;
-        } else {
-          vm.userMap[hazard.userId] = {
-            customer: '-',
-            cityName: '-',
-            cityId: '-',
-            name: hazard.userId
-          };
-        }
-      });
-      // populate the map data
-      var mapData = [];
-      for (var city in cityHazardCount) {
-        var mapDataEntry = {};
-        mapDataEntry.name = city;
-        mapDataEntry.value = cityHazardCount[city];
-        mapDataEntry.code = city;
-        mapDataEntry.color = baConfig.colors.primaryDark;
-        mapData.push(mapDataEntry);
-      }
-
-      if (mapData.length > 0) {
-        loadMap(mapData);
-      }
+      updateHazardsInfo();
     }).catch(function(err) {
       console.error("Fetching all hazards has failed!");
     });
@@ -124,7 +128,14 @@ function HazardListCtrl($filter, $scope, editableThemes, toastr, baConfig, cityL
     });
   };
 
-  webSocketService.on('new-hazard', getHazards);
+  webSocketService.on('new-hazard', function(notification) {
+    notification.data.createdAt = notification.data.createdAt || Date.now();
+    vm.hazards.splice(0, 0, notification.data);
+    var start = (vm.currentPage-1)*vm.itemsPerPage-vm.itemsOffset;
+    var end = (vm.currentPage-1)*vm.itemsPerPage+vm.itemsPerPage-vm.itemsOffset;
+    vm.paginatedHazards = vm.hazards.slice(start, end);
+    updateHazardsInfo();
+  });
 
 
   $scope.$on('$destroy', function () {

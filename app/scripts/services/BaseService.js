@@ -11,7 +11,7 @@
 
 
 angular.module('BlurAdmin.services').factory('BaseService', function(
-  $http, apiProtocol, apiHost, apiPath, tenantId) {
+  $http, apiProtocol, apiHost, apiPath, tenantId, uuid4) {
 
   function BaseAdapter(name, baseUrl) {
     if (baseUrl) {
@@ -29,6 +29,7 @@ angular.module('BlurAdmin.services').factory('BaseService', function(
 
     findAll: function(queryParams) {
       queryParams = queryParams || {};
+      queryParams.__random_uuid = uuid4.generate();
       return $http.get(this.apiUrl, {
         params: queryParams
       });
