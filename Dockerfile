@@ -2,19 +2,22 @@ FROM nginx
 
 MAINTAINER "Fatih Ulusoy" <ulusoy@de.ibm.com>
 
-ADD . /iot4i-starter-dashboard
-WORKDIR /iot4i-starter-dashboard
-
 # Install NodeJs-6
 RUN apt-get update &&\
     apt-get install -y sudo curl git gnupg2 &&\
     curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash - &&\
     apt-get install -y nodejs &&\
     npm install -g bower &&\
-    npm install -g brunch &&\
-    npm install &&\
-    bower install --allow-root &&\
-    brunch build --production
+    npm install -g brunch
+
+WORKDIR /iot4i-starter-dashboard
+COPY package.json package-lock.json bower.json /iot4i-starter-dashboard/
+RUN npm install &&\
+    bower install --allow-root
+
+ADD . /iot4i-starter-dashboard
+
+RUN brunch build --production
 
 RUN cp -a ./public/. /usr/share/nginx/html/ &&\
     rm -rf app &&\
