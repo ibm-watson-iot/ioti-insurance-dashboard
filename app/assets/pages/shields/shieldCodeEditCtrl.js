@@ -7,13 +7,18 @@
 
 angular.module('BlurAdmin.pages.shields').controller('ShieldCodeEditCtrl', ShieldCodeEditCtrl);
 
-function ShieldCodeEditCtrl($state, $stateParams, toastr, uuid4, shieldCodeService, actionService) {
+function ShieldCodeEditCtrl($state, $stateParams, toastr, uuid4,
+                            shieldCodeService, actionService, commonShieldService) {
   var vm = this;
   vm.shieldCode = { };
   vm.saving = false;
 
   actionService.findAll().then(function (resp) {
     vm.actions = resp.data.items;
+  });
+
+  commonShieldService.findAll().then(function (resp) {
+    vm.commonShields = resp.data.items;
   });
 
   if($stateParams.shieldCodeId && $stateParams.shieldCodeId !== 'new') {
@@ -36,6 +41,7 @@ function ShieldCodeEditCtrl($state, $stateParams, toastr, uuid4, shieldCodeServi
     } else {
       var partial = {
         description: vm.shieldCode.description,
+        commonShieldId: vm.shieldCode.commonShieldId,
         jobOptions: vm.shieldCode.jobOptions,
         enabled: vm.shieldCode.enabled
       };
