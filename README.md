@@ -31,12 +31,12 @@ The directory structure of the application is as follows:
 
 ### Documentation
 Installation, customization and other useful articles:
-
+https://www.ibm.com/support/knowledgecenter/SSQNYQ_bas/iot-insurance/iotinsurance_starter_apps.html
 
 #### Configure
 This app can be configured for `dev`, `staging` and `production`
 1. edit manifest.yml file `host` and `name` as you wish for a bluemix app
-2. Copy the `app/config-staging.js` to `app/config-production.js` or `app/config-dev.js` depending on the target environment and set the values
+2. Copy the `app/config-template.js` to `app/config-production.js` or `app/config-dev.js` or `app/config-staging.js` depending on the target environment and set the values
   * set tenantId to your own tenant ID
   * set backendHost value
   * note that `backendHost` and `apiHost` must **not** start with `http(s)://`
