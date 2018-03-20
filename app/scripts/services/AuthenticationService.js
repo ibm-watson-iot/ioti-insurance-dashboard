@@ -6,7 +6,7 @@
 
 angular.module('BlurAdmin.services').factory('authenticationService', function(
   $http, $httpParamSerializer, $q, $location, $window, jwtHelper, userService,
-  apiProtocol, apiHost, apiPath, authCallbackPath, tenantId, toastr) {
+  backendProtocol, backendHost, apiPath, authCallbackPath, tenantId, toastr) {
 
   var tokenKey = $location.host() + '_' + $location.port() + '_' + 'dashboardAuthToken';
   var userKey = $location.host() + '_' + $location.port() + '_' + 'dashboardUser';

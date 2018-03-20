@@ -11,7 +11,7 @@
 
 
 angular.module('BlurAdmin.services').factory('BaseService', function(
-  $http, apiProtocol, apiHost, apiPath, tenantId, uuid4) {
+  $http, backendProtocol, backendHost, apiPath, tenantId, uuid4) {
 
   function BaseAdapter(name, baseUrl) {
     if (baseUrl) {

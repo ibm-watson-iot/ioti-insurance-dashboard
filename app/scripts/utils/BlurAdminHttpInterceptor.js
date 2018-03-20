@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('BlurAdmin.utils').factory('blurAdminHttpInterceptor', function(
-  $q, $location, $rootScope, apiHost, backendHost) {
+  $q, $location, $rootScope, backendHost, backendHost) {
 
   var tokenKey = $location.host() + '_' + $location.port() + '_' + 'dashboardAuthToken';
 

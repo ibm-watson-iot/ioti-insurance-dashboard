@@ -63,22 +63,27 @@ angular.module('BlurAdmin', [
   'BlurAdmin.utils',
   'BlurAdmin.services',
   'BlurAdmin.theme',
-  'BlurAdmin.pages'
+  'BlurAdmin.pages',
+  'js-data'
 ])
 .config(function($stateProvider, $urlRouterProvider, $httpProvider, $locationProvider, uiSelectConfig) {
   $httpProvider.interceptors.push('blurAdminHttpInterceptor');
   uiSelectConfig.theme = 'selectize';
   $locationProvider.html5Mode(true);
 })
-.run(function($rootScope, $state, editableOptions, editableThemes, PermRoleStore, authenticationService, customerICN, toastr) {
+.run(function($rootScope, $state, editableOptions, editableThemes,
+              PermRoleStore, authenticationService, customerICN, toastr,
+              ApplicationAdapter, DS
+) {
 
+    DS.registerAdapter('http', ApplicationAdapter, { 'default': true });
     // xeditable theme
     editableOptions.theme = 'bs3';
     editableThemes.bs3.inputClass = 'input-sm';
 
     String.prototype.capitalizeFirstLetter = function() {
       return this.charAt(0).toUpperCase() + this.slice(1);
-    }
+    };
 
     PermRoleStore.defineRole('AUTHORIZED', function() {
       return authenticationService.isAuthenticated();
@@ -91,7 +96,6 @@ angular.module('BlurAdmin', [
     authenticationService.isAuthenticated().then(function() {
       $rootScope.loggedInUser = authenticationService.getUser();
       NPSinit(($rootScope.loggedInUser) ? ($rootScope.loggedInUser) : {}, customerICN, toastr);
-
     });
 
     $rootScope.$on('$stateChangeStart', function(event, toState, params) {

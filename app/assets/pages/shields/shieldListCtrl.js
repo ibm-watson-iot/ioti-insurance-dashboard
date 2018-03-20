@@ -7,11 +7,11 @@
 
 angular.module('BlurAdmin.pages.shields').controller('ShieldListCtrl', ShieldListCtrl);
 
-function ShieldListCtrl($rootScope, $uibModal, editableThemes, toastr, shieldService, shieldActivationService) {
+function ShieldListCtrl($rootScope, $uibModal, editableThemes, toastr, shieldService, Shield) {
   var vm = this;
   vm.allShields = [];
 
-  shieldService.findAll().success(function(data) {
+  Shield.findAll().success(function(data) {
     vm.allShields = data.items;
   }).error(function(err) {
     console.error("Fetching all shields is failed!");
