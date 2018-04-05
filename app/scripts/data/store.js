@@ -74,9 +74,7 @@
         var collection = this.getCollection(name);
         function recalc() {
           arr.splice(0, arr.length);
-          collection.getAll().forEach(function(value) {
-            arr.push(value);
-          });
+          Array.prototype.push.apply(arr, collection.getAll());
           runApply();
         }
         collection.on('remove', recalc);

@@ -74,7 +74,7 @@
                   val.then(function(v) {
                     _this['__' + rel] = v;
                   });
-                  return
+                  return;
                 }
                 _this['__' + rel] = val;
               }
