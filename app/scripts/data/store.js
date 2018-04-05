@@ -86,6 +86,8 @@
       findAll: function(name, query, opts) {
         opts = opts || {};
         var raw = opts.raw;
+        // TODO disble force=true when we get operational notifications
+        opts.force = true;
         opts.raw = true;
         var _this = this;
         return JSData.DataStore.prototype.findAll.call(this, name, query, opts)
