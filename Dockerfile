@@ -17,7 +17,7 @@ RUN npm install &&\
 
 ADD . /iot4i-starter-dashboard
 
-RUN brunch build --production
+RUN brunch build
 
 RUN cp -a ./public/. /usr/share/nginx/html/ &&\
     rm -rf app &&\

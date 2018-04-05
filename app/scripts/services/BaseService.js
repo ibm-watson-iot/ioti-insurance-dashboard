@@ -7,11 +7,8 @@
  * Contract with IBM Corp.
  *******************************************************************************/
 
-'use strict';
 
-
-angular.module('BlurAdmin.services').factory('BaseService', function(
-  $http, backendProtocol, backendHost, apiPath, tenantId, uuid4) {
+angular.module('BlurAdmin.services').factory('BaseService', function($http, apiProtocol, apiHost, apiPath, tenantId, uuid4) {
 
   function BaseAdapter(name, baseUrl) {
     if (baseUrl) {
@@ -29,18 +26,17 @@ angular.module('BlurAdmin.services').factory('BaseService', function(
 
     findAll: function(queryParams) {
       queryParams = queryParams || {};
-      queryParams.__random_uuid = uuid4.generate();
       return $http.get(this.apiUrl, {
         params: queryParams
       });
     },
 
     remove: function(modelId) {
-      return $http['delete'](this.apiUrl + modelId);
+      return $http.delete(this.apiUrl + modelId);
     },
 
     save: function(model) {
-      if(model._id) {
+      if (model._id) {
         return $http.put(this.apiUrl + model._id, model);
       } else {
         return $http.post(this.apiUrl, model);

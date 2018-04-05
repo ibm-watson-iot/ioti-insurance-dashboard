@@ -38,6 +38,10 @@ function loadScriptCb(){
    return true;
 }
 
+angular.module('BlurAdmin.data', []);
+angular.module('BlurAdmin.data.record', []);
+angular.module('BlurAdmin.data.adapters', []);
+angular.module('BlurAdmin.data.models', []);
 
 angular.module('BlurAdmin', [
   'uuid',
@@ -64,19 +68,15 @@ angular.module('BlurAdmin', [
   'BlurAdmin.services',
   'BlurAdmin.theme',
   'BlurAdmin.pages',
-  'js-data'
+  'BlurAdmin.data'
 ])
 .config(function($stateProvider, $urlRouterProvider, $httpProvider, $locationProvider, uiSelectConfig) {
   $httpProvider.interceptors.push('blurAdminHttpInterceptor');
   uiSelectConfig.theme = 'selectize';
   $locationProvider.html5Mode(true);
 })
-.run(function($rootScope, $state, editableOptions, editableThemes,
-              PermRoleStore, authenticationService, customerICN, toastr,
-              ApplicationAdapter, DS
-) {
+.run(function($rootScope, $state, editableOptions, editableThemes, PermRoleStore, authenticationService, customerICN, toastr) {
 
-    DS.registerAdapter('http', ApplicationAdapter, { 'default': true });
     // xeditable theme
     editableOptions.theme = 'bs3';
     editableThemes.bs3.inputClass = 'input-sm';

@@ -1,6 +1,5 @@
-angular.module('BlurAdmin').factory('User', function (DS) {
-  return DS.defineResource('user', {
-    defaultAdapter: 'user',
+angular.module('BlurAdmin.data.models').factory('User', function () {
+  return {
     relations: {
       hasMany: {
         shield: {
@@ -9,7 +8,7 @@ angular.module('BlurAdmin').factory('User', function (DS) {
           // property of the child record that points
           // to the parent record,
           // i.e. console.log(post.user_id); // 12345
-          foreignKey: 'user_id',
+          foreignKey: 'userId',
           // In memory, a user's posts will be attached to
           // user objects via the user's "posts" property,
           // i.e. console.log(user.posts); // [{...}, {...}, ...]
@@ -17,18 +16,22 @@ angular.module('BlurAdmin').factory('User', function (DS) {
           localField: 'shields'
         },
         'shield-activation': {
-          foreignKey: 'user_id',
+          foreignKey: 'userId',
           localField: 'shieldActivations'
         },
         hazard: {
-          foreignKey: 'user_id',
+          foreignKey: 'userId',
           localField: 'hazards'
         },
         device: {
-          foreignKey: 'user_id',
+          foreignKey: 'userId',
           localField: 'devices'
+        },
+        claim: {
+          foreignKey: 'userId',
+          localField: 'claims'
         }
       }
     }
-  });
+  };
 });

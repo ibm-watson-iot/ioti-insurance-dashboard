@@ -1,19 +1,18 @@
 (function() {
-  'use strict';
+
 
   angular.module('BlurAdmin.pages.claims').controller('ClaimViewCtrl', ClaimViewCtrl);
 
-  function ClaimViewCtrl($stateParams, claimService, userService) {
+  function ClaimViewCtrl($stateParams, Store) {
     var vm = this;
     vm.claim = {};
 
     if ($stateParams.claimId) {
-      claimService.find($stateParams.claimId).success(function(claim) {
+      Store.find($stateParams.claimId).success(function(claim) {
         vm.claim = claim;
-        userService.find(vm.claim.userId).success(function(user) {
-          vm.user = user;
-          initializeLocationMap(user.address.street + ", " + user.address.zipcode
-                            + " " + user.address.city + ", " + user.address.country);
+        claim.user.then(function(user) {
+          initializeLocationMap(user.address.street + ', ' + user.address.zipcode
+            + ' ' + user.address.city + ', ' + user.address.country);
         });
       });
     }
@@ -26,21 +25,20 @@
         zoom: 14,
         center: latlng,
         mapTypeControl: true,
-        mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU},
+        mapTypeControlOptions: { style: google.maps.MapTypeControlStyle.DROPDOWN_MENU },
         navigationControl: true,
         mapTypeId: google.maps.MapTypeId.ROADMAP
       };
-      map = new google.maps.Map(document.getElementById("google-maps"), myOptions);
+      map = new google.maps.Map(document.getElementById('google-maps'), myOptions);
       if (geocoder) {
-        geocoder.geocode({'address': address}, function(results, status) {
+        geocoder.geocode({ address: address }, function(results, status) {
           if (status == google.maps.GeocoderStatus.OK) {
             if (status != google.maps.GeocoderStatus.ZERO_RESULTS) {
               map.setCenter(results[0].geometry.location);
-              var infowindow = new google.maps.InfoWindow(
-                {
-                  content: '<b>' + address + '</b>',
-                  size: new google.maps.Size(150, 50)
-                });
+              var infowindow = new google.maps.InfoWindow({
+                content: '<b>' + address + '</b>',
+                size: new google.maps.Size(150, 50)
+              });
               var marker = new google.maps.Marker({
                 position: results[0].geometry.location,
                 map: map,
@@ -50,14 +48,14 @@
                 infowindow.open(map, marker);
               });
             } else {
-              console.log("No results found");
+              console.log('No results found');
             }
           } else {
-            console.log("Geocode was not successful for the following reason: " + status);
+            console.log('Geocode was not successful for the following reason: ' + status);
           }
         });
       }
     }
   }
 
-})();
+}());
