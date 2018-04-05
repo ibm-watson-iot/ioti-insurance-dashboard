@@ -39,30 +39,36 @@
     };
 
     function updateHazardsInfo() {
-      var cityHazardCount = {};
-      _.each(vm.hazards, function(hazard) {
-        var userInfo = hazard.user.value;
-        var cityId = userInfo.address.city.replace(/\s+/g, '').toLowerCase();
-        if (userInfo) {
-          if (!cityHazardCount[cityId]) {
-            cityHazardCount[cityId] = 0;
+      var cityHazardCount, usersPromises;
+      cityHazardCount = {};
+      usersPromises = vm.hazards.map(function(hazard) {
+        return hazard.user;
+      });
+      Promise.all(usersPromises).then(function() {
+        vm.hazards.forEach(function(hazard) {
+          var userInfo = hazard.user.value;
+          var cityId = userInfo.address.city.replace(/\s+/g, '').toLowerCase();
+          if (userInfo) {
+            if (!cityHazardCount[cityId]) {
+              cityHazardCount[cityId] = 0;
+            }
+            cityHazardCount[cityId] += 1;
           }
-          cityHazardCount[cityId] += 1;
-        }
-      });
-      // populate the map data
-      var mapData = Object.keys(cityHazardCount).map(function(city) {
-        var mapDataEntry = {};
-        mapDataEntry.name = city;
-        mapDataEntry.value = cityHazardCount[city];
-        mapDataEntry.code = city;
-        mapDataEntry.color = baConfig.colors.primaryDark;
-        return mapDataEntry;
-      });
+          // populate the map data
+          var mapData = Object.keys(cityHazardCount).map(function(city) {
+            var mapDataEntry = {};
+            mapDataEntry.name = city;
+            mapDataEntry.value = cityHazardCount[city];
+            mapDataEntry.code = city;
+            mapDataEntry.color = baConfig.colors.primaryDark;
+            return mapDataEntry;
+          });
 
-      if (mapData.length > 0) {
-        loadMap(mapData);
-      }
+          if (mapData.length > 0) {
+            loadMap(mapData);
+          }
+        });
+      });
     }
 
     function getHazards(offset) {
