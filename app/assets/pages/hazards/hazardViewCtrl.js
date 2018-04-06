@@ -2,7 +2,7 @@
 
   angular.module('BlurAdmin.pages.hazards').controller('HazardViewCtrl', HazardViewCtrl);
 
-  function HazardViewCtrl($stateParams, $filter, toastr, Store, shieldService, gmapsHandler) {
+  function HazardViewCtrl($stateParams, $filter, toastr, Store, gmapsHandler) {
     var vm = this;
     vm.hazard = {};
 

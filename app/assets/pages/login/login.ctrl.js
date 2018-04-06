@@ -1,16 +1,15 @@
 (function() {
-'use strict';
 
-angular.module('BlurAdmin.pages.login').controller('LoginCtrl', LoginCtrl);
 
-function LoginCtrl($rootScope, $scope, $state, toastr, authenticationService, userService) {
+  angular.module('BlurAdmin.pages.login').controller('LoginCtrl', LoginCtrl);
 
-  var vm = this;
+  function LoginCtrl($rootScope, $scope, $state, toastr, authenticationService) {
 
-  vm.signIn = function() {
-    authenticationService.authenticate();
-  };
+    var vm = this;
 
-}
+    vm.signIn = function() {
+      authenticationService.authenticate();
+    };
+  }
 
-})();
+}());
