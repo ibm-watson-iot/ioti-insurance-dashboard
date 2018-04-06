@@ -19,6 +19,7 @@ module.exports = {
   },
   "extends": ["airbnb-base", "plugin:node/recommended", "plugin:you-dont-need-lodash-underscore/all"],
   "plugins": [
+    "import",
     "json",
     "node"
   ],
@@ -50,7 +51,7 @@ module.exports = {
     "strict": "error",
     "vars-on-top": "error",
     "one-var-declaration-per-line": "off",
-    "one-var": ["error", { "initialized": "never", "uninitialized": "always" }],
+    "one-var": ["error", { "var": "always" }],
 
     "import/no-dynamic-require": "off",
     "import/no-extraneous-dependencies": "off",

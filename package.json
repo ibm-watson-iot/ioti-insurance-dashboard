@@ -16,6 +16,12 @@
     "bower": "^1.6.5"
   },
   "devDependencies": {
+    "eslint": "^4.19.1",
+    "eslint-plugin-import": "^2.10.0",
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-plugin-you-dont-need-lodash-underscore": "^3.0.1",
+    "eslint-plugin-node": "^6.0.1",
+    "eslint-plugin-json": "^1.2.0",
     "brunch": "^2.10.5",
     "css-brunch": "^2.6.1",
     "sass-brunch": "^2.9.0",
