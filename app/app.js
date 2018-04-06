@@ -38,6 +38,10 @@ function loadScriptCb(){
    return true;
 }
 
+angular.module('BlurAdmin.data', []);
+angular.module('BlurAdmin.data.record', []);
+angular.module('BlurAdmin.data.adapters', []);
+angular.module('BlurAdmin.data.models', []);
 
 angular.module('BlurAdmin', [
   'uuid',
@@ -63,7 +67,8 @@ angular.module('BlurAdmin', [
   'BlurAdmin.utils',
   'BlurAdmin.services',
   'BlurAdmin.theme',
-  'BlurAdmin.pages'
+  'BlurAdmin.pages',
+  'BlurAdmin.data'
 ])
 .config(function($stateProvider, $urlRouterProvider, $httpProvider, $locationProvider, uiSelectConfig) {
   $httpProvider.interceptors.push('blurAdminHttpInterceptor');
