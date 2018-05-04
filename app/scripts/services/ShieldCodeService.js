@@ -18,17 +18,9 @@ angular.module('BlurAdmin.services').factory('shieldCodeService', function(BaseS
       }
     }
     if(model._id) {
-      if (hasFile) {
-        return $http.put(this.apiUrl + model._id, fd, {headers: {'Content-Type': undefined}});
-      } else {
-        return $http.post(this.apiUrl + model._id, model);
-      }
+      return $http.put(this.apiUrl + model._id, fd, {headers: {'Content-Type': undefined}});
     } else {
-      if (hasFile) {
-        return $http.post(this.apiUrl, fd, {headers: {'Content-Type': undefined}});
-      } else {
-        return $http.post(this.apiUrl, model);
-      }
+      return $http.post(this.apiUrl, fd, {headers: {'Content-Type': undefined}});
     }
   };
   return service;
