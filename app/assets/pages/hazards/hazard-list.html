@@ -31,7 +31,7 @@
                   <th>Action</th>
                 </tr>
                 <tr class="editable-tr-wrap"
-                    ng-repeat="hazard in hazardListCtrlVm.paginatedHazards">
+                    ng-repeat="hazard in hazardListCtrlVm.paginatedHazards track by hazard._id">
                   <td class="table-id" ui-sref="main.hazard-view({hazardEventId: hazard._id})">
                     {{(hazardListCtrlVm.currentPage-1) * hazardListCtrlVm.itemsPerPage + $index + 1}}
                   </td>
@@ -39,13 +39,13 @@
                     {{hazard.createdAt | date:'mediumTime'}} {{hazard.createdAt | date:'shortDate'}}
                   </td>
                   <td class="clickable" ui-sref="main.hazard-view({hazardEventId: hazard._id})">
-                    {{hazardListCtrlVm.uuidToShieldMap[hazard.shieldId].name}}
+                    {{hazard.shield.value.name || 'N/A'}}
                   </td>
                   <td class="clickable" ui-sref="main.hazard-view({hazardEventId: hazard._id})">
-                    {{hazardListCtrlVm.userMap[hazard.userId].cityName}}
+                    {{hazard.user.value.address.city}}
                   </td>
                   <td class="clickable" ui-sref="main.hazard-view({hazardEventId: hazard._id})">
-                    {{hazardListCtrlVm.userMap[hazard.userId].name}}
+                    {{hazard.user.value.name}}
                   </td>
                   <td>
                     <button class="btn btn-primary editable-table-button btn-xs"
