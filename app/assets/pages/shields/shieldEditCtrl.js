@@ -7,16 +7,22 @@
 
 angular.module('BlurAdmin.pages.shields').controller('ShieldEditCtrl', ShieldEditCtrl);
 
-function ShieldEditCtrl($state, $stateParams, $uibModal, toastr, shieldService, shieldCodeService, actionService) {
+function ShieldEditCtrl($state, $stateParams, $uibModal, toastr, shieldService, shieldCodeService, actionService, commonShieldService) {
   var vm = this;
-  vm.shield = { };
+  vm.shield = {};
   vm.shieldcodes = [];
+  vm.commonShieldsMap = {};
   vm.saving = false;
 
   actionService.findAll().then(function (resp) {
     vm.actions = resp.data.items;
   });
 
+  commonShieldService.findAll().then(function (resp) {
+    _.each(resp.data.items, function(commonShield) {
+      vm.commonShieldsMap[commonShield._id] = commonShield;
+    });
+  });
 
   if($stateParams.shieldId && $stateParams.shieldId !== 'new') {
     shieldCodeService.findAll({shieldId: $stateParams.shieldId}).then(function (resp) {
@@ -36,6 +42,11 @@ function ShieldEditCtrl($state, $stateParams, $uibModal, toastr, shieldService, 
       sensorType: "",
       shieldParameters: []
     };
+  }
+
+  vm.getCommonShieldName = function(commonShieldId) {
+      var cs = vm.commonShieldsMap[commonShieldId];
+      return cs ? cs.name : '';
   }
 
   vm.saveShield = function() {

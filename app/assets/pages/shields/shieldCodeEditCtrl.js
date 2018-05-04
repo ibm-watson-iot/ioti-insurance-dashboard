@@ -43,10 +43,11 @@ function ShieldCodeEditCtrl($state, $stateParams, toastr, uuid4,
         description: vm.shieldCode.description,
         commonShieldId: vm.shieldCode.commonShieldId,
         jobOptions: vm.shieldCode.jobOptions,
-        enabled: vm.shieldCode.enabled
+        enabled: vm.shieldCode.enabled,
+        version: vm.shieldCode.version
       };
       promise = shieldCodeService.updatePartial($stateParams.shieldCodeId, partial)
-    } 
+    }
     promise.then(function(resp) {
       _.merge(vm.shieldCode, resp.data);
       vm.saving = false;

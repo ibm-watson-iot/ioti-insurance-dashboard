@@ -82,16 +82,24 @@
             <th class="table-id">#</th>
             <th>Name</th>
             <th>Description</th>
+            <th>Implementation</th>
+            <th>Version</th>
             <th>Enabled</th>
             <th>Actions</th>
           </tr>
-          <tr ng-repeat="shieldCode in shieldEditCtrlVm.shieldcodes" class="editable-tr-wrap">
+          <tr ng-repeat="shieldCode in shieldEditCtrlVm.shieldcodes">
             <td class="table-id">{{$index + 1}}</td>
             <td>
               <span>{{shieldCode.name}}</span>
             </td>
             <td>
               <span>{{shieldCode.description}}</span>
+            </td>
+            <td>
+              <span>{{ shieldEditCtrlVm.getCommonShieldName( shieldCode.commonShieldId) }}</span>
+            </td>
+            <td>
+              <span>{{shieldCode.version}}</span>
             </td>
             <td>
               <span>{{shieldCode.enabled}}</span>
