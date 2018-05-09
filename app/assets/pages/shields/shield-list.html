@@ -12,6 +12,7 @@
               <tr class="header-row">
                 <th class="table-id">#</th>
                 <th>Name</th>
+                <th>Version</th>
                 <th>Action</th>
               </tr>
               <tr ng-repeat="shield in shieldListCtrlVm.allShields" class="editable-tr-wrap">
@@ -20,6 +21,11 @@
                   <span ditable-text="shield.name" blur="cancel"
                       onaftersave="shieldListCtrlVm.saveShield(shield)">{{shield.name}}
                   </span>
+                </td>
+
+                <td>
+                  {{ shieldListCtrlVm.shieldCodes[shield._id] && shieldListCtrlVm.shieldCodes[shield._id][0]  ?
+                    (shieldListCtrlVm.shieldCodes[shield._id][0].version || "-") : "No shield code"}}
                 </td>
                 <td>
                   <button type="button" class="btn btn-xs btn-primary"
