@@ -7,15 +7,14 @@
 
 angular.module('BlurAdmin.pages.shields').controller('ShieldListCtrl', ShieldListCtrl);
 
-function ShieldListCtrl($rootScope, $uibModal, editableThemes, toastr, shieldService, shieldActivationService) {
+function ShieldListCtrl($rootScope, $timeout, $uibModal, editableThemes, toastr, shieldService, shieldCodeService, shieldActivationService) {
   var vm = this;
   vm.allShields = [];
+  vm.shieldCodes = {};
 
-  shieldService.findAll().success(function(data) {
-    vm.allShields = data.items;
-  }).error(function(err) {
-    console.error("Fetching all shields is failed!");
-  });
+  $timeout(function() {
+    getShields();
+  },10)
 
   vm.deleteShield = function(shield) {
     var modalInstance = $uibModal.open({
@@ -53,10 +52,29 @@ function ShieldListCtrl($rootScope, $uibModal, editableThemes, toastr, shieldSer
     });
   };
 
+  function getShields() {
+    vm.isLoading = false;
+
+    shieldService.findAll().success(function(data) {
+      vm.allShields = data.items;
+    }).error(function(err) {
+      console.error("Fetching all shields is failed!");
+    });
+
+    shieldCodeService.findAll().then(function(result) {
+      var items = result.data.items;
+      items = _.sortBy(items, 'createdAt');
+      items.forEach(function(item) {
+        if (!vm.shieldCodes[item.shieldId]) {
+          vm.shieldCodes[item.shieldId] = [];
+        }
+        vm.shieldCodes[item.shieldId].push(item);
+      });
+    });
+  }
 
   editableThemes['bs3'].submitTpl = '<button type="submit" class="btn btn-primary btn-with-icon"><i class="ion-checkmark-round"></i></button>';
   editableThemes['bs3'].cancelTpl = '<button type="button" ng-click="$form.$cancel()" class="btn btn-default btn-with-icon"><i class="ion-close-round"></i></button>';
-
 }
 
 })();
