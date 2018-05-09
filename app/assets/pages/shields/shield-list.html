@@ -22,7 +22,6 @@
                       onaftersave="shieldListCtrlVm.saveShield(shield)">{{shield.name}}
                   </span>
                 </td>
-
                 <td>
                   {{ shieldListCtrlVm.shieldCodes[shield._id] && shieldListCtrlVm.shieldCodes[shield._id][0]  ?
                     (shieldListCtrlVm.shieldCodes[shield._id][0].version || "-") : "No shield code"}}
