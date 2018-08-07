@@ -24,13 +24,14 @@
             </div>
             <div class="col-sm-6">
               <div class="form-group">
-                <label for="codeFile">Shield Sab File</label>
-                <input files-input type="file" class="form-control" id="codeFile"
-                       ng-model="shieldCodeEditCtrlVm.shieldCode.codeFile">
+                <label for="version">Shield Version</label>
+                <input type="text" class="form-control" id="version"
+                       ng-model="shieldCodeEditCtrlVm.shieldCode.version">
               </div>
             </div>
             <div class="col-sm-6">
               <div class="form-group">
+                <label>Implementation</label>
                 <ui-select ng-model="shieldCodeEditCtrlVm.shieldCode.commonShieldId">
                   <ui-select-match placeholder="Select Common Shield">
                     {{$select.selected.name}} <br> <small>{{$select.selected.description}}</small>
