@@ -19,11 +19,11 @@
     latlong = {};
 
     vm.liveHazards = Store.getLiveArray('hazard');
-    $scope.$watch('hazardListCtrlVm.liveHazards', function() {
+    $scope.$watch('hazardListCtrlVm.liveHazards.length', function() {
       vm.hazards = $filter('orderBy')(vm.liveHazards, 'createdAt', true);
     });
 
-    $scope.$watch('hazardListCtrlVm.hazards.length', 'hazardListCtrlVm.currentPage', function() {
+    $scope.$watchGroup(['hazardListCtrlVm.hazards', 'hazardListCtrlVm.currentPage'], function() {
       var start = ((vm.currentPage - 1) * vm.itemsPerPage) - vm.itemsOffset;
       var end = ((vm.currentPage - 1) * vm.itemsPerPage) + (vm.itemsPerPage - vm.itemsOffset);
       vm.paginatedHazards = vm.hazards.slice(start, end);

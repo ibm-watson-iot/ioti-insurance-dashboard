@@ -1,9 +1,9 @@
-angular.module('BlurAdmin.data.models').factory('CommonShield', function() {
+angular.module('BlurAdmin.data.models').factory('CommonShieldCode', function() {
   return {
     relations: {
       hasMany: {
         'shield-code': {
-          foreignKey: 'commonShieldId',
+          foreignKey: 'commonShieldCodeId',
           localField: 'shieldCodes'
         }
       },

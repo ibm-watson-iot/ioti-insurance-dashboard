@@ -1,4 +1,5 @@
 (function() {
+
   var models = [
     'Action',
     'Device',
@@ -8,7 +9,7 @@
     'ShieldCode',
     'User',
     'Claim',
-    'CommonShield'
+    'CommonShieldCode'
   ];
   var adapters = ['ApplicationAdapter', 'UserAdapter', 'ClaimAdapter'];
   var deps;
@@ -28,22 +29,6 @@
       adaptersMap[name] = adapter;
     });
 
-    function difference(_object, _base) {
-      var keys1 = Object.keys(_object);
-      var keys2 = Object.keys(_base);
-      var diff = [];
-      [].concat(keys1).concat(keys2).forEach(function(key) {
-        if (!keys1.includes(key) || !keys2.includes(key)) {
-          diff.push(key);
-          return;
-        }
-        if (_object[key] !== _base[key]) {
-          diff.push(key);
-        }
-      });
-      return diff;
-    }
-
     function runApply() {
       setTimeout(function() {
         $rootScope.$apply();
@@ -55,8 +40,8 @@
       'createMany',
       'destroy',
       'destroyAll',
-      'find',
       'update',
+      'find',
       'updateAll',
       'updateMany'
     ];
@@ -87,7 +72,7 @@
         opts = opts || {};
         var raw = opts.raw;
         // TODO disble force=true when we get operational notifications
-        opts.force = true;
+        // opts.force = true;
         opts.raw = true;
         var _this = this;
         return JSData.DataStore.prototype.findAll.call(this, name, query, opts)
@@ -106,28 +91,28 @@
       },
 
       cacheFind: function cacheFind(name, data, id, opts) {
+        const date = Date.now();
         this._completedQueries[name][id] = function(_name, _id, _opts) {
-          var diff = difference(_opts, opts);
-          if (diff.length === 1 && diff[0] === 'raw') {
-            if (!_opts.raw) {
-              return data.data;
-            }
-            return data;
+          if (Date.now() > date + (30 * 1000)) {
+            return null;
           }
-          return null;
+          if (!_opts.raw) {
+            return data.data;
+          }
+          return data;
         };
       },
 
       cacheFindAll: function cacheFindAll(name, data, hash, opts) {
+        const date = Date.now();
         this._completedQueries[name][hash] = function(_name, _hash, _opts) {
-          var diff = difference(_opts, opts);
-          if (diff.length === 1 && diff[0] === 'raw') {
-            if (!_opts.raw) {
-              return data.data;
-            }
-            return data;
+          if (Date.now() > date + (30 * 1000)) {
+            return null;
           }
-          return null;
+          if (!_opts.raw) {
+            return data.data;
+          }
+          return data;
         };
       }
     };

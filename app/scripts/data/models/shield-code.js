@@ -10,9 +10,9 @@ angular.module('BlurAdmin.data.models').factory('ShieldCode', function() {
           localKey: 'shieldId',
           localField: 'shield'
         },
-        'common-shield': {
-          localKey: 'commonShieldId',
-          localField: 'commonShield'
+        'common-shield-code': {
+          localKey: 'commonShieldCodeId',
+          localField: 'commonShieldCode'
         }
       }
     }

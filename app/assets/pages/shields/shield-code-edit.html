@@ -44,18 +44,6 @@
             </div>
             <div class="col-sm-6">
               <div class="form-group">
-                <ui-select ng-model="shieldCodeEditCtrlVm.shieldCode.commonShieldId">
-                  <ui-select-match placeholder="Select Common Shield">
-                    {{$select.selected.name}} <br> <small>{{$select.selected.description}}</small>
-                  </ui-select-match>
-                  <ui-select-choices repeat="commonShield._id as commonShield in shieldCodeEditCtrlVm.commonShields">
-                    {{commonShield.name}} <br> <small>{{commonShield.description}}</small>
-                  </ui-select-choices>
-                </ui-select>
-              </div>
-            </div>
-            <div class="col-sm-6">
-              <div class="form-group">
                 <label for="jobOptions">Shield Code Options</label>
                 <textarea json-text class="form-control" id="jobOptions"
                           ng-model="shieldCodeEditCtrlVm.shieldCode.jobOptions">

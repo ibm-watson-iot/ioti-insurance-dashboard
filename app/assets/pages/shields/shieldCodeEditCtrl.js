@@ -12,7 +12,7 @@
     vm.shieldCode = { };
     vm.saving = false;
 
-    Store.findAll('common-shield').then(function(resp) {
+    Store.findAll('common-shield-code', { type: 'cloud' }).then(function(resp) {
       vm.commonShields = resp;
     });
 
