@@ -94,18 +94,18 @@
               <h2>Loading...</h2>
             </div>
             <div class="heading-widget section-block ng-scope"
-               ng-if="!claimAddCtrlVm.isLoading && claimAddCtrlVm.claims.length === 0">
+               ng-if="!claimAddCtrlVm.isLoading && claimAddCtrlVm.user.claims.value.length === 0">
               <h2>You don't have any claims.</h2>
             </div>
             <table class="table table-hover"
-                ng-if="!claimAddCtrlVm.isLoading && claimAddCtrlVm.claims.length > 0">
+                ng-if="!claimAddCtrlVm.isLoading && claimAddCtrlVm.user.claims.value.length > 0">
               <tr class="header-row">
                 <th class="table-id">#</th>
                 <th>Damage Date</th>
                 <th>Policy Id</th>
                 <th>Policy Holder</th>
               </tr>
-              <tr ng-repeat="claim in claimAddCtrlVm.claims | orderBy:'damageDate':true"
+              <tr ng-repeat="claim in claimAddCtrlVm.user.claims.value | orderBy:'damageDate':true"
                 ui-sref="main.claim-view({claimId: claim._id})" class="editable-tr-wrap">
                 <td class="table-id">{{$index + 1}}</td>
                 <td>

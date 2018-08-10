@@ -38,6 +38,10 @@ function loadScriptCb(){
    return true;
 }
 
+angular.module('BlurAdmin.data', []);
+angular.module('BlurAdmin.data.record', []);
+angular.module('BlurAdmin.data.adapters', []);
+angular.module('BlurAdmin.data.models', []);
 
 angular.module('BlurAdmin', [
   'uuid',
@@ -63,7 +67,8 @@ angular.module('BlurAdmin', [
   'BlurAdmin.utils',
   'BlurAdmin.services',
   'BlurAdmin.theme',
-  'BlurAdmin.pages'
+  'BlurAdmin.pages',
+  'BlurAdmin.data'
 ])
 .config(function($stateProvider, $urlRouterProvider, $httpProvider, $locationProvider, uiSelectConfig) {
   $httpProvider.interceptors.push('blurAdminHttpInterceptor');
@@ -78,7 +83,7 @@ angular.module('BlurAdmin', [
 
     String.prototype.capitalizeFirstLetter = function() {
       return this.charAt(0).toUpperCase() + this.slice(1);
-    }
+    };
 
     PermRoleStore.defineRole('AUTHORIZED', function() {
       return authenticationService.isAuthenticated();
@@ -91,7 +96,6 @@ angular.module('BlurAdmin', [
     authenticationService.isAuthenticated().then(function() {
       $rootScope.loggedInUser = authenticationService.getUser();
       NPSinit(($rootScope.loggedInUser) ? ($rootScope.loggedInUser) : {}, customerICN, toastr);
-
     });
 
     $rootScope.$on('$stateChangeStart', function(event, toState, params) {

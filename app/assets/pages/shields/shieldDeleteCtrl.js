@@ -2,22 +2,21 @@
  * @author f.ulusoy
  * created on 26.01.2017
  */
-(function () {
-'use strict';
+(function() {
 
-angular.module('BlurAdmin.pages.shields').controller('ShieldDeleteCtrl', function(
-    $scope, $uibModalInstance, shield) {
 
-  $scope.shield = shield;
+  angular.module('BlurAdmin.pages.shields').controller('ShieldDeleteCtrl', function($scope, $uibModalInstance, shield) {
 
-  $scope.apply = function() {
-    $uibModalInstance.close($scope.shield);
-  };
+    $scope.shield = shield;
 
-  $scope.cancel = function() {
-    $uibModalInstance.dismiss('cancel');
-  };
+    $scope.apply = function() {
+      $uibModalInstance.close($scope.shield);
+    };
 
-});
+    $scope.cancel = function() {
+      $uibModalInstance.dismiss('cancel');
+    };
 
-})();
+  });
+
+}());

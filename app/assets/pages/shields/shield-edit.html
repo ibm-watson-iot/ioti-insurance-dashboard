@@ -87,7 +87,7 @@
             <th>Enabled</th>
             <th>Actions</th>
           </tr>
-          <tr ng-repeat="shieldCode in shieldEditCtrlVm.shieldcodes">
+          <tr ng-repeat="shieldCode in shieldEditCtrlVm.shield.shieldCodes.value">
             <td class="table-id">{{$index + 1}}</td>
             <td>
               <span>{{shieldCode.name}}</span>
@@ -96,7 +96,7 @@
               <span>{{shieldCode.description}}</span>
             </td>
             <td>
-              <span>{{ shieldEditCtrlVm.getCommonShieldName( shieldCode.commonShieldId) }}</span>
+              <span>{{ shieldCode.commonShieldCode.value.name }}</span>
             </td>
             <td>
               <span>{{shieldCode.version}}</span>
