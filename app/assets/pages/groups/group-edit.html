@@ -1,0 +1,41 @@
+<div class="widgets" ng-controller="GroupEditCtrl as groupEditCtrlVm">
+  <div class="row">
+    <div class="col-md-12">
+      <div ba-panel ba-panel-class="with-scroll">
+        <div>
+          <div class="row">
+            <div>
+              <h4 ng-if="groupEditCtrlVm.group._id">Editing Group - {{groupEditCtrlVm.group._id}}</h4>
+              <h4 ng-if="!groupEditCtrlVm.group._id">Creating new Group</h4>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label for="externalAttributeId">External Attribute Id</label>
+                <input type="text" class="form-control" id="externalAttributeId"
+                    ng-model="groupEditCtrlVm.group.externalAttributeId">
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group">
+                <ui-select multiple ng-model="groupEditCtrlVm.group.attributes">
+                  <ui-select-match placeholder="Select Attributes">
+                    {{$item}}
+                  </ui-select-match>
+                  <ui-select-choices repeat="attr in groupEditCtrlVm.availableAttributes">
+                    {{attr}}
+                  </ui-select-choices>
+                </ui-select>
+                <br>
+              </div>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary" ng-click="groupEditCtrlVm.saveGroup()"
+                  data-ng-disabled="groupEditCtrlVm.saving || !groupEditCtrlVm.isValid">
+            Save
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

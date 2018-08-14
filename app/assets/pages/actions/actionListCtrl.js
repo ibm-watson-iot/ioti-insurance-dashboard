@@ -16,23 +16,11 @@
     });
 
     vm.saveAction = function(action) {
-      action.save().then(function() {
-        toastr.success(null, 'Saving action is successful.');
-      }).catch(function(err) {
-        console.error('Saving action is failed!');
-        toastr.error('Saving action is failed!', 'Error');
-      });
+      return action.save()
     };
 
     vm.deleteAction = function(action) {
-      Store.destroy('action', action._id).then(function() {
-        var index = vm.actions.indexOf(action);
-        vm.actions.splice(index, 1);
-        toastr.success(null, 'Deleting action was successful.');
-      }).catch(function(err) {
-        console.error('Deleting action has failed!');
-        toastr.error('Deleting action has failed!', 'Error');
-      });
+      return Store.destroy('action', action._id);
     };
 
 

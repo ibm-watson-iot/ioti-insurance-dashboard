@@ -1,6 +1,13 @@
 angular.module('BlurAdmin.data.models').factory('User', function () {
   return {
     relations: {
+      hasOne: {
+        attributes: {
+          localKey: 'userId',
+          foreignKey: 'externalAttributeId',
+          localField: 'attributes'
+        }
+      },
       hasMany: {
         shield: {
           // In a hasMany relationship configured with

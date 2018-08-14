@@ -1,0 +1,41 @@
+<div class="widgets" ng-controller="PolicyEditCtrl as policyEditCtrlVm">
+  <div class="row">
+    <div class="col-md-12">
+      <div ba-panel ba-panel-class="with-scroll">
+        <div>
+          <div class="row">
+            <div>
+              <h4 ng-if="policyEditCtrlVm.policy._id">Editing Policy - {{policyEditCtrlVm.policy._id}}</h4>
+              <h4 ng-if="!policyEditCtrlVm.policy._id">Creating new Policy</h4>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label for="resource">Resource</label>
+                <input type="text" class="form-control" id="resource"
+                    ng-model="policyEditCtrlVm.policy.resource">
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group" ng-repeat="op in ['read','write','update','delete']">
+                <label for="{{op}}-operations">Policy {{op}} Operations</label>
+                <ui-select id="{{op}}-operations" multiple ng-model="groupEditCtrlVm.group.attributes[op]">
+                  <ui-select-match placeholder="Select {{op}} Attributes">
+                    {{$item}}
+                  </ui-select-match>
+                  <ui-select-choices repeat="attr in groupEditCtrlVm.availableAttributes">
+                    {{attr}}
+                  </ui-select-choices>
+                </ui-select>
+              </div>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary" ng-click="policyEditCtrlVm.savePolicy()"
+                  data-ng-disabled="policyEditCtrlVm.saving || !policyEditCtrlVm.isValid">
+            Save
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

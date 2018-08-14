@@ -38,6 +38,11 @@
         model.relations.hasMany[k].localField = '__' + localField;
         relations.push(localField);
       });
+      Object.keys(model.relations.hasOne || {}).forEach(function(k) {
+        var localField = model.relations.hasOne[k].localField;
+        model.relations.hasOne[k].localField = '__' + localField;
+        relations.push(localField);
+      });
 
       function wrapPromise(_this, promise, rel, value) {
         promise.value = value;

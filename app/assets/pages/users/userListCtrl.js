@@ -61,7 +61,7 @@
     cityLocationService.me().success(function(data) {
       latlong = data;
       loadUsers(0);
-    }).error(function(err) {
+    }).catch(function(err) {
       console.error('Fetching city locations failed!');
     });
 

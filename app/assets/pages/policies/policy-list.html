@@ -1,0 +1,41 @@
+<div class="widgets">
+  <div class="row" ng-controller="PolicyListCtrl as policyListCtrl">
+    <div class="col-md-12">
+      <div class="panel panel-primary bootstrap-panel with-scroll">
+        <div class="panel-heading">All policys</div>
+        <div class="panel-body">
+          <div class="add-row-editable-table">
+            <button class="btn btn-primary" ui-sref="main.policy-edit({policyId: 'new'})">Add policy</button>
+          </div>
+          <div class="horizontal-scroll">
+            <table class="table table-hover">
+              <tr class="header-row">
+                <th class="table-id">#</th>
+                <th>Resource</th>
+              </tr>
+              <tr ng-repeat="policy in policyListCtrl.allPolicies" class="editable-tr-wrap">
+                <td class="table-id">{{$index + 1}}</td>
+                <td>
+                  {{policy.resource}}
+                </td>
+                <td>
+                  <button type="button" class="btn btn-xs btn-primary"
+                      ng-if="isAdmin"
+                      ui-sref="main.policy-edit({policyId: policy._id})">
+                    <i class="fa fa-pencil"></i>
+                  </button>
+                  <button type="button" class="btn btn-xs btn-primary"
+                      ng-if="isAdmin"
+                      ng-click="policyListCtrl.deletePolicy(policy)">
+                    <i class="fa fa-trash"></i>
+                  </button>
+                </td>
+                </tr>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

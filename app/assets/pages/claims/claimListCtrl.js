@@ -6,7 +6,7 @@
   function ClaimListCtrl($timeout, baConfig, layoutPaths, cityLocationService, Store) {
     var vm = this;
     var latlong;
-    vm.claims = Store.getLiveArray('claims');
+    vm.claims = Store.getLiveArray('claim');
 
     cityLocationService.me().then(function(result) {
       latlong = result.data;
