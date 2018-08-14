@@ -26,7 +26,7 @@
               <div class="form-group">
                 <label for="policyHolder">Policy Holder</label>
                 <span class="form-control" id="policyHolder">
-                  {{claimViewCtrlVm.user.fullname}}
+                  {{claimViewCtrlVm.claim.user.value.fullname}}
                 </span>
               </div>
             </div>
@@ -34,7 +34,7 @@
               <div class="form-group">
                 <label for="email">Email</label>
                 <span class="form-control" id="email">
-                  {{claimViewCtrlVm.user.email}}
+                  {{claimViewCtrlVm.claim.user.value.email}}
                 </span>
               </div>
             </div>
@@ -44,7 +44,7 @@
               <div class="form-group">
                 <label for="street">Street</label>
                 <span type="text" class="form-control" id="street">
-                  {{claimViewCtrlVm.user.address.street}}
+                  {{claimViewCtrlVm.claim.user.value.address.street}}
                 </span>
               </div>
             </div>
@@ -52,7 +52,7 @@
               <div class="form-group">
                 <label for="zipcode">Zipcode</label>
                 <span type="text" class="form-control" id="zipcode">
-                  {{claimViewCtrlVm.user.address.zipcode}}
+                  {{claimViewCtrlVm.claim.user.value.address.zipcode}}
                 </span>
               </div>
             </div>
@@ -62,7 +62,7 @@
               <div class="form-group">
                 <label for="city">City</label>
                 <span type="text" class="form-control" id="city">
-                  {{claimViewCtrlVm.user.address.city}}
+                  {{claimViewCtrlVm.claim.user.value.address.city}}
                 </span>
               </div>
             </div>
@@ -70,7 +70,7 @@
               <div class="form-group">
                 <label for="country">Country</label>
                 <span type="text" class="form-control" id="country">
-                  {{claimViewCtrlVm.user.address.country}}
+                  {{claimViewCtrlVm.claim.user.value.address.country}}
                 </span>
               </div>
             </div>

@@ -61,32 +61,32 @@
             </div>
           </uib-tab>
           <uib-tab heading="Active Shields">
-            <div class="heading-widget section-block ng-scope" ng-if="userViewCtrlVm.userShields.length === 0">
+            <div class="heading-widget section-block ng-scope" ng-if="userViewCtrlVm.user.shields.value.length === 0">
               <h2>No Activated Shield</h2>
             </div>
-            <table class="table table-hover" ng-if="userViewCtrlVm.userShields.length > 0">
+            <table class="table table-hover" ng-if="userViewCtrlVm.user.shields.value.length > 0">
               <tr class="header-row">
                 <th class="table-id">#</th>
                 <th>Name</th>
               </tr>
-              <tr ui-sref="main.user-shield-view({shieldId: shield.shieldId})"  ng-repeat="shield in userViewCtrlVm.userShields" class="editable-tr-wrap">
+              <tr ui-sref="main.user-shield-view({shieldId: shield._id})"  ng-repeat="shield in userViewCtrlVm.user.shields.value" class="editable-tr-wrap">
                 <td class="table-id">{{$index + 1}}</td>
                 <td>
-                  {{userViewCtrlVm.uuidToShieldMap[shield.shieldId].name}}
+                  {{shield.name}}
                 </td>
               </tr>
             </table>
           </uib-tab>
           <uib-tab heading="Devices">
-            <div class="heading-widget section-block ng-scope" ng-if="userViewCtrlVm.userDevices.length === 0">
+            <div class="heading-widget section-block ng-scope" ng-if="userViewCtrlVm.user.devices.value.length === 0">
               <h2>No Available Devices</h2>
             </div>
-            <table class="table table-hover" ng-if="userViewCtrlVm.userDevices.length > 0">
+            <table class="table table-hover" ng-if="userViewCtrlVm.user.devices.value.length > 0">
               <tr class="header-row">
                 <th class="table-id">#</th>
                 <th>Name</th>
               </tr>
-              <tr ui-sref="main.user-device-view({deviceId: device._id})"  ng-repeat="device in userViewCtrlVm.userDevices" class="editable-tr-wrap">
+              <tr ui-sref="main.user-device-view({deviceId: device._id})"  ng-repeat="device in userViewCtrlVm.user.devices.value" class="editable-tr-wrap">
                 <td class="table-id">{{$index + 1}}</td>
                 <td>
                   {{device.vendorId}} {{device.extra.deviceDesc}}
@@ -95,11 +95,11 @@
             </table>
           </uib-tab>
           <uib-tab heading="Hazards">
-            <div class="heading-widget section-block ng-scope" ng-if="userViewCtrlVm.userHazards.length === 0">
+            <div class="heading-widget section-block ng-scope" ng-if="userViewCtrlVm.user.hazards.value.length === 0">
               <h2>No Hazards</h2>
             </div>
             <table class="table table-hover"
-                ng-if="userViewCtrlVm.userHazards.length > 0">
+                ng-if="userViewCtrlVm.user.hazards.value.length > 0">
               <tr class="header-row">
                 <th class="table-id">#</th>
                 <th>Event Title</th>
@@ -107,7 +107,7 @@
                 <th>Shield</th>
               </tr>
               <tr class="editable-tr-wrap clickable"
-                  ng-repeat="hazard in userViewCtrlVm.userHazards | orderBy:'createdAt':true"
+                  ng-repeat="hazard in userViewCtrlVm.user.hazards.value | orderBy:'createdAt':true"
                   ui-sref="main.hazard-view({hazardEventId: hazard._id})">
                 <td class="table-id">
                   {{$index + 1}}
@@ -119,21 +119,21 @@
                   {{hazard.createdAt | date:'mediumTime'}} {{hazard.createdAt | date:'shortDate'}}
                 </td>
                 <td>
-                  {{userViewCtrlVm.uuidToShieldMap[hazard.shieldId].name}}
+                  {{hazard.shield.value.name}}
                 </td>
               </tr>
             </table>
           </uib-tab>
           <uib-tab heading="Claims">
-            <div class="heading-widget section-block ng-scope" ng-if="userViewCtrlVm.userClaims.length === 0">
+            <div class="heading-widget section-block ng-scope" ng-if="userViewCtrlVm.user.claims.value.length === 0">
               <h2>No Claims</h2>
             </div>
-            <table class="table table-hover" ng-if="userViewCtrlVm.userClaims.length > 0">
+            <table class="table table-hover" ng-if="userViewCtrlVm.user.claims.value.length > 0">
               <tr class="header-row">
                 <th class="table-id">#</th>
                 <th>Policy Number</th>
               </tr>
-              <tr ui-sref="main.claim-view({claimId: claim._id})"  ng-repeat="claim in userViewCtrlVm.userClaims" class="editable-tr-wrap">
+              <tr ui-sref="main.claim-view({claimId: claim._id})"  ng-repeat="claim in userViewCtrlVm.user.claims.value" class="editable-tr-wrap">
                 <td class="table-id">{{$index + 1}}</td>
                 <td>
                   {{claim.policyNumber}}

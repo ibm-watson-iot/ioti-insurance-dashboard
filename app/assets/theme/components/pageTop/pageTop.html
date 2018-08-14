@@ -1,5 +1,5 @@
 <div class="page-top clearfix" scroll-position="scrolled" max-height="50" ng-class="{'scrolled': scrolled}">
-  <a href="#/dashboard" class="al-logo clearfix"><span>Blue</span>Insurance</a>
+  <a ui-sref="main.dashboard" class="al-logo clearfix"><span>Blue</span>Insurance</a>
   <a href class="collapse-menu-link ion-navicon" ba-sidebar-toggle-menu></a>
 
   <div class="user-profile clearfix">
@@ -9,7 +9,7 @@
       </a>
       <ul  class="top-dropdown-menu profile-dropdown" uib-dropdown-menu>
         <li><i class="dropdown-arr"></i></li>
-        <li><a href="#/profile"><i class="fa fa-user"></i>Profile</a></li>
+        <li><a ui-sref="main.profile"><i class="fa fa-user"></i>Profile</a></li>
         <li><a href class="signout" ng-click="signOut()"><i class="fa fa-power-off"></i>Sign out</a></li>
       </ul>
     </div>
@@ -17,6 +17,6 @@
   </div>
 
   <div class="questions-section">
-    <a href="#/profile">{{loggedInUser.fullname}}</a>
+    <a ui-sref="main.profile">{{loggedInUser.fullname}}</a>
   </div>
 </div>

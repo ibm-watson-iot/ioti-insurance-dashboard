@@ -2,22 +2,22 @@
  * @author v.lugovksy
  * created on 16.12.2015
  */
-(function () {
-  'use strict';
+(function() {
+
 
   angular.module('BlurAdmin.pages.dashboard')
     .controller('DashboardLineChartCtrl', DashboardLineChartCtrl);
 
   /** @ngInject */
-  function DashboardLineChartCtrl(baConfig, layoutPaths, baUtil, userService) {
+  function DashboardLineChartCtrl(baConfig, layoutPaths, baUtil, Store) {
     var layoutColors = baConfig.colors;
     var graphColor = baConfig.theme.blur ? '#000000' : layoutColors.primary;
     var users = [];
 
-    userService.findAll().success(function(data) {
-      users = data.items;
+    Store.findAll('shield').then(function(data) {
+      users = data;
       var chartData = [];
-      for (var i=12; i>=0; i--) {
+      for (var i = 12; i >= 0; i--) {
         var date = new Date();
         var result = users.filter(function(user) {
           return user.createdAt <= new Date(date.getFullYear(), date.getMonth() + 1 - i);
@@ -99,4 +99,4 @@
       }
     });
   }
-})();
+}());

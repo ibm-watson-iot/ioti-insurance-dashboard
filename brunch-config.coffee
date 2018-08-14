@@ -53,6 +53,8 @@ exports.config =
           'bower_components/amcharts-stock/dist/amcharts/amstock.js',
           'bower_components/moment/min/moment-with-locales.js',
           'bower_components/ng-file-upload/ng-file-upload.js',
+          'bower_components/js-data/dist/js-data.js',
+          'bower_components/js-data-angular/dist/js-data-angular.js',
 
           'app/vendor/'
 

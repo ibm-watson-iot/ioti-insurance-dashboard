@@ -12,7 +12,7 @@
         <a href ng-click="acknowledgeAll()">Acknowledge All</a>
       </div>
       <div class="msg-list">
-        <a class="clearfix" ng-repeat="hazard in hazards | limitTo:10"
+        <a class="clearfix" ng-repeat="hazard in hazards track by hazard._id | limitTo:10"
             ui-sref="main.hazard-view({hazardEventId: hazard._id})">
           <div class="img-area" ng-click="acknowledge()">
             <i class="fa fa-bolt"></i>

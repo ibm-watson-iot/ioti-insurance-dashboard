@@ -17,7 +17,7 @@
               <label for="shieldName">Shield</label>
               <span class="form-control" id="shieldName"
                   ng-model="hazardViewCtrlVm.shield.name">
-                  {{hazardViewCtrlVm.shield.name}}
+                  {{hazardViewCtrlVm.hazard.shield.value.name}}
                 </span>
             </div>
           </div>
@@ -54,12 +54,12 @@
         <div class="row">
           <div class="col-md-12">
             <button class="btn btn-primary pull-right"
-                ng-if="hazardViewCtrlVm.claims.length > 0"
+                ng-if="hazardViewCtrlVm.hazard.claims.value.length > 0"
                 ui-sref="main.claim-view({claimId: hazardViewCtrlVm.claims[0]._id})">
               Show Claim
             </button>
             <button class="btn btn-primary pull-right"
-                ng-if="hazardViewCtrlVm.claims.length === 0"
+                ng-if="hazardViewCtrlVm.hazard.claims.value.length === 0"
                 ui-sref="main.claim-add({hazardId: hazardViewCtrlVm.hazard._id, userId: hazardViewCtrlVm.hazard.userId})">
               Create Claim
             </button>
