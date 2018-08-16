@@ -56,7 +56,7 @@
         resource: '',
         operations: {
           read: [],
-          write: [],
+          create: [],
           update: [],
           delete: []
         }
