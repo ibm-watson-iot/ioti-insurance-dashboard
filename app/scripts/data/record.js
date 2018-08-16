@@ -79,12 +79,10 @@
                 var id, key = ((model.relations.belongsTo || {})[rel] || {}).localKey;
                 if (key) {
                   id = _this[key];
-                  var failed = globalFailedCache.get(rel + ':' + id);
-                  if (failed === true) {
-                    var p = Promise.reject();
-                    wrapPromise(_this, p, rel, null);
-                    p.catch(function() {});
-                    return p;
+                  var failedPromise = globalFailedCache.get(rel + ':' + id);
+                  if (failedPromise) {
+                    wrapPromise(_this, failedPromise, rel, null);
+                    return failedPromise;
                   }
                 }
                 var value = _this['__' + rel];
@@ -109,7 +107,7 @@
                 });
                 promise.catch(function(err) {
                   if (key && err.request.status === 404) {
-                    globalFailedCache.set(rel + ':' + id, true);
+                    globalFailedCache.set(rel + ':' + id, promise);
                   }
                 });
                 return promise;
