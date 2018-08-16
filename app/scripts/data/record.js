@@ -77,10 +77,9 @@
             Object.defineProperty(_this, rel, {
               get() {
                 var id, key;
-                var relationConfigName = _.kebabCase(rel);
-                key = key || ((model.relations.belongsTo || {})[relationConfigName] || {}).localKey;
-                key = key || ((model.relations.hasMany || {})[relationConfigName] || {}).localKey;
-                key = key || ((model.relations.hasOne || {})[relationConfigName] || {}).localKey;
+                key = this._mapper().relationList.find(function(r) {
+                  return r.localField === '__' + rel;
+                }).localKey;
                 id = _this[key];
                 var loadedKey = rel + '-' + id;
                 var failedPromise = globalFailedCache.get(rel + ':' + id);
