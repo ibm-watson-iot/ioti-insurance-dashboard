@@ -76,8 +76,13 @@
           relations.forEach(function(rel) {
             Object.defineProperty(_this, rel, {
               get() {
-                var id, key = rel + 'Id';
+                var id, key;
+                var relationConfigName = _.kebabCase(rel);
+                key = key || ((model.relations.belongsTo || {})[relationConfigName] || {}).localKey;
+                key = key || ((model.relations.hasMany || {})[relationConfigName] || {}).localKey;
+                key = key || ((model.relations.hasOne || {})[relationConfigName] || {}).localKey;
                 id = _this[key];
+                var loadedKey = rel + '-' + id;
                 var failedPromise = globalFailedCache.get(rel + ':' + id);
                 if (failedPromise) {
                   wrapPromise(_this, failedPromise, rel, null);
@@ -88,8 +93,8 @@
                 var promise = Promise.resolve(value);
                 promise = wrapPromise(_this, promise, rel, value);
                 if (!_this[META].reload) {
-                  if (_this[META].loaded[rel]) {
-                    return promise;
+                  if (_this[META].loaded[loadedKey]) {
+                    return _this[META].loaded[loadedKey];
                   }
                   if (Array.isArray(value) && value.length > 0) {
                     return promise;
@@ -99,7 +104,7 @@
                   }
                 }
                 promise = _this.loadRelations(['__' + rel]).then(function(record) {
-                  _this[META].loaded[rel] = true;
+                  _this[META].loaded[loadedKey] = promise;
                   _this[META].reload = false;
                   wrapPromise(_this, promise, rel, record['__' + rel]);
                   return record['__' + rel];
