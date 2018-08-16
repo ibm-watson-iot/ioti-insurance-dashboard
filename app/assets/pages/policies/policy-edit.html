@@ -26,6 +26,7 @@
                   <tr ng-repeat="attrs in policyEditCtrlVm.policy.operations[op] | toObject track by $index" >
                     <td class="table-id">{{$index + 1}}</td>
                     <td>
+                      <!--unable to use ui-selectize here... problems with ng-repeat-->
                       <selectize config="{plugins: ['remove_button']}" options='policyEditCtrlVm.availableAttributes' ng-model="policyEditCtrlVm.policy.operations[op][$index]"></selectize>
                     </td>
                     <td>
