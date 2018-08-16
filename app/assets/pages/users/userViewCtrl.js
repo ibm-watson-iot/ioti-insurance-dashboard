@@ -3,10 +3,10 @@
 
   angular.module('BlurAdmin.pages.users').controller('UserViewCtrl', UserViewCtrl);
 
-  function UserViewCtrl($stateParams, Store) {
+  function UserViewCtrl($stateParams, Store, accessControlAttributes) {
     var vm = this;
     vm.user = {};
-    vm.newAttr = "new policy attr here";
+    vm.availableAttributes = accessControlAttributes;
 
     if ($stateParams.userId) {
       Store.find('user', $stateParams.userId).then(function (user) {
@@ -19,6 +19,11 @@
               externalAttributeId: vm.user._id
             });
           }
+          vm.user.attributes.value.attributes.forEach(function (i) {
+            if (vm.availableAttributes.indexOf(i) === -1) {
+              vm.availableAttributes.push(i);
+            }
+          });
         });
       });
     }

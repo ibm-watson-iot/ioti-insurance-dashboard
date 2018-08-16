@@ -56,6 +56,7 @@ angular.module('BlurAdmin', [
   'ui.bootstrap',
   'ui.slimscroll',
   'ui.select',
+  'selectize',
   'angular-progress-button-styles',
   'angular-jwt',
   'angular-loading-bar',

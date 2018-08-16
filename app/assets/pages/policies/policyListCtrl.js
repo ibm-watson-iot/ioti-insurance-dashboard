@@ -36,9 +36,6 @@
       });
     };
 
-    vm.savePolicy = function(policy) {
-      return policy.save();
-    };
   }
 
 }());

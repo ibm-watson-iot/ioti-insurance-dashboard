@@ -7,12 +7,10 @@
 
   angular.module('BlurAdmin.pages.policies').controller('GroupEditCtrl', GroupEditCtrl);
 
-  function GroupEditCtrl($state, $stateParams, $uibModal, toastr, Store, $scope) {
+  function GroupEditCtrl($state, $stateParams, $uibModal, toastr, Store, $scope, accessControlAttributes) {
     var vm = this;
     vm.group = { };
-    vm.availableAttributes = [
-      'context:ORG.IBM.WIOTP'
-    ];
+    vm.availableAttributes = accessControlAttributes;
 
     Store.find('action').then(function(actions) {
       vm.actions = actions;
