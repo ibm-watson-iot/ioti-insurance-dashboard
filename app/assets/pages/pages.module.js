@@ -12,6 +12,8 @@
     'BlurAdmin.pages.profile',
     'BlurAdmin.pages.dashboard',
     'BlurAdmin.pages.claims',
+    'BlurAdmin.pages.policies',
+    'BlurAdmin.pages.groups',
     'BlurAdmin.pages.hazards',
     'BlurAdmin.pages.users',
     'BlurAdmin.pages.shields',

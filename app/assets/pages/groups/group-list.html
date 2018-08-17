@@ -1,0 +1,42 @@
+<div class="widgets">
+  <div class="row" ng-controller="GroupListCtrl as groupListCtrlVm">
+    <div class="col-md-12">
+      <div class="panel panel-primary bootstrap-panel with-scroll">
+        <div class="panel-heading">All groups</div>
+        <div class="panel-body">
+          <div class="add-row-editable-table">
+            <button class="btn btn-primary" ui-sref="main.group-edit({groupId: 'new'})">Add group</button>
+          </div>
+          <div class="horizontal-scroll">
+            <table class="table table-hover">
+              <tr class="header-row">
+                <th class="table-id">#</th>
+                <th>External Id</th>
+                <th>Attributes</th>
+              </tr>
+              <tr ng-repeat="group in groupListCtrlVm.allGroups" class="editable-tr-wrap">
+                <td class="table-id">{{$index + 1}}</td>
+                <td>
+                  <span>{{group.externalAttributeId}}</span>
+                </td>
+                <td>
+                  <button type="button" class="btn btn-xs btn-primary"
+                      ng-if="isAdmin"
+                      ui-sref="main.group-edit({groupId: group._id})">
+                    <i class="fa fa-pencil"></i>
+                  </button>
+                  <button type="button" class="btn btn-xs btn-primary"
+                      ng-if="isAdmin"
+                      ng-click="groupListCtrlVm.deleteGroup(group)">
+                    <i class="fa fa-trash"></i>
+                  </button>
+                </td>
+                </tr>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

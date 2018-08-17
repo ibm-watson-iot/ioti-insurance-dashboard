@@ -141,6 +141,28 @@
               </tr>
             </table>
           </uib-tab>
+          <uib-tab heading="Access Attributes">
+            <ui-select multiple ng-model="userViewCtrlVm.user.attributes.value.attributes">
+              <ui-select-match placeholder="Select Attributes">
+                {{$item}}
+              </ui-select-match>
+              <ui-select-choices repeat="attr in userViewCtrlVm.availableAttributes">
+                {{attr}}
+              </ui-select-choices>
+            </ui-select>
+            <br>
+            <button type="button" class="btn btn-xs btn-primary"
+                    ng-if="isAdmin"
+                    replace-with-loader="true"
+                    ng-click="userViewCtrlVm.user.attributes.value.save()">
+              <i class="fa fa-save"></i> Save
+            </button>
+            <button type="button" class="btn btn-xs btn-primary"
+                    ng-if="isAdmin"
+                    ng-click="userViewCtrlVm.user.attributes.value.revert()">
+              <i class="fa fa-backward"></i> Revert
+            </button>
+          </uib-tab>
         </uib-tabset>
       </div>
     </div>

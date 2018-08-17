@@ -56,6 +56,7 @@ angular.module('BlurAdmin', [
   'ui.bootstrap',
   'ui.slimscroll',
   'ui.select',
+  'selectize',
   'angular-progress-button-styles',
   'angular-jwt',
   'angular-loading-bar',
@@ -70,10 +71,17 @@ angular.module('BlurAdmin', [
   'BlurAdmin.pages',
   'BlurAdmin.data'
 ])
-.config(function($stateProvider, $urlRouterProvider, $httpProvider, $locationProvider, uiSelectConfig) {
+.config(function($stateProvider, $urlRouterProvider, $httpProvider, $locationProvider, uiSelectConfig, $provide) {
   $httpProvider.interceptors.push('blurAdminHttpInterceptor');
   uiSelectConfig.theme = 'selectize';
   $locationProvider.html5Mode(true);
+  $provide.decorator('ngClickDirective', ['$delegate', function($delegate) {
+    //$delegate is array of all ng-click directive
+    //in this case first one is angular buildin ng-click
+    //so we remove it.
+    $delegate.shift();
+    return $delegate;
+  }]);
 })
 .run(function($rootScope, $state, editableOptions, editableThemes, PermRoleStore, authenticationService, customerICN, toastr) {
 

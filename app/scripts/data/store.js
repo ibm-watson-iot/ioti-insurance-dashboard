@@ -9,6 +9,8 @@
     'ShieldCode',
     'User',
     'Claim',
+    'Policy',
+    'Attributes',
     'CommonShieldCode'
   ];
   var adapters = ['ApplicationAdapter', 'UserAdapter', 'ClaimAdapter'];
@@ -135,7 +137,11 @@
     modelDefs.forEach(function(mod, i) {
       var name, mapper;
       name = _.kebabCase(models[i]);
-      mod.endpoint = name + 's';
+      mod.endpoint = name;
+      if (!name.endsWith('s')) {
+        mod.endpoint = name + 's';
+      }
+      mod.endpoint = mod.endpoint.replace('ys', 'ies');
       mod.idAttribute = '_id';
       mod.recordClass = createRecordClass(mod);
       if (adaptersMap[name]) {

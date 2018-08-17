@@ -37,10 +37,7 @@
     vm.saveClaim = function() {
       vm.claim.damagaDate = vm.damagaDate.getTime();
       vm.claim.save().then(function() {
-        toastr.success(null, 'Saving claim is successful.');
         $state.go('main.claims');
-      }).catch(function(err) {
-        toastr.error('Saving claim is failed!', 'Error');
       });
     };
 

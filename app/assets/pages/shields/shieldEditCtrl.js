@@ -10,7 +10,6 @@
   function ShieldEditCtrl($state, $stateParams, $uibModal, toastr, Store) {
     var vm = this;
     vm.shield = { };
-    vm.saving = false;
 
     Store.find('action').then(function(actions) {
       vm.actions = actions;
@@ -34,16 +33,9 @@
     }
 
     vm.saveShield = function() {
-      vm.saving = true;
-      vm.shield.save()
+      return vm.shield.save()
         .then(function() {
-          toastr.success('Saving shield was successful');
-          vm.saving = false;
           $state.transitionTo('main.shield-edit', { shieldId: vm.shield._id });
-        })
-        .catch(function(err) {
-          vm.saving = false;
-          toastr.error('Saving shield is failed!', 'Error');
         });
     };
 
@@ -62,15 +54,8 @@
           }
         }
       });
-      modalInstance.result.then(function() {
-        vm['deleting_' + code._id] = true;
-        Store.destroy('shield-code', code._id).then(function(resp) {
-          toastr.success(null, 'Deleting the shield code was successful.');
-          delete vm['deleting_' + code._id];
-        }).catch(function(err) {
-          console.error('Deleting the shield code has failed!');
-          delete vm['deleting_' + code._id];
-        });
+      return modalInstance.result.then(function() {
+        return Store.destroy('shield-code', code._id);
       });
     };
 

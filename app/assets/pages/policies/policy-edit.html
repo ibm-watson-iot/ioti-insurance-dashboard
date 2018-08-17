@@ -1,0 +1,68 @@
+<div class="widgets" ng-controller="PolicyEditCtrl as policyEditCtrlVm">
+  <div class="row">
+    <div class="col-md-12">
+      <div ba-panel ba-panel-class="with-scroll">
+        <div>
+          <div class="row">
+            <div>
+              <h4 ng-if="policyEditCtrlVm.policy._id">Editing Policy - {{policyEditCtrlVm.policy._id}}</h4>
+              <h4 ng-if="!policyEditCtrlVm.policy._id">Creating new Policy</h4>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label for="resource">Resource</label>
+                <input type="text" class="form-control" id="resource"
+                    ng-model="policyEditCtrlVm.policy.resource">
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group" ng-repeat="op in ['read','create','update','delete']">
+                <table class="table table-hover" id="{{op}}-operations">
+                  <tr class="header-row">
+                    <th class="table-id">#</th>
+                    <th>Policy {{op}} Attributes</th>
+                    <th>Actions</th>
+                  </tr>
+                  <tr ng-repeat="attrs in policyEditCtrlVm.policy.operations[op] | toObject track by $index" >
+                    <td class="table-id">{{$index + 1}}</td>
+                    <td>
+                      <!--unable to use ui-selectize here... problems with ng-repeat-->
+                      <selectize config="{plugins: ['remove_button']}" options='policyEditCtrlVm.availableAttributes' ng-model="policyEditCtrlVm.policy.operations[op][$index]"></selectize>
+                    </td>
+                    <td>
+                      <button type="button" class="btn btn-xs btn-primary"
+                              ng-if="isAdmin"
+                              ng-click="policyEditCtrlVm.removeAttr(op, attr)">
+                        <i class="fa fa-trash"></i>
+                      </button>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="table-id">-</td>
+                    <td>
+                    </td>
+                    <td>
+                      <button type="button" class="btn btn-xs btn-primary"
+                              ng-if="isAdmin"
+                              ng-click="policyEditCtrlVm.addAttr(op)">
+                        <i class="fa fa-plus"></i>
+                      </button>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary" ng-click="policyEditCtrlVm.savePolicy()"
+                  data-ng-disabled="policyEditCtrlVm.saving || !policyEditCtrlVm.isValid">
+            Save
+          </button>
+          <button type="submit" class="btn btn-default" ng-click="policyEditCtrlVm.policy.revert()">
+            Revert
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -31,11 +31,7 @@
 
     vm.acknowledgeHazard = function(hazard) {
       hazard.ishandled = true;
-      hazard.save().then(function(data) {
-        toastr.success('Acknowledged.');
-      }).catch(function(err) {
-        toastr.error('Saving hazard is failed! ' + err, 'Error');
-      });
+      return hazard.save();
     };
 
     function updateHazardsInfo() {
@@ -95,12 +91,7 @@
     });
 
     vm.saveHazard = function(hazard) {
-      hazard.save().then(function() {
-        toastr.success(null, 'Saving hazard is successful.');
-      }).catch(function(err) {
-        console.error('Saving hazard has failed!');
-        toastr.error('Saving hazard has failed!', 'Error');
-      });
+      return hazard.save();
     };
 
     webSocketService.on('new-hazard', function(notification) {

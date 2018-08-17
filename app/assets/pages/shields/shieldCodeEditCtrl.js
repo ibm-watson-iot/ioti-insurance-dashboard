@@ -29,16 +29,9 @@
     }
 
     vm.saveShieldCode = function() {
-      vm.saving = true;
-      vm.shieldCode.save().then(function() {
-        vm.saving = false;
-        toastr.success('Saving shieldCode was successful');
+      return vm.shieldCode.save().then(function() {
         $state.transitionTo('main.shield-code-edit', { shieldCodeId: vm.shieldCode._id });
-      })
-        .catch(function(err) {
-          vm.saving = false;
-          toastr.error('Saving shieldCode is failed!', 'Error');
-        });
+      });
     };
 
   }
