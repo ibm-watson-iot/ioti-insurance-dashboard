@@ -55,7 +55,7 @@
                           ng-model="shieldCodeEditCtrlVm.shieldCode.jobOptions[name]">
                 </textarea>
                 <div class="input-group">
-                <input class="form-control" ng-if="options.type !== 'object'"  ng-attr-placeholder="{{options.default}}" type="{{options.type}}" id="{{name}}" ng-value="shieldCodeEditCtrlVm.shieldCode.jobOption[name]">
+                <input class="form-control" ng-if="options.type !== 'object'"  ng-attr-placeholder="{{options.default}}" type="{{options.type}}" id="{{name}}" ng-model="shieldCodeEditCtrlVm.shieldCode.jobOptions[name]">
                 <div ng-if="options.unit" class="input-group-addon">
                   {{options.unit}}
                 </div>

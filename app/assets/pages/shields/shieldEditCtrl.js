@@ -55,7 +55,7 @@
         }
       });
       return modalInstance.result.then(function() {
-        return Store.destroy('shield-code', code._id);
+        return code.destroy();
       });
     };
 
