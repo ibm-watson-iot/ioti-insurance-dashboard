@@ -120,6 +120,8 @@ angular.module('BlurAdmin.data.adapters').factory(
     };
 
     // pass options to the constructor
-    return new JSDataHttp.HttpAdapter(options);
+    var adapter = new JSDataHttp.HttpAdapter(options);
+    adapter.__options = options;
+    return adapter;
   }
 );
