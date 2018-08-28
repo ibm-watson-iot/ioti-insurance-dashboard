@@ -63,19 +63,19 @@ angular.module('BlurAdmin.data.adapters').factory(
         return JSDataHttp.HttpAdapter.prototype.findAll.call(this, mapper, query, opts);
       },
 
-      afterUpdate(mapper, id, props, opts) {
+      afterUpdate: function(mapper, id, props, opts) {
         toastr.success('Updated ' + mapper.name + ' - ' + id + ' successfully');
       },
 
-      afterCreate(mapper, id, props, opts) {
+      afterCreate: function(mapper, id, props, opts) {
         toastr.success('Created ' + mapper.name + ' - ' + id + ' successfully');
       },
 
-      afterDestroy(mapper, id, props, opts) {
+      afterDestroy: function(mapper, id, props, opts) {
         toastr.success('Deleted ' + mapper.name + ' - ' + id + ' successfully');
       },
 
-      error(err, data) {
+      error: function(err, data) {
         var isAPICall, originalPath, tokenKey, method, id;
 
         console.error(

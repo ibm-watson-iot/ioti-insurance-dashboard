@@ -30,7 +30,9 @@
     }
 
     vm.saveAction = function() {
-      return vm.action.save();
+      return vm.action.save().then(function() {
+        $state.transitionTo('main.action-edit', { actionId: vm.action._id });
+      });
     };
 
   }

@@ -59,7 +59,7 @@
       }
 
       return JSData.Record.extend({
-        save(opts) {
+        save: function(opts) {
           opts = opts || {};
           if (opts.changesOnly === undefined) {
             opts.changesOnly = true;
@@ -75,7 +75,7 @@
           var _this = this;
           relations.forEach(function(rel) {
             Object.defineProperty(_this, rel, {
-              get() {
+              get: function() {
                 var id, key;
                 key = this._mapper().relationList.find(function(r) {
                   return r.localField === '__' + rel;
@@ -115,7 +115,7 @@
                 });
                 return promise;
               },
-              set(val) {
+              set: function(val) {
                 if (val.then) {
                   if (val.value) {
                     _this['__' + rel] = val.value;

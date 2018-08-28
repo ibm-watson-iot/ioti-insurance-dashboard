@@ -2,40 +2,40 @@
  * @author f.ulusoy
  * created on 27.01.2017
  */
-'use strict';
+
 
 // global window variables for Medallia NPS
-var Medallia =  {
-    loaded: false,
-    scan: null,
-    daysSinceFirstLogin: 0
+var Medallia = {
+  loaded: false,
+  scan: null,
+  daysSinceFirstLogin: 0
 };
 
-function loadScript(src,callback){
+function loadScript(src, callback) {
 
-   var script = document.createElement("script");
-   if (Medallia.loaded) return true;;
-   script.type = "text/javascript";
-   if(callback)script.onload=callback;
-   Medallia.loaded = true;
-   console.log("Loading Medallia embed script");
+  var script = document.createElement('script');
+  if (Medallia.loaded) return true;
+  script.type = 'text/javascript';
+  if (callback)script.onload = callback;
+  Medallia.loaded = true;
+  console.log('Loading Medallia embed script');
 
-   document.getElementsByTagName("head")[0].appendChild(script);
-   script.src = src;
-   return true;
+  document.getElementsByTagName('head')[0].appendChild(script);
+  script.src = src;
+  return true;
 }
 
-function loadScriptCb(){
-   console.log("Medallia embed script loaded - loading rest");
-   Medallia.scan = setInterval(function() {
-      if (window.KAMPYLE_ONSITE_SDK != undefined) {
-         console.log("Medallia NPS code ready " + window.KAMPYLE_ONSITE_SDK);
-         clearInterval(Medallia.scan)
-         Medallia.scan = null;
-      }
-      //else console.log("KAMPYLE not ready yet");
-   });
-   return true;
+function loadScriptCb() {
+  console.log('Medallia embed script loaded - loading rest');
+  Medallia.scan = setInterval(function() {
+    if (window.KAMPYLE_ONSITE_SDK != undefined) {
+      console.log('Medallia NPS code ready ' + window.KAMPYLE_ONSITE_SDK);
+      clearInterval(Medallia.scan);
+      Medallia.scan = null;
+    }
+    //else console.log("KAMPYLE not ready yet");
+  });
+  return true;
 }
 
 angular.module('BlurAdmin.data', []);
@@ -70,19 +70,19 @@ angular.module('BlurAdmin', [
   'BlurAdmin.pages',
   'BlurAdmin.data'
 ])
-.config(function($stateProvider, $urlRouterProvider, $httpProvider, $locationProvider, uiSelectConfig, $provide) {
-  $httpProvider.interceptors.push('blurAdminHttpInterceptor');
-  uiSelectConfig.theme = 'selectize';
-  $locationProvider.html5Mode(true);
-  $provide.decorator('ngClickDirective', ['$delegate', function($delegate) {
+  .config(function($stateProvider, $urlRouterProvider, $httpProvider, $locationProvider, uiSelectConfig, $provide) {
+    $httpProvider.interceptors.push('blurAdminHttpInterceptor');
+    uiSelectConfig.theme = 'selectize';
+    $locationProvider.html5Mode(true);
+    $provide.decorator('ngClickDirective', ['$delegate', function($delegate) {
     //$delegate is array of all ng-click directive
     //in this case first one is angular buildin ng-click
     //so we remove it.
-    $delegate.shift();
-    return $delegate;
-  }]);
-})
-.run(function($rootScope, $state, editableOptions, editableThemes, PermRoleStore, authenticationService, customerICN, toastr) {
+      $delegate.shift();
+      return $delegate;
+    }]);
+  })
+  .run(function($rootScope, $state, editableOptions, editableThemes, PermRoleStore, authenticationService, customerICN, toastr) {
 
     // xeditable theme
     editableOptions.theme = 'bs3';
@@ -115,4 +115,4 @@ angular.module('BlurAdmin', [
         $state.go(toState.redirectTo, params, { location: 'replace' });
       }
     });
-});
+  });

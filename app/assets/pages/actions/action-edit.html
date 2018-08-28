@@ -57,6 +57,13 @@
             </div>
             <div class="col-sm-6" ng-if="actionEditCtrlVm.callbackAuthEnabled">
               <div class="form-group">
+                <label for="callbackAction-password">Callback Action Auth Type</label>
+                <input class="form-control" id="callbackAction-authType"
+                       ng-model="actionEditCtrlVm.action.callbackAction.auth.authType">
+              </div>
+            </div>
+            <div class="col-sm-6" ng-if="actionEditCtrlVm.callbackAuthEnabled">
+              <div class="form-group">
                 <label for="callbackAction-password">Callback Action Auth Username</label>
                 <input type="password" class="form-control" id="callbackAction-password"
                        ng-model="actionEditCtrlVm.action.callbackAction.auth.password">
