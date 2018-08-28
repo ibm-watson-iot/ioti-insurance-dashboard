@@ -38,6 +38,11 @@
         model.relations.hasMany[k].localField = '__' + localField;
         relations.push(localField);
       });
+      Object.keys(model.relations.hasOne || {}).forEach(function(k) {
+        var localField = model.relations.hasOne[k].localField;
+        model.relations.hasOne[k].localField = '__' + localField;
+        relations.push(localField);
+      });
 
       function wrapPromise(_this, promise, rel, value) {
         promise.value = value;
@@ -71,23 +76,24 @@
           relations.forEach(function(rel) {
             Object.defineProperty(_this, rel, {
               get() {
-                var id, key = ((model.relations.belongsTo || {})[rel] || {}).localKey;
-                if (key) {
-                  id = _this[key];
-                  var failed = globalFailedCache.get(rel + ':' + id);
-                  if (failed === true) {
-                    var p = Promise.reject();
-                    wrapPromise(_this, p, rel, null);
-                    p.catch(function() {});
-                    return p;
-                  }
+                var id, key;
+                key = this._mapper().relationList.find(function(r) {
+                  return r.localField === '__' + rel;
+                }).localKey;
+                id = _this[key];
+                var loadedKey = rel + '-' + id;
+                var failedPromise = globalFailedCache.get(rel + ':' + id);
+                if (failedPromise) {
+                  wrapPromise(_this, failedPromise, rel, null);
+                  return failedPromise;
                 }
+
                 var value = _this['__' + rel];
                 var promise = Promise.resolve(value);
                 promise = wrapPromise(_this, promise, rel, value);
                 if (!_this[META].reload) {
-                  if (_this[META].loaded[rel]) {
-                    return promise;
+                  if (_this[META].loaded[loadedKey]) {
+                    return _this[META].loaded[loadedKey];
                   }
                   if (Array.isArray(value) && value.length > 0) {
                     return promise;
@@ -97,14 +103,14 @@
                   }
                 }
                 promise = _this.loadRelations(['__' + rel]).then(function(record) {
-                  _this[META].loaded[rel] = true;
+                  _this[META].loaded[loadedKey] = promise;
                   _this[META].reload = false;
                   wrapPromise(_this, promise, rel, record['__' + rel]);
                   return record['__' + rel];
                 });
                 promise.catch(function(err) {
-                  if (key && err.request.status === 404) {
-                    globalFailedCache.set(rel + ':' + id, true);
+                  if (key && (err.request.status >= 400 || !err.response)) {
+                    globalFailedCache.set(rel + ':' + id, promise);
                   }
                 });
                 return promise;
