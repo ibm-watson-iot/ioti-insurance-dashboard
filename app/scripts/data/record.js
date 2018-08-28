@@ -109,7 +109,7 @@
                   return record['__' + rel];
                 });
                 promise.catch(function(err) {
-                  if (key && err.request.status >= 400) {
+                  if (key && (err.request.status >= 400 || !err.response)) {
                     globalFailedCache.set(rel + ':' + id, promise);
                   }
                 });
