@@ -30,14 +30,7 @@
     }
 
     vm.saveAction = function() {
-      vm.action.save()
-        .then(function(resp) {
-          _.merge(vm.action, resp);
-          toastr.success('Saving action was successful');
-        })
-        .catch(function(err) {
-          toastr.error('Saving action is failed!', 'Error');
-        });
+      return vm.action.save();
     };
 
   }

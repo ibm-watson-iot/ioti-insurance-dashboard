@@ -61,24 +61,9 @@ exports.config =
           'app/app.js',
           'app/scripts/utils/utils.module.js',
           'app/scripts/utils/BlurAdminHttpInterceptor.js',
-          'app/scripts/services/services.module.js',
-          'app/scripts/services/',
-
-          'app/assets/theme/components/components.module.js',
-          'app/assets/theme/inputs/inputs.module.js',
-          'app/assets/theme/theme.module.js',
-
-          'app/assets/pages/pages.module.js',
-          'app/assets/pages/main.module.js',
-
-          'app/assets/pages/dashboard/dashboard.module.js',
-          'app/assets/pages/login/login.module.js',
-          'app/assets/pages/profile/profile.module.js',
-          'app/assets/pages/hazards/hazards.module.js',
-          'app/assets/pages/users/users.module.js',
-          'app/assets/pages/claims/claims.module.js',
-          'app/assets/pages/shields/shields.module.js',
-          'app/assets/pages/actions/actions.module.js',
+          'app/*/*/*/*.module.js',
+          'app/*/*/*.module.js',
+          'app/scripts/services/'
         ]
         after: [
 
@@ -115,7 +100,7 @@ exports.config =
 
     afterBrunch: [
       [
-         'cp manifest.yml public/',
+         'bash -c "cp manifest.yml public/',
          'cp .htaccess public/',
          'cp nginx.conf public/',
          'cp bower_components/Ionicons/fonts/* public/fonts',
@@ -126,6 +111,6 @@ exports.config =
          'mkdir -p public/img/theme/vendor/ammap/img',
          'cp bower_components/ammap/dist/ammap/images/* public/img/theme/vendor/ammap/img',
          'mkdir -p public/data',
-         'cp app/assets/data/CityLocations.json public/data'
+         'cp app/assets/data/CityLocations.json public/data"'
       ].join(' && ')
     ]

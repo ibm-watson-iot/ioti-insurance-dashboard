@@ -32,10 +32,8 @@
 
     vm.acknowledgeHazard = function(hazard) {
       hazard.ishandled = true;
-      Store.update(hazard).then(function(data) {
+      return Store.update(hazard, { noToast: true }).then(function(data) {
         toastr.success('Acknowledged.');
-      }).catch(function(err) {
-        toastr.error('Saving hazard has failed!', 'Error');
       });
     };
   }

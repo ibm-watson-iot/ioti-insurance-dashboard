@@ -18,33 +18,25 @@
     vm.deleteShield = function(shield) {
       var modalInstance = $uibModal.open({
         animation: true,
-        templateUrl: 'pages/shields/shield-delete.html',
-        controller: 'ShieldDeleteCtrl',
+        templateUrl: 'pages/modals/prompt/prompt.html',
+        controller: 'ModalPromptCtrl',
         size: 'sm',
         resolve: {
-          shield: function() {
-            return shield;
+          title: function() {
+            return 'Delete Shield';
+          },
+          message: function() {
+            return 'Do you really want to delete shield "' + shield.name + '"?';
           }
         }
       });
-      modalInstance.result.then(function(shieldToDelete) {
-        Store.destroy('shield', shieldToDelete._id).then(function(data) {
-          toastr.success(null, 'Deleting the shield is successful.');
-        }).catch(function(err) {
-          console.error('Deleting the shield is failed!');
-        });
-      }, function() {
-        console.log('Modal dismissed at: ' + new Date());
+      return modalInstance.result.then(function() {
+        return shield.destroy();
       });
     };
 
     vm.saveShield = function(shield) {
-      shield.save().then(function() {
-        toastr.success(null, 'Saving shield is successful.');
-      }).catch(function(err) {
-        console.error('Saving shield is failed!');
-        toastr.error('Saving shield is failed!', 'Error');
-      });
+      return shield.save();
     };
 
     editableThemes.bs3.submitTpl = '<button type="submit" class="btn btn-primary btn-with-icon"><i class="ion-checkmark-round"></i></button>';

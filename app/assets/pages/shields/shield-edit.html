@@ -69,7 +69,6 @@
           <button type="submit" class="btn btn-primary" ng-click="shieldEditCtrlVm.saveShield()"
                   data-ng-disabled="shieldEditCtrlVm.saving">
             Save
-            <span ng-show="shieldEditCtrlVm.saving"><i class="fa fa-refresh fa-spin"></i></span>
           </button>
         </div>
       </div>
@@ -110,11 +109,10 @@
                       ui-sref="main.shield-code-edit({shieldId: shieldEditCtrlVm.shield._id, shieldCodeId: shieldCode._id})">
                 <i class="fa fa-pencil"></i>
               </button>
-              <button type="button" class="btn btn-xs btn-primary" data-ng-disabled="shieldEditCtrlVm['deleting_'+shieldCode._id]"
+              <button type="button" class="btn btn-xs btn-primary"
                       ng-if="isAdmin"
                       ng-click="shieldEditCtrlVm.deleteShieldCode(shieldCode)">
                 <i class="fa fa-trash"></i>
-                <span ng-show="shieldEditCtrlVm['deleting_'+shieldCode._id]"><i class="fa fa-refresh fa-spin"></i></span>
               </button>
             </td>
           </tr>

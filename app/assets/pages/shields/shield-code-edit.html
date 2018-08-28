@@ -32,7 +32,7 @@
             <div class="col-sm-6">
               <div class="form-group">
                 <label>Implementation</label>
-                <ui-select ng-model="shieldCodeEditCtrlVm.shieldCode.commonShieldId">
+                <ui-select ng-model="shieldCodeEditCtrlVm.shieldCode.commonShieldCodeId">
                   <ui-select-match placeholder="Select Common Shield">
                     {{$select.selected.name}} <br> <small>{{$select.selected.description}}</small>
                   </ui-select-match>
@@ -45,9 +45,24 @@
             <div class="col-sm-6">
               <div class="form-group">
                 <label for="jobOptions">Shield Code Options</label>
-                <textarea json-text class="form-control" id="jobOptions"
+                <textarea json-text class="form-control" id="jobOptions" ng-if="!shieldCodeEditCtrlVm.shieldCode.jobOptionDefinitions && !shieldCodeEditCtrlVm.shieldCode.commonShieldCodeId"
                           ng-model="shieldCodeEditCtrlVm.shieldCode.jobOptions">
-              </textarea>
+                </textarea>
+              </div>
+              <div class="form-group" ng-repeat="(name, options) in (shieldCodeEditCtrlVm.shieldCode.commonShieldCode.value.jobOptionDefinitions || shieldCodeEditCtrlVm.shieldCode.jobOptionDefinitions)">
+                <label for="{{name}}">{{name}}</label>
+                <textarea json-text class="form-control" id="{{name}}" ng-if="options.type === 'object'"  ng-attr-placeholder="{{options.default}}"
+                          ng-model="shieldCodeEditCtrlVm.shieldCode.jobOptions[name]">
+                </textarea>
+                <div class="input-group">
+                <input class="form-control" ng-if="options.type !== 'object'"  ng-attr-placeholder="{{options.default}}" type="{{options.type}}" id="{{name}}" ng-model="shieldCodeEditCtrlVm.shieldCode.jobOptions[name]">
+                <div ng-if="options.unit" class="input-group-addon">
+                  {{options.unit}}
+                </div>
+                </div>
+                <small ng-if="options.description || options.default" class="form-text text-muted">
+                  {{options.description}}, default: {{options.default}}
+                </small>
               </div>
             </div>
           </div>
@@ -55,7 +70,6 @@
           <button type="submit" class="btn btn-primary" ng-click="shieldCodeEditCtrlVm.saveShieldCode()"
                   data-ng-disabled="shieldCodeEditCtrlVm.saving">
             Save
-            <span ng-show="shieldCodeEditCtrlVm.saving"><i class="fa fa-refresh fa-spin"></i></span>
           </button>
         </div>
       </div>

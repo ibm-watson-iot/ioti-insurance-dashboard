@@ -48,10 +48,7 @@
     $scope.acknowledgeAll = function() {
       _.each($scope.hazards, function(hazard) {
         hazard.ishandled = true;
-        hazard.save().then(function() {
-        }).catch(function(err) {
-          toastr.error('Saving hazard is failed!', 'Error');
-        });
+        hazard.save();
       });
     };
 
