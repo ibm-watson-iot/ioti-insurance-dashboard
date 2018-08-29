@@ -49,13 +49,16 @@
                           ng-model="shieldCodeEditCtrlVm.shieldCode.jobOptions">
                 </textarea>
               </div>
-              <div class="form-group" ng-repeat="(name, options) in (shieldCodeEditCtrlVm.shieldCode.commonShieldCode.value.jobOptionDefinitions || shieldCodeEditCtrlVm.shieldCode.jobOptionDefinitions)">
-                <label for="{{name}}">{{name}}</label>
+              <div ng-class="options.type === 'boolean' ? 'checkbox' : 'form-group'" ng-repeat="(name, options) in (shieldCodeEditCtrlVm.shieldCode.commonShieldCode.value.jobOptionDefinitions || shieldCodeEditCtrlVm.shieldCode.jobOptionDefinitions)">
+                <label for="{{name}}">
+                  <input ng-if="options.type === 'boolean'"  ng-attr-placeholder="{{options.default}}" type="checkbox" id="{{name}}" ng-model="shieldCodeEditCtrlVm.shieldCode.jobOptions[name]">
+                  {{name}}
+                </label>
                 <textarea json-text class="form-control" id="{{name}}" ng-if="options.type === 'object'"  ng-attr-placeholder="{{options.default}}"
                           ng-model="shieldCodeEditCtrlVm.shieldCode.jobOptions[name]">
                 </textarea>
                 <div class="input-group">
-                <input class="form-control" ng-if="options.type !== 'object'"  ng-attr-placeholder="{{options.default}}" type="{{options.type}}" id="{{name}}" ng-model="shieldCodeEditCtrlVm.shieldCode.jobOptions[name]">
+                <input class="form-control" ng-if="options.type !== 'object' && options.type !== 'boolean'"  ng-attr-placeholder="{{options.default}}" type="{{options.type}}" id="{{name}}" ng-model="shieldCodeEditCtrlVm.shieldCode.jobOptions[name]">
                 <div ng-if="options.unit" class="input-group-addon">
                   {{options.unit}}
                 </div>
