@@ -33,6 +33,7 @@
 
         var cityUserCount = {};
         _.each(vm.users, function(user) {
+          if (!user.address) return;
           var city = user.address.city;
           if (city) {
             if (!cityUserCount[city]) {
