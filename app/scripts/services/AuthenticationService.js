@@ -6,7 +6,7 @@
 
 angular.module('BlurAdmin.services').factory('authenticationService', function(
   $http, $httpParamSerializer, $q, $location, $window, jwtHelper, $injector,
-  apiProtocol, apiHost, apiPath, authCallbackPath, tenantId, toastr
+  apiProtocol, apiHost, apiPath, authCallbackPath, tenantId, toastr, $uibModal
 ) {
 
   var tokenKey = $location.host() + '_' + $location.port() + '_' + 'dashboardAuthToken';
@@ -61,13 +61,24 @@ angular.module('BlurAdmin.services').factory('authenticationService', function(
     })
     .then(function(authenticatedUser) {
       var Store = $injector.get('Store');
-      return Store.find('user', authenticatedUser.sub).catch(function() {
-        authenticatedUser.address = {
-          city: 'Munich'
-        };
-        authenticatedUser._id = authenticatedUser.sub;
-        return Store.save(authenticatedUser).catch(function(data) {
-          console.error('Saving new user is failed.', data);
+      return Store.find('user', authenticatedUser.sub).catch(function(err) {
+        var modalInstance = $uibModal.open({
+          animation: true,
+          templateUrl: 'pages/modals/prompt/prompt.html',
+          controller: 'ModalPromptCtrl',
+          size: 'sm',
+          resolve: {
+            cannotCancel: true,
+            title: function() {
+              return 'Access denied';
+            },
+            message: function() {
+              return 'Ask your manager to provide you access to this dashboard. Your ID: "' + authenticatedUser.sub + '"';
+            }
+          }
+        });
+        return modalInstance.result.then(function() {
+          throw err;
         });
       });
     })

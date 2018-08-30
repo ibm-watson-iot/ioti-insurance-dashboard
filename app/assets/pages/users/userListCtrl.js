@@ -7,7 +7,7 @@
 
   angular.module('BlurAdmin.pages.users').controller('UserListCtrl', UserListCtrl);
 
-  function UserListCtrl($scope, $timeout, baConfig, layoutPaths, Store, cityLocationService) {
+  function UserListCtrl($scope, $timeout, baConfig, layoutPaths, Store, cityLocationService, $uibModal) {
     var vm = this;
     var latlong;
     vm.users = Store.getLiveArray('user');
@@ -154,6 +154,26 @@
           vm.nextUserLoad = null;
         }, 1000);
       }
+    };
+
+    vm.deleteUser = function(user) {
+      var modalInstance = $uibModal.open({
+        animation: true,
+        templateUrl: 'pages/modals/prompt/prompt.html',
+        controller: 'ModalPromptCtrl',
+        size: 'sm',
+        resolve: {
+          title: function() {
+            return 'Delete User';
+          },
+          message: function() {
+            return 'Do you really want to delete shield "' + user.name + '"?';
+          }
+        }
+      });
+      return modalInstance.result.then(function() {
+        return user.destroy();
+      });
     };
   }
 

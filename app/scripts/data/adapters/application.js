@@ -97,9 +97,9 @@ angular.module('BlurAdmin.data.adapters').factory(
             method = 'replace';
           }
           if (id) {
-            toastr.error('Failed to ' + data.config.method + ' ' + data.config.name + ' - ' + id);
+            toastr.error('Failed to ' + method + ' ' + data.config.name + ' - ' + id);
           } else {
-            toastr.error('Failed to ' + data.config.method + ' ' + data.config.endpoint);
+            toastr.error('Failed to ' + method + ' ' + data.config.endpoint);
           }
 
         }

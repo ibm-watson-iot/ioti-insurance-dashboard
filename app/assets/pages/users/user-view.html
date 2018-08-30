@@ -8,17 +8,26 @@
               <div class="row">
                 <div class="col-sm-6">
                   <div class="form-group">
+                    <label for="name">ID</label>
+                    <input ng-disabled="!userViewCtrlVm.isNew" class="form-control" id="_id" ng-model="userViewCtrlVm.user._id" />
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="form-group">
                     <label for="name">Name</label>
-                    <span class="form-control" id="name">
-                      {{userViewCtrlVm.user.name}}
+                    <input class="form-control" id="name" ng-model="userViewCtrlVm.user.name">
                   </div>
                 </div>
                 <div class="col-sm-6">
                   <div class="form-group">
                     <label for="email">E-mail</label>
-                    <span class="form-control" id="email">
-                      {{userViewCtrlVm.user.email}}
-                    </span>
+                    <input class="form-control" id="email" ng-model="userViewCtrlVm.user.email">
+                  </div>
+                </div>
+                <div class="col-sm-6" ng-if="isAdmin">
+                  <div class="form-group">
+                    <label for="accessLevel">Access Level (3 is admin)</label>
+                    <input class="form-control" id="accessLevel" ng-model="userViewCtrlVm.user.accessLevel">
                   </div>
                 </div>
               </div>
@@ -26,17 +35,13 @@
                 <div class="col-sm-6">
                   <div class="form-group">
                     <label for="street">Street</label>
-                    <span class="form-control" id="street">
-                      {{userViewCtrlVm.user.address.street}}
-                    </span>
+                    <input class="form-control" id="street" ng-model="userViewCtrlVm.user.address.street">
                   </div>
                 </div>
                 <div class="col-sm-6">
                   <div class="form-group">
                     <label for="zipcode">Zipcode</label>
-                    <span class="form-control" id="zipcode">
-                      {{userViewCtrlVm.user.address.zipcode}}
-                    </span>
+                    <input class="form-control" id="zipcode" ng-model="userViewCtrlVm.user.address.zipcode">
                   </div>
                 </div>
               </div>
@@ -44,20 +49,21 @@
                 <div class="col-sm-6">
                   <div class="form-group">
                     <label for="city">City</label>
-                    <span class="form-control" id="city">
-                      {{userViewCtrlVm.user.address.city}}
-                    </span>
+                    <input class="form-control" id="city" ng-model="userViewCtrlVm.user.address.city">
                   </div>
                 </div>
                 <div class="col-sm-6">
                   <div class="form-group">
                     <label for="country">Country</label>
-                    <span class="form-control" id="country">
-                      {{userViewCtrlVm.user.address.country}}
-                    </span>
+                    <input class="form-control" id="country" ng-model="userViewCtrlVm.user.address.country">
                   </div>
                 </div>
               </div>
+            </div>
+            <div>
+              <button ng-if="isAdmin || userViewCtrlVm.user._id == loggedInUser.sub" type="submit" class="btn btn-primary" ng-click="userViewCtrlVm.user.save()">
+                Save
+              </button>
             </div>
           </uib-tab>
           <uib-tab heading="Active Shields">

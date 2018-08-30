@@ -9,7 +9,7 @@
       </a>
       <ul  class="top-dropdown-menu profile-dropdown" uib-dropdown-menu>
         <li><i class="dropdown-arr"></i></li>
-        <li><a ui-sref="main.profile"><i class="fa fa-user"></i>Profile</a></li>
+        <li><a ui-sref="main.user-view({userId: loggedInUser.sub})"><i class="fa fa-user"></i>Profile</a></li>
         <li><a href class="signout" ng-click="signOut()"><i class="fa fa-power-off"></i>Sign out</a></li>
       </ul>
     </div>
