@@ -61,7 +61,7 @@
               </div>
             </div>
             <div>
-              <button ng-if="isAdmin || userViewCtrlVm.user._id == loggedInUser.sub" type="submit" class="btn btn-primary" ng-click="userViewCtrlVm.user.save()">
+              <button ng-if="isAdmin || userViewCtrlVm.user._id == loggedInUser._id" type="submit" class="btn btn-primary" ng-click="userViewCtrlVm.user.save()">
                 Save
               </button>
             </div>

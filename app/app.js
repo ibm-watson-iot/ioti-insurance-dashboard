@@ -102,6 +102,7 @@ angular.module('BlurAdmin', [
 
     authenticationService.isAuthenticated().then(function() {
       $rootScope.loggedInUser = authenticationService.getUser();
+      $rootScope.loggedInTokenUser = authenticationService.getTokenUser();
       NPSinit(($rootScope.loggedInUser) ? ($rootScope.loggedInUser) : {}, customerICN, toastr);
     });
 

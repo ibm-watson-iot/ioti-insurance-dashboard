@@ -1,6 +1,6 @@
 applications:
 - buildpack: https://github.com/cloudfoundry/staticfile-buildpack.git
-  host: iot4i-starter-dashboard
-  name: iot4i-starter-dashboard
+  host: amica-protected-home-dashboard
+  name: amica-protected-home-dashboard
   memory: 256M
   stack: cflinuxfs2

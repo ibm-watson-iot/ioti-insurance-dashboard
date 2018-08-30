@@ -34,7 +34,7 @@
                   <td>
                     <button type="button" class="btn btn-xs btn-primary"
                             ng-if="isAdmin"
-                            ng-if="loggedInUser.sub !== user._id"
+                            ng-if="loggedInUser._id !== user._id"
                             ng-click="userListCtrlVm.deleteUser(user)">
                       <i class="fa fa-trash"></i>
                     </button>
