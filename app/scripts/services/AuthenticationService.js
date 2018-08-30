@@ -5,10 +5,11 @@
 
 
 angular.module('BlurAdmin.services').factory('authenticationService', function(
-  $http, $httpParamSerializer, $q, $location, $window, jwtHelper, $injector, $scope,
+  $http, $httpParamSerializer, $q, $location, $window, jwtHelper, $injector,
   apiProtocol, apiHost, apiPath, authCallbackPath, tenantId, toastr, $uibModal
 ) {
 
+  var currentUser = null;
   var tokenKey = $location.host() + '_' + $location.port() + '_' + 'dashboardAuthToken';
   var userKey = $location.host() + '_' + $location.port() + '_' + 'dashboardUser';
   var apiUrl = apiProtocol + '://' + apiHost + apiPath + '/' + tenantId + '/';
@@ -84,7 +85,7 @@ angular.module('BlurAdmin.services').factory('authenticationService', function(
       });
     })
     .then(function(data) {
-      $scope.currentUser = data;
+      currentUser = data;
       window.Medallia.daysSinceFirstLogin = Math.round((Date.now() - data.createdAt) / 86400000);
       console.log('New login: daysSinceFirstLogin is ' + window.Medallia.daysSinceFirstLogin);
       var expirationTime = jwtHelper.getTokenExpirationDate(localStorage.getItem(tokenKey));
@@ -115,8 +116,7 @@ angular.module('BlurAdmin.services').factory('authenticationService', function(
     isAdmin: function() {
       return authorizeCode.then(function() {
         if (localStorage.getItem(userKey)) {
-          var user = $scope.currentUser;
-          if (user && user.accessLevel == '3') {
+          if (currentUser && currentUser.accessLevel == '3') {
             return true;
           }
         }
@@ -125,7 +125,7 @@ angular.module('BlurAdmin.services').factory('authenticationService', function(
     },
 
     getUser: function() {
-      return $scope.currentUser;
+      return currentUser;
     },
     getTokenUser: function() {
       return JSON.parse(localStorage.getItem(userKey));
