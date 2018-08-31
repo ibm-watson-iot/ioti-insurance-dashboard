@@ -22,6 +22,7 @@
         controller: 'ModalPromptCtrl',
         size: 'sm',
         resolve: {
+          canCancel: true,
           title: function() {
             return 'Delete Shield';
           },

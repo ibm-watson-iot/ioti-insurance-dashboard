@@ -10,6 +10,6 @@
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-primary" ng-click="confirm()">Confirm</button>
-    <button ng-if="!cannotCancel" type="button" class="btn btn-danger" ng-click="$dismiss()">Cancel</button>
+    <button ng-if="canCancel" type="button" class="btn btn-danger" ng-click="$dismiss()">Cancel</button>
   </div>
 </div>
