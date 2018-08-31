@@ -116,6 +116,12 @@ angular.module('BlurAdmin.services').factory('authenticationService', function(
     isAdmin: function() {
       return authorizeCode.then(function() {
         if (localStorage.getItem(userKey)) {
+          const tokenUser = JSON.parse(localStorage.getItem(userKey));
+          if (tokenUser.scopes) {
+            if (tokenUser.scopes.split(' ').indexOf('admin') >= 0) {
+              return true;
+            }
+          }
           if (currentUser && currentUser.accessLevel == '3') {
             return true;
           }
