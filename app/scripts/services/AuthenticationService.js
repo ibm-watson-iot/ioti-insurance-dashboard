@@ -70,7 +70,7 @@ angular.module('BlurAdmin.services').factory('authenticationService', function(
           controller: 'ModalPromptCtrl',
           size: 'sm',
           resolve: {
-            canCancel: true,
+            canCancel: false,
             title: function() {
               return 'Access denied';
             },
