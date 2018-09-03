@@ -9,7 +9,6 @@
     'ui.router',
     'BlurAdmin.pages.login',
     'BlurAdmin.pages.main',
-    'BlurAdmin.pages.profile',
     'BlurAdmin.pages.dashboard',
     'BlurAdmin.pages.claims',
     'BlurAdmin.pages.hazards',

@@ -72,7 +72,7 @@
         opts = opts || {};
         var raw = opts.raw;
         // TODO disble force=true when we get operational notifications
-        // opts.force = true;
+        opts.force = true;
         opts.raw = true;
         var _this = this;
         return JSData.DataStore.prototype.findAll.call(this, name, query, opts)
@@ -93,6 +93,9 @@
       cacheFind: function cacheFind(name, data, id, opts) {
         const date = Date.now();
         this._completedQueries[name][id] = function(_name, _id, _opts) {
+          if (_opts.force === true) {
+            return null;
+          }
           if (Date.now() > date + (30 * 1000)) {
             return null;
           }
@@ -106,6 +109,9 @@
       cacheFindAll: function cacheFindAll(name, data, hash, opts) {
         const date = Date.now();
         this._completedQueries[name][hash] = function(_name, _hash, _opts) {
+          if (_opts.force === true) {
+            return null;
+          }
           if (Date.now() > date + (30 * 1000)) {
             return null;
           }

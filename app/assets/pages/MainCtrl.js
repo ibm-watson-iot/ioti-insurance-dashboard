@@ -3,6 +3,8 @@
 angular.module('BlurAdmin.pages').controller('MainCtrl', function(
   $rootScope, $scope, authenticationService, notificationService) {
 
-  $scope.isAdmin = authenticationService.isAdmin();
+  authenticationService.isAdmin().then(function(isAdmin) {
+    $scope.isAdmin = isAdmin;
+  });
   notificationService.enable();
 });

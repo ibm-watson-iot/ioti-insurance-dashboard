@@ -6,9 +6,10 @@
 
 angular.module('BlurAdmin.services').factory('authenticationService', function(
   $http, $httpParamSerializer, $q, $location, $window, jwtHelper, $injector,
-  apiProtocol, apiHost, apiPath, authCallbackPath, tenantId, toastr
+  apiProtocol, apiHost, apiPath, authCallbackPath, tenantId, toastr, $uibModal
 ) {
 
+  var currentUser = null;
   var tokenKey = $location.host() + '_' + $location.port() + '_' + 'dashboardAuthToken';
   var userKey = $location.host() + '_' + $location.port() + '_' + 'dashboardUser';
   var apiUrl = apiProtocol + '://' + apiHost + apiPath + '/' + tenantId + '/';
@@ -56,22 +57,35 @@ angular.module('BlurAdmin.services').factory('authenticationService', function(
       var token = response.data;
       localStorage.setItem(tokenKey, token.access_token);
       var authenticatedUser = jwtHelper.decodeToken(token.access_token);
+      authenticatedUser.uniqueSecurityID = authenticatedUser.sub; /*authenticatedUser.uniqueSecurityName TODO: need to align dashboards */
       localStorage.setItem(userKey, JSON.stringify(authenticatedUser));
       return authenticatedUser;
     })
     .then(function(authenticatedUser) {
       var Store = $injector.get('Store');
-      return Store.find('user', authenticatedUser.sub).catch(function() {
-        authenticatedUser.address = {
-          city: 'Munich'
-        };
-        authenticatedUser._id = authenticatedUser.sub;
-        return Store.save(authenticatedUser).catch(function(data) {
-          console.error('Saving new user is failed.', data);
+      return Store.find('user', authenticatedUser.uniqueSecurityID).catch(function(err) {
+        var modalInstance = $uibModal.open({
+          animation: true,
+          templateUrl: 'pages/modals/prompt/prompt.html',
+          controller: 'ModalPromptCtrl',
+          size: 'sm',
+          resolve: {
+            canCancel: false,
+            title: function() {
+              return 'Access denied';
+            },
+            message: function() {
+              return 'Ask your manager to provide you access to this dashboard. Your ID: "' + authenticatedUser.uniqueSecurityID + '"';
+            }
+          }
+        });
+        return modalInstance.result.then(function() {
+          throw err;
         });
       });
     })
     .then(function(data) {
+      currentUser = data;
       window.Medallia.daysSinceFirstLogin = Math.round((Date.now() - data.createdAt) / 86400000);
       console.log('New login: daysSinceFirstLogin is ' + window.Medallia.daysSinceFirstLogin);
       var expirationTime = jwtHelper.getTokenExpirationDate(localStorage.getItem(tokenKey));
@@ -102,8 +116,13 @@ angular.module('BlurAdmin.services').factory('authenticationService', function(
     isAdmin: function() {
       return authorizeCode.then(function() {
         if (localStorage.getItem(userKey)) {
-          var user = JSON.parse(localStorage.getItem(userKey));
-          if (user && user.accessLevel === '3') {
+          const tokenUser = JSON.parse(localStorage.getItem(userKey));
+          if (tokenUser.scopes) {
+            if (tokenUser.scopes.split(' ').indexOf('admin') >= 0) {
+              return true;
+            }
+          }
+          if (currentUser && currentUser.accessLevel == '3') {
             return true;
           }
         }
@@ -112,10 +131,10 @@ angular.module('BlurAdmin.services').factory('authenticationService', function(
     },
 
     getUser: function() {
-      return JSON.parse(localStorage.getItem(userKey));
+      return currentUser;
     },
-    setUser: function(user) {
-      localStorage.setItem(userKey, JSON.stringify(user));
+    getTokenUser: function() {
+      return JSON.parse(localStorage.getItem(userKey));
     },
     getToken: function() {
       return localStorage.getItem(tokenKey);

@@ -24,12 +24,33 @@
                   <th class="table-id">#</th>
                   <th>Full Name</th>
                   <th>Email</th>
+                  <th>Actions</th>
                 </tr>
                 <tr class="editable-tr-wrap clickable" ng-repeat="user in userListCtrlVm.paginatedUsers"
                     ui-sref="main.user-view({userId: user._id})">
                   <td class="table-id">{{(userListCtrlVm.currentPage-1)*userListCtrlVm.itemsPerPage + $index + 1}}</td>
                   <td> {{user.name}} </td>
                   <td> {{user.email}} </td>
+                  <td>
+                    <button type="button" class="btn btn-xs btn-primary"
+                            ng-if="isAdmin"
+                            ng-if="loggedInUser._id !== user._id"
+                            ng-click="userListCtrlVm.deleteUser(user)">
+                      <i class="fa fa-trash"></i>
+                    </button>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <button type="button" class="btn btn-xs btn-primary"
+                            ng-if="isAdmin"
+                            ui-sref="main.user-view({userId: null})">
+                      Add new
+                    </button>
+                  </td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
                 </tr>
                 <tfoot>
                 <tr ng-if="userListCtrlVm.totalItems > userListCtrlVm.itemsPerPage">

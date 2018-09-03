@@ -3,15 +3,16 @@
 
   angular.module('BlurAdmin.pages.modals').controller('ModalPromptCtrl', ModalPromptCtrl);
 
-  function ModalPromptCtrl($scope, $uibModalInstance, title, message) {
+  function ModalPromptCtrl($scope, $uibModalInstance, title, message, canCancel) {
 
     $scope.title = title;
     $scope.message = message;
-    $scope.confirm = function () {
+    $scope.canCancel = canCancel;
+    $scope.confirm = function() {
       $uibModalInstance.close();
     };
 
-    $scope.cancel = function () {
+    $scope.cancel = function() {
       $uibModalInstance.dismiss();
     };
   }
