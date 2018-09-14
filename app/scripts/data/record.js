@@ -48,12 +48,12 @@
         promise.value = value;
         promise.reload = function() {
           _this[META].loaded[rel] = false;
-          _this[META].reload = true;
+          _this[META].reload[rel] = true;
           return _this[rel];
         };
         promise.clear = function() {
           _this[META].loaded[rel] = false;
-          _this[META].reload = true;
+          _this[META].reload[rel] = true;
         };
         return promise;
       }
@@ -70,28 +70,31 @@
           JSData.Record.call(this, props, opts);
           Object.defineProperty(this, META, {
             enumerable: false,
-            value: { loaded: {}, reload: false }
+            value: { loaded: {}, reload: {} }
           });
           var _this = this;
           relations.forEach(function(rel) {
             Object.defineProperty(_this, rel, {
               get: function() {
-                var id, key;
+                var id, key, loadedKey, failedPromise, value, promise;
                 key = this._mapper().relationList.find(function(r) {
                   return r.localField === '__' + rel;
                 }).localKey;
-                id = _this[key];
-                var loadedKey = rel + '-' + id;
-                var failedPromise = globalFailedCache.get(rel + ':' + id);
+                loadedKey = rel;
+                if (key !== undefined) {
+                  id = _this[key];
+                  loadedKey = key + '-' + id;
+                }
+                failedPromise = globalFailedCache.get(rel + ':' + id);
                 if (failedPromise) {
                   wrapPromise(_this, failedPromise, rel, null);
                   return failedPromise;
                 }
 
-                var value = _this['__' + rel];
-                var promise = Promise.resolve(value);
+                value = _this['__' + rel];
+                promise = Promise.resolve(value);
                 promise = wrapPromise(_this, promise, rel, value);
-                if (!_this[META].reload) {
+                if (!_this[META].reload[loadedKey]) {
                   if (_this[META].loaded[loadedKey]) {
                     return _this[META].loaded[loadedKey];
                   }
@@ -104,7 +107,7 @@
                 }
                 promise = _this.loadRelations(['__' + rel]).then(function(record) {
                   _this[META].loaded[loadedKey] = promise;
-                  _this[META].reload = false;
+                  _this[META].reload[loadedKey] = false;
                   wrapPromise(_this, promise, rel, record['__' + rel]);
                   return record['__' + rel];
                 });
